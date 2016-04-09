@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="97">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="Common" displayName="Common" projectFiles="true">
+      <logicalFolder name="Algorithm" displayName="Algorithm" projectFiles="true">
+        <itemPath>../../../../Common/Algorithm/Algorithm.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Assignable" displayName="Assignable" projectFiles="true">
+        <itemPath>../../../../Common/Assignable/Assignable.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Clonable" displayName="Clonable" projectFiles="true">
+        <itemPath>../../../../Common/Clonable/Clonable.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Comparable" displayName="Comparable" projectFiles="true">
+        <itemPath>../../../../Common/Comparable/Comparable.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Debug" displayName="Debug" projectFiles="true">
+        <logicalFolder name="dist" displayName="dist" projectFiles="true">
+          <logicalFolder name="Debug" displayName="Debug" projectFiles="true">
+            <logicalFolder name="GNU-Linux-x86"
+                           displayName="GNU-Linux-x86"
+                           projectFiles="true">
+              <itemPath>../../../../Common/Debug/dist/Debug/GNU-Linux-x86/debug</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+        </logicalFolder>
+        <itemPath>../../../../Common/Debug/.dep.inc</itemPath>
+        <itemPath>../../../../Common/Debug/DebugExt.cpp</itemPath>
+        <itemPath>../../../../Common/Debug/DebugExt.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Driver" displayName="Driver" projectFiles="true">
+        <itemPath>../../../../Common/Driver/Driven.h</itemPath>
+        <itemPath>../../../../Common/Driver/Driver.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Exceptions" displayName="Exceptions" projectFiles="true">
+        <itemPath>../../../../Common/Exceptions/Exception.h</itemPath>
+        <itemPath>../../../../Common/Exceptions/MsgException.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Functor" displayName="Functor" projectFiles="true">
+        <itemPath>../../../../Common/Functor/Functor.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Include" displayName="Include" projectFiles="true">
+        <itemPath>../../../../Common/Include/Algorithm</itemPath>
+        <itemPath>../../../../Common/Include/Assignable</itemPath>
+        <itemPath>../../../../Common/Include/Clonable</itemPath>
+        <itemPath>../../../../Common/Include/Comparable</itemPath>
+        <itemPath>../../../../Common/Include/Driver</itemPath>
+        <itemPath>../../../../Common/Include/Exceptions</itemPath>
+        <itemPath>../../../../Common/Include/Functor</itemPath>
+        <itemPath>../../../../Common/Include/MathExt</itemPath>
+        <itemPath>../../../../Common/Include/Messages</itemPath>
+        <itemPath>../../../../Common/Include/Object</itemPath>
+        <itemPath>../../../../Common/Include/Operationable</itemPath>
+        <itemPath>../../../../Common/Include/RandExt</itemPath>
+        <itemPath>../../../../Common/Include/Runnable</itemPath>
+        <itemPath>../../../../Common/Include/SavableRestorable</itemPath>
+        <itemPath>../../../../Common/Include/SenderReceiver</itemPath>
+        <itemPath>../../../../Common/Include/Signals</itemPath>
+        <itemPath>../../../../Common/Include/SmartPointer</itemPath>
+        <itemPath>../../../../Common/Include/Solver</itemPath>
+        <itemPath>../../../../Common/Include/Stopable</itemPath>
+        <itemPath>../../../../Common/Include/WritableReadable</itemPath>
+      </logicalFolder>
+      <logicalFolder name="MathExt" displayName="MathExt" projectFiles="true">
+        <itemPath>../../../../Common/MathExt/MathExt.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Messages" displayName="Messages" projectFiles="true">
+        <itemPath>../../../../Common/Messages/Messages.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Object" displayName="Object" projectFiles="true">
+        <itemPath>../../../../Common/Object/Object.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Operationable"
+                     displayName="Operationable"
+                     projectFiles="true">
+        <itemPath>../../../../Common/Operationable/Operationable.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="RandExt" displayName="RandExt" projectFiles="true">
+        <itemPath>../../../../Common/RandExt/RandExt.cpp</itemPath>
+        <itemPath>../../../../Common/RandExt/RandExt.h</itemPath>
+        <itemPath>../../../../Common/RandExt/RandExt_CombinedRandGen.h</itemPath>
+        <itemPath>../../../../Common/RandExt/RandExt_Interfaces.h</itemPath>
+        <itemPath>../../../../Common/RandExt/RandExt_LCG.h</itemPath>
+        <itemPath>../../../../Common/RandExt/RandExt_MersenneTwister.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Runnable" displayName="Runnable" projectFiles="true">
+        <itemPath>../../../../Common/Runnable/Runnable.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="SavableRestorable"
+                     displayName="SavableRestorable"
+                     projectFiles="true">
+        <itemPath>../../../../Common/SavableRestorable/SavableRestorable.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="SenderReceiver"
+                     displayName="SenderReceiver"
+                     projectFiles="true">
+        <itemPath>../../../../Common/SenderReceiver/SenderReceiver.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Signals" displayName="Signals" projectFiles="true">
+        <itemPath>../../../../Common/Signals/Signal.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="SmartPointer"
+                     displayName="SmartPointer"
+                     projectFiles="true">
+        <itemPath>../../../../Common/SmartPointer/SmartPointer.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Solvers" displayName="Solvers" projectFiles="true">
+        <itemPath>../../../../Common/Solvers/Solver.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Stopable" displayName="Stopable" projectFiles="true">
+        <itemPath>../../../../Common/Stopable/Stopable.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="WritableReadable"
+                     displayName="WritableReadable"
+                     projectFiles="true">
+        <itemPath>../../../../Common/WritableReadable/WritableReadable.h</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="src" displayName="src" projectFiles="true">
+      <itemPath>src/VNSScheduler.cpp</itemPath>
+      <itemPath>src/VNSScheduler.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>src</Elem>
+    <Elem>../../../../Common</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="5">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <qt>
+        <destdir>builds/Lin64bit/debug</destdir>
+        <modules>core gui widgets xml</modules>
+        <mocDir>$$DESTDIR/moc</mocDir>
+        <rccDir>$$DESTDIR/rcc</rccDir>
+        <uiDir>$$DESTDIR/ui</uiDir>
+        <defs>
+          <Elem>OBJECTS_DIR=$$DESTDIR/obj</Elem>
+          <Elem>QMAKE_CXXFLAGS += -std=c++14</Elem>
+        </defs>
+      </qt>
+      <compileType>
+        <ccTool>
+          <standard>11</standard>
+          <incDir>
+            <pElem>../../../../Common/Include</pElem>
+            <pElem>../../../../Common/Debug</pElem>
+            <pElem>../../Common/src</pElem>
+            <pElem>src</pElem>
+            <pElem>../PriorityScheduler/src</pElem>
+            <pElem>../CombinedScheduler/src</pElem>
+            <pElem>../LocalSearchPM/src</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>DEBUG</Elem>
+            <Elem>EDEBUG</Elem>
+            <Elem>IDEBUG</Elem>
+            <Elem>LS_MSG</Elem>
+            <Elem>WDEBUG</Elem>
+          </preprocessorList>
+        </ccTool>
+      </compileType>
+      <item path="../../../../Common/Algorithm/Algorithm.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Assignable/Assignable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Clonable/Clonable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Comparable/Comparable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Debug/.dep.inc" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Debug/DebugExt.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Debug/DebugExt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Debug/dist/Debug/GNU-Linux-x86/debug"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Driver/Driven.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Driver/Driver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Exceptions/Exception.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Exceptions/MsgException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Functor/Functor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Algorithm"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Assignable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Clonable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Comparable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Driver" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Exceptions"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Functor" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/MathExt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Messages"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Object" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Operationable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/RandExt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Runnable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/SavableRestorable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/SenderReceiver"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Signals" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/SmartPointer"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Solver" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Stopable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/WritableReadable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/MathExt/MathExt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Messages/Messages.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Object/Object.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Operationable/Operationable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/RandExt/RandExt.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/RandExt/RandExt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/RandExt/RandExt_CombinedRandGen.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/RandExt/RandExt_Interfaces.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/RandExt/RandExt_LCG.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/RandExt/RandExt_MersenneTwister.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Runnable/Runnable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/SavableRestorable/SavableRestorable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/SenderReceiver/SenderReceiver.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Signals/Signal.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/SmartPointer/SmartPointer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Solvers/Solver.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Stopable/Stopable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/WritableReadable/WritableReadable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/VNSScheduler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/VNSScheduler.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="5">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <qt>
+        <destdir>builds/Lin64bit/release</destdir>
+        <buildMode>1</buildMode>
+        <modules>core gui widgets xml</modules>
+        <mocDir>$$DESTDIR/moc</mocDir>
+        <rccDir>$$DESTDIR/rcc</rccDir>
+        <uiDir>$$DESTDIR/ui</uiDir>
+        <defs>
+          <Elem>OBJECTS_DIR=$$DESTDIR/obj</Elem>
+          <Elem>QMAKE_CXXFLAGS += -std=c++14</Elem>
+        </defs>
+      </qt>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <standard>11</standard>
+          <incDir>
+            <pElem>../../../../Common/Include</pElem>
+            <pElem>../../../../Common/Debug</pElem>
+            <pElem>../../Common/src</pElem>
+            <pElem>src</pElem>
+            <pElem>../PriorityScheduler/src</pElem>
+            <pElem>../CombinedScheduler/src</pElem>
+            <pElem>../LocalSearchPM/src</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>DEBUG</Elem>
+            <Elem>EDEBUG</Elem>
+            <Elem>IDEBUG</Elem>
+            <Elem>LS_MSG</Elem>
+            <Elem>WDEBUG</Elem>
+          </preprocessorList>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="../../../../Common/Algorithm/Algorithm.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Assignable/Assignable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Clonable/Clonable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Comparable/Comparable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Debug/.dep.inc" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Debug/DebugExt.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Debug/DebugExt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Debug/dist/Debug/GNU-Linux-x86/debug"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Driver/Driven.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Driver/Driver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Exceptions/Exception.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Exceptions/MsgException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Functor/Functor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Algorithm"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Assignable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Clonable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Comparable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Driver" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Exceptions"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Functor" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/MathExt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Messages"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Object" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Operationable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/RandExt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Runnable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/SavableRestorable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/SenderReceiver"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Signals" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/SmartPointer"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Solver" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/Stopable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Include/WritableReadable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/MathExt/MathExt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Messages/Messages.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Object/Object.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Common/Operationable/Operationable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/RandExt/RandExt.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/RandExt/RandExt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/RandExt/RandExt_CombinedRandGen.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/RandExt/RandExt_Interfaces.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/RandExt/RandExt_LCG.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/RandExt/RandExt_MersenneTwister.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Runnable/Runnable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/SavableRestorable/SavableRestorable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/SenderReceiver/SenderReceiver.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Signals/Signal.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/SmartPointer/SmartPointer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Solvers/Solver.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/Stopable/Stopable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../Common/WritableReadable/WritableReadable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/VNSScheduler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/VNSScheduler.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
