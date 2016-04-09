@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.cnd.makeproject</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/make-project/1">
+            <name>Planner</name>
+            <c-extensions/>
+            <cpp-extensions>cpp</cpp-extensions>
+            <header-extensions>h</header-extensions>
+            <sourceEncoding>UTF-8</sourceEncoding>
+            <make-dep-projects>
+                <make-dep-project>/home/DrSobik/Projects/IPPS/CPPALG/Solvers/SBHScheduler</make-dep-project>
+                <make-dep-project>/home/DrSobik/Projects/IPPS/CPPALG/Solvers/CombinedScheduler</make-dep-project>
+                <make-dep-project>/home/DrSobik/Projects/IPPS/CPPALG/Solvers/VNSPlanner</make-dep-project>
+                <make-dep-project>/home/DrSobik/Projects/IPPS/CPPALG/Solvers/PriorityScheduler</make-dep-project>
+                <make-dep-project>/home/DrSobik/Projects/IPPS/CPPALG/Solvers/VNSScheduler</make-dep-project>
+                <make-dep-project>/home/DrSobik/Projects/IPPS/CPPALG/Solvers/LocalSearchPM</make-dep-project>
+                <make-dep-project>/home/DrSobik/Projects/IPPS/CPPALG/Common</make-dep-project>
+            </make-dep-projects>
+            <sourceRootList>
+                <sourceRootElem>.</sourceRootElem>
+                <sourceRootElem>../../../Common</sourceRootElem>
+            </sourceRootList>
+            <confList>
+                <confElem>
+                    <name>Debug</name>
+                    <type>4</type>
+                </confElem>
+                <confElem>
+                    <name>Release</name>
+                    <type>4</type>
+                </confElem>
+            </confList>
+            <formatting>
+                <project-formatting-style>false</project-formatting-style>
+            </formatting>
+        </data>
+    </configuration>
+</project>
