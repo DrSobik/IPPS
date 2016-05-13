@@ -535,6 +535,7 @@ Schedule LocalSearchPM::solve(const SchedulingProblem& problem/*, const Schedule
 
     out << "LocalSearchPM::solve : Ready to start!" << endl;
 
+    
     // Run the scheduler
     if (this->maxIter() > 0) {
         //pm->save();
