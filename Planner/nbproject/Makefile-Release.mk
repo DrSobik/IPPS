@@ -22,7 +22,7 @@ AS=as
 QMAKE=qmake-qt5
 
 # Macros
-CND_PLATFORM=GNU-Linux
+CND_PLATFORM=GNU_GCC5-Linux
 CND_DLIB_EXT=so
 CND_CONF=Release
 CND_DISTDIR=dist
@@ -52,7 +52,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=/home/DrSobik/Projects/IPPS/CPPALG/Solvers/PriorityScheduler/builds/Lin64bit/release/libPriorityScheduler.so.1.0.0 /home/DrSobik/Projects/IPPS/CPPALG/Solvers/CombinedScheduler/builds/Lin64bit/release/libCombinedScheduler.so.1.0.0 /home/DrSobik/Projects/IPPS/CPPALG/Solvers/LocalSearchPM/builds/Lin64bit/release/libLocalSearchPM.so.1.0.0 /home/DrSobik/Projects/IPPS/CPPALG/Solvers/SBHScheduler/builds/Lin64bit/release/libSBHScheduler.so.1.0.0 /home/DrSobik/Projects/IPPS/CPPALG/Solvers/VNSScheduler/builds/Lin64bit/release/libVNSScheduler.so.1.0.0 /home/DrSobik/Projects/IPPS/CPPALG/Solvers/VNSPlanner/builds/Lin64bit/release/libVNSPlanner.so.1.0.0 /home/DrSobik/Projects/IPPS/CPPALG/Common/builds/Lin64bit/release/libCommon.so.1.0.0
+LDLIBSOPTIONS=/home/DrSobik/Projects/IPPS/CPPALG/Common/builds/Lin64bit/release/libCommon.so.1.0.0
 
 nbproject/qt-${CND_CONF}.mk: nbproject/qt-${CND_CONF}.pro FORCE
 	${QMAKE} VPATH=. -o qttmp-${CND_CONF}.mk nbproject/qt-${CND_CONF}.pro

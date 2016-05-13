@@ -13,7 +13,7 @@
 
 #include <QApplication>
 
-#include "LocalSearchPM.h"
+#include "LocalSearchPM/LocalSearchPM.h"
 
 int main(int argc, char *argv[]) {
 	// initialize resources, if needed
@@ -24,6 +24,6 @@ int main(int argc, char *argv[]) {
 	// create and show your widgets here
 
 	LocalSearchPM lspm;
-	
+
 	return app.exec();
 }

@@ -61,6 +61,9 @@
         <itemPath>../../../Common/Include/Stopable</itemPath>
         <itemPath>../../../Common/Include/WritableReadable</itemPath>
       </logicalFolder>
+      <logicalFolder name="Loader" displayName="Loader" projectFiles="true">
+        <itemPath>../../../Common/Loader/Loader.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="MathExt" displayName="MathExt" projectFiles="true">
         <itemPath>../../../Common/MathExt/MathExt.h</itemPath>
       </logicalFolder>
@@ -153,6 +156,8 @@
         <defs>
           <Elem>OBJECTS_DIR=$$DESTDIR/obj</Elem>
           <Elem>QMAKE_CXXFLAGS += -std=c++14</Elem>
+          <Elem>AFTERBUILDDIR = ../bin/</Elem>
+          <Elem>unix:QMAKE_POST_LINK = mkdir -p $$AFTERBUILDDIR &amp;&amp;  cp -f -d $$DESTDIR/$$TARGET $$AFTERBUILDDIR</Elem>
         </defs>
       </qt>
       <compileType>
@@ -161,13 +166,7 @@
           <incDir>
             <pElem>../../../Common/Include</pElem>
             <pElem>../../../Common/Debug</pElem>
-            <pElem>../Common/src</pElem>
-            <pElem>../Solvers/VNSPlanner/src</pElem>
-            <pElem>../Solvers/PriorityScheduler/src</pElem>
-            <pElem>../Solvers/CombinedScheduler/src</pElem>
-            <pElem>../Solvers/LocalSearchPM/src</pElem>
-            <pElem>../Solvers/SBHScheduler/src</pElem>
-            <pElem>../Solvers/VNSScheduler/src</pElem>
+            <pElem>../Common/src/Include</pElem>
           </incDir>
           <preprocessorList>
             <Elem>DEBUG</Elem>
@@ -295,6 +294,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../../Common/Loader/Loader.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../../Common/MathExt/MathExt.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../Common/Messages/Messages.h"
@@ -393,6 +394,8 @@
         <defs>
           <Elem>OBJECTS_DIR=$$DESTDIR/obj</Elem>
           <Elem>QMAKE_CXXFLAGS += -std=c++14</Elem>
+          <Elem>AFTERBUILDDIR = ../bin/</Elem>
+          <Elem>unix:QMAKE_POST_LINK = mkdir -p $$AFTERBUILDDIR &amp;&amp;  cp -f -d $$DESTDIR/$$TARGET $$AFTERBUILDDIR</Elem>
         </defs>
       </qt>
       <compileType>
@@ -405,13 +408,7 @@
           <incDir>
             <pElem>../../../Common/Include</pElem>
             <pElem>../../../Common/Debug</pElem>
-            <pElem>../Common/src</pElem>
-            <pElem>../Solvers/VNSPlanner/src</pElem>
-            <pElem>../Solvers/PriorityScheduler/src</pElem>
-            <pElem>../Solvers/CombinedScheduler/src</pElem>
-            <pElem>../Solvers/LocalSearchPM/src</pElem>
-            <pElem>../Solvers/SBHScheduler/src</pElem>
-            <pElem>../Solvers/VNSScheduler/src</pElem>
+            <pElem>../Common/src/Include</pElem>
           </incDir>
           <preprocessorList>
             <Elem>DEBUG</Elem>
@@ -429,78 +426,6 @@
         </asmTool>
         <linkerTool>
           <linkerLibItems>
-            <linkerLibProjectItem>
-              <makeArtifact PL="/home/DrSobik/Projects/IPPS/CPPALG/Solvers/PriorityScheduler"
-                            CT="5"
-                            CN="Release"
-                            AC="true"
-                            BL="true"
-                            WD="/home/DrSobik/Projects/IPPS/CPPALG/Solvers/PriorityScheduler"
-                            BC="${MAKE}  -f Makefile CONF=Release"
-                            CC="${MAKE}  -f Makefile CONF=Release clean"
-                            OP="builds/Lin64bit/release/libPriorityScheduler.so.1.0.0">
-              </makeArtifact>
-            </linkerLibProjectItem>
-            <linkerLibProjectItem>
-              <makeArtifact PL="/home/DrSobik/Projects/IPPS/CPPALG/Solvers/CombinedScheduler"
-                            CT="5"
-                            CN="Release"
-                            AC="true"
-                            BL="true"
-                            WD="/home/DrSobik/Projects/IPPS/CPPALG/Solvers/CombinedScheduler"
-                            BC="${MAKE}  -f Makefile CONF=Release"
-                            CC="${MAKE}  -f Makefile CONF=Release clean"
-                            OP="builds/Lin64bit/release/libCombinedScheduler.so.1.0.0">
-              </makeArtifact>
-            </linkerLibProjectItem>
-            <linkerLibProjectItem>
-              <makeArtifact PL="/home/DrSobik/Projects/IPPS/CPPALG/Solvers/LocalSearchPM"
-                            CT="5"
-                            CN="Release"
-                            AC="true"
-                            BL="true"
-                            WD="/home/DrSobik/Projects/IPPS/CPPALG/Solvers/LocalSearchPM"
-                            BC="${MAKE}  -f Makefile CONF=Release"
-                            CC="${MAKE}  -f Makefile CONF=Release clean"
-                            OP="builds/Lin64bit/release/libLocalSearchPM.so.1.0.0">
-              </makeArtifact>
-            </linkerLibProjectItem>
-            <linkerLibProjectItem>
-              <makeArtifact PL="/home/DrSobik/Projects/IPPS/CPPALG/Solvers/SBHScheduler"
-                            CT="5"
-                            CN="Release"
-                            AC="true"
-                            BL="true"
-                            WD="/home/DrSobik/Projects/IPPS/CPPALG/Solvers/SBHScheduler"
-                            BC="${MAKE}  -f Makefile CONF=Release"
-                            CC="${MAKE}  -f Makefile CONF=Release clean"
-                            OP="builds/Lin64bit/release/libSBHScheduler.so.1.0.0">
-              </makeArtifact>
-            </linkerLibProjectItem>
-            <linkerLibProjectItem>
-              <makeArtifact PL="/home/DrSobik/Projects/IPPS/CPPALG/Solvers/VNSScheduler"
-                            CT="5"
-                            CN="Release"
-                            AC="true"
-                            BL="true"
-                            WD="/home/DrSobik/Projects/IPPS/CPPALG/Solvers/VNSScheduler"
-                            BC="${MAKE}  -f Makefile CONF=Release"
-                            CC="${MAKE}  -f Makefile CONF=Release clean"
-                            OP="builds/Lin64bit/release/libVNSScheduler.so.1.0.0">
-              </makeArtifact>
-            </linkerLibProjectItem>
-            <linkerLibProjectItem>
-              <makeArtifact PL="/home/DrSobik/Projects/IPPS/CPPALG/Solvers/VNSPlanner"
-                            CT="5"
-                            CN="Release"
-                            AC="true"
-                            BL="true"
-                            WD="/home/DrSobik/Projects/IPPS/CPPALG/Solvers/VNSPlanner"
-                            BC="${MAKE}  -f Makefile CONF=Release"
-                            CC="${MAKE}  -f Makefile CONF=Release clean"
-                            OP="builds/Lin64bit/release/libVNSPlanner.so.1.0.0">
-              </makeArtifact>
-            </linkerLibProjectItem>
             <linkerLibProjectItem>
               <makeArtifact PL="/home/DrSobik/Projects/IPPS/CPPALG/Common"
                             CT="5"
@@ -689,6 +614,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="../../../Common/Loader/Loader.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../Common/MathExt/MathExt.h" ex="false" tool="3" flavor2="0">
       </item>

@@ -15,7 +15,7 @@ CXX           = g++-5
 DEFINES       = -DDEBUG -DEDEBUG -DIDEBUG -DLS_MSG -DWDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -std=c++14 -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -Inbproject -I. -I../../../../Common/Include -I../../../../Common/Debug -I../../Common/src -Isrc -I../LocalSearchPM/src -I../PriorityScheduler/src -I../CombinedScheduler/src -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtXml -isystem /usr/include/qt5/QtCore -Ibuilds/Lin64bit/release/moc -I/usr/lib64/qt5/mkspecs/linux-g++
+INCPATH       = -Inbproject -I. -I../../../../Common/Include -I../../../../Common/Debug -I../../Common/src -I../LocalSearchPM/src/LocalSearchPM -I../PriorityScheduler/src/PriorityScheduler -I../CombinedScheduler/src/CombinedScheduler -Isrc/TGScheduler -Isrc/TGVNSScheduler -Isrc/SBHScheduler -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtXml -isystem /usr/include/qt5/QtCore -Ibuilds/Lin64bit/release/moc -I/usr/lib64/qt5/mkspecs/linux-g++
 QMAKE         = /usr/bin/qmake-qt5
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -50,9 +50,9 @@ OBJECTS_DIR   = builds/Lin64bit/release/obj/
 
 SOURCES       = ../../../../Common/Debug/DebugExt.cpp \
 		../../../../Common/RandExt/RandExt.cpp \
-		src/SBHScheduler.cpp \
-		src/TGScheduler.cpp \
-		src/TGVNSScheduler.cpp 
+		src/SBHScheduler/SBHScheduler.cpp \
+		src/TGScheduler/TGScheduler.cpp \
+		src/TGVNSScheduler/TGVNSScheduler.cpp 
 OBJECTS       = builds/Lin64bit/release/obj/DebugExt.o \
 		builds/Lin64bit/release/obj/RandExt.o \
 		builds/Lin64bit/release/obj/SBHScheduler.o \
@@ -186,13 +186,13 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		../../../../Common/Solvers/Solver.h \
 		../../../../Common/Stopable/Stopable.h \
 		../../../../Common/WritableReadable/WritableReadable.h \
-		src/SBHScheduler.h \
-		src/TGScheduler.h \
-		src/TGVNSScheduler.h ../../../../Common/Debug/DebugExt.cpp \
+		src/SBHScheduler/SBHScheduler.h \
+		src/TGScheduler/TGScheduler.h \
+		src/TGVNSScheduler/TGVNSScheduler.h ../../../../Common/Debug/DebugExt.cpp \
 		../../../../Common/RandExt/RandExt.cpp \
-		src/SBHScheduler.cpp \
-		src/TGScheduler.cpp \
-		src/TGVNSScheduler.cpp
+		src/SBHScheduler/SBHScheduler.cpp \
+		src/TGScheduler/TGScheduler.cpp \
+		src/TGVNSScheduler/TGVNSScheduler.cpp
 QMAKE_TARGET  = SBHScheduler
 DESTDIR       = builds/Lin64bit/release/#avoid trailing-slash linebreak
 TARGET        = libSBHScheduler.so.1.0.0
@@ -240,6 +240,7 @@ builds/Lin64bit/release/$(TARGET):  $(OBJECTS) $(SUBLIBS) $(OBJCOMP)
 	-$(MOVE) $(TARGET0) builds/Lin64bit/release/ 
 	-$(MOVE) $(TARGET1) builds/Lin64bit/release/ 
 	-$(MOVE) $(TARGET2) builds/Lin64bit/release/ 
+	mkdir -p ../../bin/DLL/Solvers/SBHScheduler && cp -f -d builds/Lin64bit/release/lib* ../../bin/DLL/Solvers/SBHScheduler
 
 
 
@@ -436,8 +437,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../../../Common/Algorithm/Algorithm.h ../../../../Common/Assignable/Assignable.h ../../../../Common/Clonable/Clonable.h ../../../../Common/Comparable/Comparable.h ../../../../Common/Debug/DebugExt.h ../../../../Common/Driver/Driven.h ../../../../Common/Driver/Driver.h ../../../../Common/Exceptions/Exception.h ../../../../Common/Exceptions/MsgException.h ../../../../Common/Functor/Functor.h ../../../../Common/Include/Algorithm ../../../../Common/Include/Assignable ../../../../Common/Include/Clonable ../../../../Common/Include/Comparable ../../../../Common/Include/Driver ../../../../Common/Include/Exceptions ../../../../Common/Include/Functor ../../../../Common/Include/MathExt ../../../../Common/Include/Messages ../../../../Common/Include/Object ../../../../Common/Include/Operationable ../../../../Common/Include/RandExt ../../../../Common/Include/Runnable ../../../../Common/Include/SavableRestorable ../../../../Common/Include/SenderReceiver ../../../../Common/Include/Signals ../../../../Common/Include/SmartPointer ../../../../Common/Include/Solver ../../../../Common/Include/Stopable ../../../../Common/Include/WritableReadable ../../../../Common/MathExt/MathExt.h ../../../../Common/Messages/Messages.h ../../../../Common/Object/Object.h ../../../../Common/Operationable/Operationable.h ../../../../Common/RandExt/RandExt.h ../../../../Common/RandExt/RandExt_CombinedRandGen.h ../../../../Common/RandExt/RandExt_Interfaces.h ../../../../Common/RandExt/RandExt_LCG.h ../../../../Common/RandExt/RandExt_MersenneTwister.h ../../../../Common/Runnable/Runnable.h ../../../../Common/SavableRestorable/SavableRestorable.h ../../../../Common/SenderReceiver/SenderReceiver.h ../../../../Common/Signals/Signal.h ../../../../Common/SmartPointer/SmartPointer.h ../../../../Common/Solvers/Solver.h ../../../../Common/Stopable/Stopable.h ../../../../Common/WritableReadable/WritableReadable.h src/SBHScheduler.h src/TGScheduler.h src/TGVNSScheduler.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../../../Common/Debug/DebugExt.cpp ../../../../Common/RandExt/RandExt.cpp src/SBHScheduler.cpp src/TGScheduler.cpp src/TGVNSScheduler.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../../../Common/Algorithm/Algorithm.h ../../../../Common/Assignable/Assignable.h ../../../../Common/Clonable/Clonable.h ../../../../Common/Comparable/Comparable.h ../../../../Common/Debug/DebugExt.h ../../../../Common/Driver/Driven.h ../../../../Common/Driver/Driver.h ../../../../Common/Exceptions/Exception.h ../../../../Common/Exceptions/MsgException.h ../../../../Common/Functor/Functor.h ../../../../Common/Include/Algorithm ../../../../Common/Include/Assignable ../../../../Common/Include/Clonable ../../../../Common/Include/Comparable ../../../../Common/Include/Driver ../../../../Common/Include/Exceptions ../../../../Common/Include/Functor ../../../../Common/Include/MathExt ../../../../Common/Include/Messages ../../../../Common/Include/Object ../../../../Common/Include/Operationable ../../../../Common/Include/RandExt ../../../../Common/Include/Runnable ../../../../Common/Include/SavableRestorable ../../../../Common/Include/SenderReceiver ../../../../Common/Include/Signals ../../../../Common/Include/SmartPointer ../../../../Common/Include/Solver ../../../../Common/Include/Stopable ../../../../Common/Include/WritableReadable ../../../../Common/MathExt/MathExt.h ../../../../Common/Messages/Messages.h ../../../../Common/Object/Object.h ../../../../Common/Operationable/Operationable.h ../../../../Common/RandExt/RandExt.h ../../../../Common/RandExt/RandExt_CombinedRandGen.h ../../../../Common/RandExt/RandExt_Interfaces.h ../../../../Common/RandExt/RandExt_LCG.h ../../../../Common/RandExt/RandExt_MersenneTwister.h ../../../../Common/Runnable/Runnable.h ../../../../Common/SavableRestorable/SavableRestorable.h ../../../../Common/SenderReceiver/SenderReceiver.h ../../../../Common/Signals/Signal.h ../../../../Common/SmartPointer/SmartPointer.h ../../../../Common/Solvers/Solver.h ../../../../Common/Stopable/Stopable.h ../../../../Common/WritableReadable/WritableReadable.h src/SBHScheduler/SBHScheduler.h src/TGScheduler/TGScheduler.h src/TGVNSScheduler/TGVNSScheduler.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../../../Common/Debug/DebugExt.cpp ../../../../Common/RandExt/RandExt.cpp src/SBHScheduler/SBHScheduler.cpp src/TGScheduler/TGScheduler.cpp src/TGVNSScheduler/TGVNSScheduler.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -503,7 +504,7 @@ builds/Lin64bit/release/obj/RandExt.o: ../../../../Common/RandExt/RandExt.cpp ..
 		../../../../Common/RandExt/RandExt_Interfaces.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/RandExt.o ../../../../Common/RandExt/RandExt.cpp
 
-builds/Lin64bit/release/obj/SBHScheduler.o: src/SBHScheduler.cpp src/SBHScheduler.h \
+builds/Lin64bit/release/obj/SBHScheduler.o: src/SBHScheduler/SBHScheduler.cpp src/SBHScheduler/SBHScheduler.h \
 		../../Common/src/Scheduler.h \
 		../../../../Common/Debug/DebugExt.h \
 		../../Common/src/Operation.h \
@@ -538,16 +539,16 @@ builds/Lin64bit/release/obj/SBHScheduler.o: src/SBHScheduler.cpp src/SBHSchedule
 		../../Common/src/TGSelection.h \
 		../../Common/src/Clonable.h \
 		../../Common/src/IterativeAlg.h \
-		src/TGScheduler.h \
-		src/TGVNSScheduler.h \
-		../LocalSearchPM/src/LocalSearchPM.h \
+		src/TGScheduler/TGScheduler.h \
+		src/TGVNSScheduler/TGVNSScheduler.h \
+		../LocalSearchPM/src/LocalSearchPM/LocalSearchPM.h \
 		../../../../Common/Include/Solver \
 		../../../../Common/Solvers/Solver.h \
-		../PriorityScheduler/src/PriorityScheduler.h \
-		../CombinedScheduler/src/CombinedScheduler.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/SBHScheduler.o src/SBHScheduler.cpp
+		../PriorityScheduler/src/PriorityScheduler/PriorityScheduler.h \
+		../CombinedScheduler/src/CombinedScheduler/CombinedScheduler.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/SBHScheduler.o src/SBHScheduler/SBHScheduler.cpp
 
-builds/Lin64bit/release/obj/TGScheduler.o: src/TGScheduler.cpp src/TGScheduler.h \
+builds/Lin64bit/release/obj/TGScheduler.o: src/TGScheduler/TGScheduler.cpp src/TGScheduler/TGScheduler.h \
 		../../Common/src/Resources.h \
 		../../Common/src/Operation.h \
 		../../../../Common/Debug/DebugExt.h \
@@ -579,19 +580,19 @@ builds/Lin64bit/release/obj/TGScheduler.o: src/TGScheduler.cpp src/TGScheduler.h
 		../../Common/src/Clonable.h \
 		../../Common/src/Objective.h \
 		../../Common/src/TGSelection.h \
-		src/SBHScheduler.h \
+		src/SBHScheduler/SBHScheduler.h \
 		../../Common/src/Scheduler.h \
 		../../Common/src/Schedule.h \
 		../../Common/src/IterativeAlg.h \
-		src/TGVNSScheduler.h \
-		../LocalSearchPM/src/LocalSearchPM.h \
+		src/TGVNSScheduler/TGVNSScheduler.h \
+		../LocalSearchPM/src/LocalSearchPM/LocalSearchPM.h \
 		../../../../Common/Include/Solver \
 		../../../../Common/Solvers/Solver.h \
-		../PriorityScheduler/src/PriorityScheduler.h \
-		../CombinedScheduler/src/CombinedScheduler.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/TGScheduler.o src/TGScheduler.cpp
+		../PriorityScheduler/src/PriorityScheduler/PriorityScheduler.h \
+		../CombinedScheduler/src/CombinedScheduler/CombinedScheduler.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/TGScheduler.o src/TGScheduler/TGScheduler.cpp
 
-builds/Lin64bit/release/obj/TGVNSScheduler.o: src/TGVNSScheduler.cpp src/TGVNSScheduler.h \
+builds/Lin64bit/release/obj/TGVNSScheduler.o: src/TGVNSScheduler/TGVNSScheduler.cpp src/TGVNSScheduler/TGVNSScheduler.h \
 		../../../../Common/Include/RandExt \
 		../../../../Common/RandExt/RandExt.h \
 		../../../../Common/Include/Object \
@@ -620,20 +621,20 @@ builds/Lin64bit/release/obj/TGVNSScheduler.o: src/TGVNSScheduler.cpp src/TGVNSSc
 		../../Common/src/Operation.h \
 		../../../../Common/Debug/DebugExt.h \
 		../../Common/src/ProcessModel.h \
-		src/TGScheduler.h \
+		src/TGScheduler/TGScheduler.h \
 		../../Common/src/Clonable.h \
 		../../Common/src/Objective.h \
 		../../Common/src/TGSelection.h \
 		../../Common/src/IterativeAlg.h \
-		src/SBHScheduler.h \
+		src/SBHScheduler/SBHScheduler.h \
 		../../Common/src/Scheduler.h \
 		../../Common/src/Schedule.h \
-		../LocalSearchPM/src/LocalSearchPM.h \
+		../LocalSearchPM/src/LocalSearchPM/LocalSearchPM.h \
 		../../../../Common/Include/Solver \
 		../../../../Common/Solvers/Solver.h \
-		../PriorityScheduler/src/PriorityScheduler.h \
-		../CombinedScheduler/src/CombinedScheduler.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/TGVNSScheduler.o src/TGVNSScheduler.cpp
+		../PriorityScheduler/src/PriorityScheduler/PriorityScheduler.h \
+		../CombinedScheduler/src/CombinedScheduler/CombinedScheduler.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/TGVNSScheduler.o src/TGVNSScheduler/TGVNSScheduler.cpp
 
 ####### Install
 

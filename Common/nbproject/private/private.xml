@@ -4,4 +4,17 @@
         <activeConfTypeElem>5</activeConfTypeElem>
         <activeConfIndexElem>1</activeConfIndexElem>
     </data>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group name="Common"/>
+        <group>
+            <file>file:/data/Projects/IPPS/CPPALG/Common/src/Scheduler/Scheduler.cpp</file>
+            <file>file:/data/Projects/IPPS/CPPALG/Common/src/Planner/Planner.cpp</file>
+            <file>file:/data/Projects/IPPS/CPPALG/Common/src/IterativeAlg/IterativeAlg.h</file>
+            <file>file:/data/Projects/IPPS/CPPALG/Common/src/Scheduler/Scheduler.h</file>
+            <file>file:/data/Projects/IPPS/CPPALG/Common/src/IPPSDefinitions/IPPSDefinitions.h</file>
+            <file>file:/data/Projects/IPPS/CPPALG/Common/src/Planner/Planner.h</file>
+            <file>file:/data/Projects/IPPS/CPPALG/Common/src/IterativeAlg/IterativeAlg.cpp</file>
+        </group>
+    </open-files>
 </project-private>

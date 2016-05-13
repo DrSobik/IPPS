@@ -22,7 +22,7 @@ AS=as
 QMAKE=qmake-qt5
 
 # Macros
-CND_PLATFORM=GNU-Linux
+CND_PLATFORM=GNU_GCC5-Linux
 CND_DLIB_EXT=so
 CND_CONF=Release
 CND_DISTDIR=dist
@@ -52,7 +52,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../CombinedScheduler/builds/Lin64bit/release/libCombinedScheduler.so.1.0.0 ../LocalSearchPM/builds/Lin64bit/release/libLocalSearchPM.so.1.0.0 ../../Common/builds/Lin64bit/release/libCommon.so.1.0.0
+LDLIBSOPTIONS=../../Common/builds/Lin64bit/release/libCommon.so.1.0.0
 
 nbproject/qt-${CND_CONF}.mk: nbproject/qt-${CND_CONF}.pro FORCE
 	${QMAKE} VPATH=. -o qttmp-${CND_CONF}.mk nbproject/qt-${CND_CONF}.pro

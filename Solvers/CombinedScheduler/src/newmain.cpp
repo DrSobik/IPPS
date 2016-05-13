@@ -13,7 +13,7 @@
 
 #include <QApplication>
 
-#include "CombinedScheduler.h"
+#include "CombinedScheduler/CombinedScheduler.h"
 
 int main(int argc, char *argv[]) {
 	// initialize resources, if needed
@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
 	// create and show your widgets here
 
-	CombinedSchedulerLS csls;
+	CombinedScheduler csls;
 	
 	return app.exec();
 }

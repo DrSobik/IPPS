@@ -22,7 +22,7 @@ AS=as
 QMAKE=qmake-qt5
 
 # Macros
-CND_PLATFORM=GNU-Linux
+CND_PLATFORM=GNU_GCC5-Linux
 CND_DLIB_EXT=so
 CND_CONF=Release
 CND_DISTDIR=dist
