@@ -116,25 +116,19 @@
         <itemPath>../../../../Common/WritableReadable/WritableReadable.h</itemPath>
       </logicalFolder>
     </logicalFolder>
-    <logicalFolder name="f1" displayName="IPPSCommon" projectFiles="true">
-      <itemPath>../../Common/IterativeAlg.cpp</itemPath>
-      <itemPath>../../Common/IterativeAlg.h</itemPath>
-      <itemPath>../../Common/Objective.cpp</itemPath>
-      <itemPath>../../Common/Objective.h</itemPath>
-      <itemPath>../../Common/Operation.cpp</itemPath>
-      <itemPath>../../Common/Operation.h</itemPath>
-      <itemPath>../../Common/ProcessModel.cpp</itemPath>
-      <itemPath>../../Common/ProcessModel.h</itemPath>
-      <itemPath>../../Common/Resources.cpp</itemPath>
-      <itemPath>../../Common/Resources.h</itemPath>
-      <itemPath>../../Common/Schedule.cpp</itemPath>
-      <itemPath>../../Common/Schedule.h</itemPath>
-      <itemPath>../../Common/Scheduler.cpp</itemPath>
-      <itemPath>../../Common/Scheduler.h</itemPath>
-    </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
-      <itemPath>src/PriorityScheduler.cpp</itemPath>
-      <itemPath>src/PriorityScheduler.h</itemPath>
+      <logicalFolder name="DLLExportInterface"
+                     displayName="DLLExportInterface"
+                     projectFiles="true">
+        <itemPath>src/DLLExportInterface/DLLExportInterface.cpp</itemPath>
+        <itemPath>src/DLLExportInterface/DLLExportInterface.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="PriorityScheduler"
+                     displayName="PriorityScheduler"
+                     projectFiles="true">
+        <itemPath>src/PriorityScheduler/PriorityScheduler.cpp</itemPath>
+        <itemPath>src/PriorityScheduler/PriorityScheduler.h</itemPath>
+      </logicalFolder>
       <itemPath>src/newmain.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -165,8 +159,8 @@
         <defs>
           <Elem>OBJECTS_DIR=$$DESTDIR/obj</Elem>
           <Elem>QMAKE_CXXFLAGS += -std=c++14</Elem>
-          <Elem>CONFIG-= staticlib</Elem>
-          <Elem>CONFIG+= dll</Elem>
+          <Elem>AFTERBUILDDIR = ../../bin/DLL/Solvers/$$TARGET</Elem>
+          <Elem>unix:QMAKE_POST_LINK = mkdir -p $$AFTERBUILDDIR &amp;&amp;  cp -f -d $$DESTDIR/lib* $$AFTERBUILDDIR</Elem>
         </defs>
       </qt>
       <compileType>
@@ -176,12 +170,12 @@
             <pElem>../../../../Common/Include</pElem>
             <pElem>../../../../Common/Debug</pElem>
             <pElem>../../Common/src</pElem>
+            <pElem>../../Common/src/Include</pElem>
             <pElem>src</pElem>
-            <pElem>../CombinedScheduler/src</pElem>
-            <pElem>../LocalSearchPM/src</pElem>
           </incDir>
           <preprocessorList>
             <Elem>DEBUG</Elem>
+            <Elem>DLL_EXPORT</Elem>
             <Elem>EDEBUG</Elem>
             <Elem>IDEBUG</Elem>
             <Elem>LS_MSG</Elem>
@@ -411,37 +405,25 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../Common/IterativeAlg.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/DLLExportInterface/DLLExportInterface.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
-      <item path="../../Common/IterativeAlg.h" ex="false" tool="3" flavor2="0">
+      <item path="src/DLLExportInterface/DLLExportInterface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="../../Common/Objective.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/PriorityScheduler/PriorityScheduler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
-      <item path="../../Common/Objective.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Common/Operation.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../../Common/Operation.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Common/ProcessModel.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../../Common/ProcessModel.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Common/Resources.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../../Common/Resources.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Common/Schedule.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../../Common/Schedule.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Common/Scheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../../Common/Scheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/PriorityScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/PriorityScheduler.h" ex="false" tool="3" flavor2="0">
+      <item path="src/PriorityScheduler/PriorityScheduler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="src/newmain.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -462,8 +444,8 @@
         <defs>
           <Elem>OBJECTS_DIR=$$DESTDIR/obj</Elem>
           <Elem>QMAKE_CXXFLAGS += -std=c++14</Elem>
-          <Elem>CONFIG-= staticlib</Elem>
-          <Elem>CONFIG+= dll</Elem>
+          <Elem>AFTERBUILDDIR = ../../bin/DLL/Solvers/$$TARGET</Elem>
+          <Elem>unix:QMAKE_POST_LINK = mkdir -p $$AFTERBUILDDIR &amp;&amp;  cp -f -d $$DESTDIR/lib* $$AFTERBUILDDIR</Elem>
         </defs>
       </qt>
       <compileType>
@@ -477,12 +459,12 @@
             <pElem>../../../../Common/Include</pElem>
             <pElem>../../../../Common/Debug</pElem>
             <pElem>../../Common/src</pElem>
+            <pElem>../../Common/src/Include</pElem>
             <pElem>src</pElem>
-            <pElem>../CombinedScheduler/src</pElem>
-            <pElem>../LocalSearchPM/src</pElem>
           </incDir>
           <preprocessorList>
             <Elem>DEBUG</Elem>
+            <Elem>DLL_EXPORT</Elem>
             <Elem>EDEBUG</Elem>
             <Elem>IDEBUG</Elem>
             <Elem>LS_MSG</Elem>
@@ -497,30 +479,6 @@
         </asmTool>
         <linkerTool>
           <linkerLibItems>
-            <linkerLibProjectItem>
-              <makeArtifact PL="../CombinedScheduler"
-                            CT="5"
-                            CN="Release"
-                            AC="true"
-                            BL="true"
-                            WD="../CombinedScheduler"
-                            BC="${MAKE}  -f Makefile CONF=Release"
-                            CC="${MAKE}  -f Makefile CONF=Release clean"
-                            OP="builds/Lin64bit/release/libCombinedScheduler.so.1.0.0">
-              </makeArtifact>
-            </linkerLibProjectItem>
-            <linkerLibProjectItem>
-              <makeArtifact PL="../LocalSearchPM"
-                            CT="5"
-                            CN="Release"
-                            AC="true"
-                            BL="true"
-                            WD="../LocalSearchPM"
-                            BC="${MAKE}  -f Makefile CONF=Release"
-                            CC="${MAKE}  -f Makefile CONF=Release clean"
-                            OP="builds/Lin64bit/release/libLocalSearchPM.so.1.0.0">
-              </makeArtifact>
-            </linkerLibProjectItem>
             <linkerLibProjectItem>
               <makeArtifact PL="../../Common"
                             CT="5"
@@ -790,37 +748,25 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../Common/IterativeAlg.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/DLLExportInterface/DLLExportInterface.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
-      <item path="../../Common/IterativeAlg.h" ex="false" tool="3" flavor2="0">
+      <item path="src/DLLExportInterface/DLLExportInterface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="../../Common/Objective.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/PriorityScheduler/PriorityScheduler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
-      <item path="../../Common/Objective.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Common/Operation.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../../Common/Operation.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Common/ProcessModel.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../../Common/ProcessModel.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Common/Resources.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../../Common/Resources.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Common/Schedule.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../../Common/Schedule.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Common/Scheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../../Common/Scheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/PriorityScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/PriorityScheduler.h" ex="false" tool="3" flavor2="0">
+      <item path="src/PriorityScheduler/PriorityScheduler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="src/newmain.cpp" ex="false" tool="1" flavor2="0">
       </item>

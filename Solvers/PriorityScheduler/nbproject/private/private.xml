@@ -6,6 +6,12 @@
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group name="Common"/>
+        <group name="Common">
+            <file>file:/data/Projects/IPPS/CPPALG/Solvers/PriorityScheduler/src/PriorityScheduler/PriorityScheduler.h</file>
+        </group>
+        <group>
+            <file>file:/data/Projects/IPPS/CPPALG/Solvers/PriorityScheduler/src/PriorityScheduler/PriorityScheduler.cpp</file>
+            <file>file:/data/Projects/IPPS/CPPALG/Solvers/PriorityScheduler/src/PriorityScheduler/PriorityScheduler.h</file>
+        </group>
     </open-files>
 </project-private>

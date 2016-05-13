@@ -117,8 +117,18 @@
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
-      <itemPath>src/CombinedScheduler.cpp</itemPath>
-      <itemPath>src/CombinedScheduler.h</itemPath>
+      <logicalFolder name="CombinedScheduler"
+                     displayName="CombinedScheduler"
+                     projectFiles="true">
+        <itemPath>src/CombinedScheduler/CombinedScheduler.cpp</itemPath>
+        <itemPath>src/CombinedScheduler/CombinedScheduler.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="DLLExportInterface"
+                     displayName="DLLExportInterface"
+                     projectFiles="true">
+        <itemPath>src/DLLExportInterface/DLLExportInterface.cpp</itemPath>
+        <itemPath>src/DLLExportInterface/DLLExportInterface.h</itemPath>
+      </logicalFolder>
       <itemPath>src/newmain.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -149,8 +159,8 @@
         <defs>
           <Elem>OBJECTS_DIR=$$DESTDIR/obj</Elem>
           <Elem>QMAKE_CXXFLAGS += -std=c++14</Elem>
-          <Elem>CONFIG-= staticlib</Elem>
-          <Elem>CONFIG+= dll</Elem>
+          <Elem>AFTERBUILDDIR = ../../bin/DLL/Solvers/$$TARGET</Elem>
+          <Elem>unix:QMAKE_POST_LINK = mkdir -p $$AFTERBUILDDIR &amp;&amp;  cp -f -d $$DESTDIR/lib* $$AFTERBUILDDIR</Elem>
         </defs>
       </qt>
       <compileType>
@@ -159,12 +169,13 @@
           <incDir>
             <pElem>../../../../Common/Include</pElem>
             <pElem>../../../../Common/Debug</pElem>
+            <pElem>../../Common/src/Include</pElem>
             <pElem>../../Common/src</pElem>
             <pElem>src</pElem>
-            <pElem>../LocalSearchPM/src</pElem>
           </incDir>
           <preprocessorList>
             <Elem>DEBUG</Elem>
+            <Elem>DLL_EXPORT</Elem>
             <Elem>EDEBUG</Elem>
             <Elem>IDEBUG</Elem>
             <Elem>LS_MSG</Elem>
@@ -394,9 +405,25 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="src/CombinedScheduler.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/CombinedScheduler/CombinedScheduler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
-      <item path="src/CombinedScheduler.h" ex="false" tool="3" flavor2="0">
+      <item path="src/CombinedScheduler/CombinedScheduler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/DLLExportInterface/DLLExportInterface.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/DLLExportInterface/DLLExportInterface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="src/newmain.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -417,8 +444,8 @@
         <defs>
           <Elem>OBJECTS_DIR=$$DESTDIR/obj</Elem>
           <Elem>QMAKE_CXXFLAGS += -std=c++14</Elem>
-          <Elem>CONFIG-= staticlib</Elem>
-          <Elem>CONFIG+= dll</Elem>
+          <Elem>AFTERBUILDDIR = ../../bin/DLL/Solvers/$$TARGET</Elem>
+          <Elem>unix:QMAKE_POST_LINK = mkdir -p $$AFTERBUILDDIR &amp;&amp;  cp -f -d $$DESTDIR/lib* $$AFTERBUILDDIR</Elem>
         </defs>
       </qt>
       <compileType>
@@ -431,12 +458,13 @@
           <incDir>
             <pElem>../../../../Common/Include</pElem>
             <pElem>../../../../Common/Debug</pElem>
+            <pElem>../../Common/src/Include</pElem>
             <pElem>../../Common/src</pElem>
             <pElem>src</pElem>
-            <pElem>../LocalSearchPM/src</pElem>
           </incDir>
           <preprocessorList>
             <Elem>DEBUG</Elem>
+            <Elem>DLL_EXPORT</Elem>
             <Elem>EDEBUG</Elem>
             <Elem>IDEBUG</Elem>
             <Elem>LS_MSG</Elem>
@@ -451,18 +479,6 @@
         </asmTool>
         <linkerTool>
           <linkerLibItems>
-            <linkerLibProjectItem>
-              <makeArtifact PL="../LocalSearchPM"
-                            CT="5"
-                            CN="Release"
-                            AC="true"
-                            BL="false"
-                            WD="../LocalSearchPM"
-                            BC="${MAKE}  -f Makefile CONF=Release"
-                            CC="${MAKE}  -f Makefile CONF=Release clean"
-                            OP="builds/Lin64bit/release/libLocalSearchPM.so.1.0.0">
-              </makeArtifact>
-            </linkerLibProjectItem>
             <linkerLibProjectItem>
               <makeArtifact PL="../../Common"
                             CT="5"
@@ -722,9 +738,25 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="src/CombinedScheduler.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/CombinedScheduler/CombinedScheduler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
-      <item path="src/CombinedScheduler.h" ex="false" tool="3" flavor2="0">
+      <item path="src/CombinedScheduler/CombinedScheduler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/DLLExportInterface/DLLExportInterface.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/DLLExportInterface/DLLExportInterface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="src/newmain.cpp" ex="false" tool="1" flavor2="0">
       </item>

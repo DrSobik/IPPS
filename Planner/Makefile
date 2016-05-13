@@ -15,7 +15,7 @@ CXX           = g++-5
 DEFINES       = -DDEBUG -DEDEBUG -DIDEBUG -DLS_MSG -DWDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -std=c++14 -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -Inbproject -I. -I../../../Common/Include -I../../../Common/Debug -I../Common/src -I../Solvers/VNSPlanner/src -I../Solvers/PriorityScheduler/src -I../Solvers/CombinedScheduler/src -I../Solvers/LocalSearchPM/src -I../Solvers/SBHScheduler/src -I../Solvers/VNSScheduler/src -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtNetwork -isystem /usr/include/qt5/QtXml -isystem /usr/include/qt5/QtCore -Ibuilds/Lin64bit/release/moc -I/usr/lib64/qt5/mkspecs/linux-g++
+INCPATH       = -Inbproject -I. -I../../../Common/Include -I../../../Common/Debug -I../Common/src/Include -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtNetwork -isystem /usr/include/qt5/QtXml -isystem /usr/include/qt5/QtCore -Ibuilds/Lin64bit/release/moc -I/usr/lib64/qt5/mkspecs/linux-g++
 QMAKE         = /usr/bin/qmake-qt5
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = Planner1.0.0
 DISTDIR = /data/Projects/IPPS/CPPALG/Planner/builds/Lin64bit/release/obj/Planner1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1
-LIBS          = $(SUBLIBS) -Wl,-rpath,/home/DrSobik/Projects/IPPS/CPPALG/Solvers/PriorityScheduler/builds/Lin64bit/release /home/DrSobik/Projects/IPPS/CPPALG/Solvers/PriorityScheduler/builds/Lin64bit/release/libPriorityScheduler.so.1.0.0 -Wl,-rpath,/home/DrSobik/Projects/IPPS/CPPALG/Solvers/CombinedScheduler/builds/Lin64bit/release /home/DrSobik/Projects/IPPS/CPPALG/Solvers/CombinedScheduler/builds/Lin64bit/release/libCombinedScheduler.so.1.0.0 -Wl,-rpath,/home/DrSobik/Projects/IPPS/CPPALG/Solvers/LocalSearchPM/builds/Lin64bit/release /home/DrSobik/Projects/IPPS/CPPALG/Solvers/LocalSearchPM/builds/Lin64bit/release/libLocalSearchPM.so.1.0.0 -Wl,-rpath,/home/DrSobik/Projects/IPPS/CPPALG/Solvers/SBHScheduler/builds/Lin64bit/release /home/DrSobik/Projects/IPPS/CPPALG/Solvers/SBHScheduler/builds/Lin64bit/release/libSBHScheduler.so.1.0.0 -Wl,-rpath,/home/DrSobik/Projects/IPPS/CPPALG/Solvers/VNSScheduler/builds/Lin64bit/release /home/DrSobik/Projects/IPPS/CPPALG/Solvers/VNSScheduler/builds/Lin64bit/release/libVNSScheduler.so.1.0.0 -Wl,-rpath,/home/DrSobik/Projects/IPPS/CPPALG/Solvers/VNSPlanner/builds/Lin64bit/release /home/DrSobik/Projects/IPPS/CPPALG/Solvers/VNSPlanner/builds/Lin64bit/release/libVNSPlanner.so.1.0.0 -Wl,-rpath,/home/DrSobik/Projects/IPPS/CPPALG/Common/builds/Lin64bit/release /home/DrSobik/Projects/IPPS/CPPALG/Common/builds/Lin64bit/release/libCommon.so.1.0.0 -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Network -lQt5Xml -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -Wl,-rpath,/home/DrSobik/Projects/IPPS/CPPALG/Common/builds/Lin64bit/release /home/DrSobik/Projects/IPPS/CPPALG/Common/builds/Lin64bit/release/libCommon.so.1.0.0 -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Network -lQt5Xml -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -168,6 +168,7 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		../../../Common/Include/Solver \
 		../../../Common/Include/Stopable \
 		../../../Common/Include/WritableReadable \
+		../../../Common/Loader/Loader.h \
 		../../../Common/MathExt/MathExt.h \
 		../../../Common/Messages/Messages.h \
 		../../../Common/Object/Object.h \
@@ -219,6 +220,7 @@ first: all
 $(TARGET):  $(OBJECTS)  
 	@test -d builds/Lin64bit/release/ || mkdir -p builds/Lin64bit/release/
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
+	mkdir -p ../bin/ && cp -f -d builds/Lin64bit/release/Planner ../bin/
 
 Makefile: nbproject/qt-Release.pro /usr/lib64/qt5/mkspecs/linux-g++/qmake.conf /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
@@ -409,7 +411,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../../Common/Algorithm/Algorithm.h ../../../Common/Assignable/Assignable.h ../../../Common/Clonable/Clonable.h ../../../Common/Comparable/Comparable.h ../../../Common/Debug/DebugExt.h ../../../Common/Driver/Driven.h ../../../Common/Driver/Driver.h ../../../Common/Exceptions/Exception.h ../../../Common/Exceptions/MsgException.h ../../../Common/Functor/Functor.h ../../../Common/Include/Algorithm ../../../Common/Include/Assignable ../../../Common/Include/Clonable ../../../Common/Include/Comparable ../../../Common/Include/Driver ../../../Common/Include/Exceptions ../../../Common/Include/Functor ../../../Common/Include/MathExt ../../../Common/Include/Messages ../../../Common/Include/Object ../../../Common/Include/Operationable ../../../Common/Include/RandExt ../../../Common/Include/Runnable ../../../Common/Include/SavableRestorable ../../../Common/Include/SenderReceiver ../../../Common/Include/Signals ../../../Common/Include/SmartPointer ../../../Common/Include/Solver ../../../Common/Include/Stopable ../../../Common/Include/WritableReadable ../../../Common/MathExt/MathExt.h ../../../Common/Messages/Messages.h ../../../Common/Object/Object.h ../../../Common/Operationable/Operationable.h ../../../Common/RandExt/RandExt.h ../../../Common/RandExt/RandExt_CombinedRandGen.h ../../../Common/RandExt/RandExt_Interfaces.h ../../../Common/RandExt/RandExt_LCG.h ../../../Common/RandExt/RandExt_MersenneTwister.h ../../../Common/Runnable/Runnable.h ../../../Common/SavableRestorable/SavableRestorable.h ../../../Common/SenderReceiver/SenderReceiver.h ../../../Common/Signals/Signal.h ../../../Common/SmartPointer/SmartPointer.h ../../../Common/Solvers/Solver.h ../../../Common/Stopable/Stopable.h ../../../Common/WritableReadable/WritableReadable.h src/PlannerAgent/PlannerAgent.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../../Common/Algorithm/Algorithm.h ../../../Common/Assignable/Assignable.h ../../../Common/Clonable/Clonable.h ../../../Common/Comparable/Comparable.h ../../../Common/Debug/DebugExt.h ../../../Common/Driver/Driven.h ../../../Common/Driver/Driver.h ../../../Common/Exceptions/Exception.h ../../../Common/Exceptions/MsgException.h ../../../Common/Functor/Functor.h ../../../Common/Include/Algorithm ../../../Common/Include/Assignable ../../../Common/Include/Clonable ../../../Common/Include/Comparable ../../../Common/Include/Driver ../../../Common/Include/Exceptions ../../../Common/Include/Functor ../../../Common/Include/MathExt ../../../Common/Include/Messages ../../../Common/Include/Object ../../../Common/Include/Operationable ../../../Common/Include/RandExt ../../../Common/Include/Runnable ../../../Common/Include/SavableRestorable ../../../Common/Include/SenderReceiver ../../../Common/Include/Signals ../../../Common/Include/SmartPointer ../../../Common/Include/Solver ../../../Common/Include/Stopable ../../../Common/Include/WritableReadable ../../../Common/Loader/Loader.h ../../../Common/MathExt/MathExt.h ../../../Common/Messages/Messages.h ../../../Common/Object/Object.h ../../../Common/Operationable/Operationable.h ../../../Common/RandExt/RandExt.h ../../../Common/RandExt/RandExt_CombinedRandGen.h ../../../Common/RandExt/RandExt_Interfaces.h ../../../Common/RandExt/RandExt_LCG.h ../../../Common/RandExt/RandExt_MersenneTwister.h ../../../Common/Runnable/Runnable.h ../../../Common/SavableRestorable/SavableRestorable.h ../../../Common/SenderReceiver/SenderReceiver.h ../../../Common/Signals/Signal.h ../../../Common/SmartPointer/SmartPointer.h ../../../Common/Solvers/Solver.h ../../../Common/Stopable/Stopable.h ../../../Common/WritableReadable/WritableReadable.h src/PlannerAgent/PlannerAgent.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Common/Debug/DebugExt.cpp ../../../Common/RandExt/RandExt.cpp src/PlannerAgent/PlannerAgent.cpp src/main.cpp $(DISTDIR)/
 
 
@@ -437,7 +439,7 @@ compiler_moc_header_make_all: builds/Lin64bit/release/moc/moc_PlannerAgent.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) builds/Lin64bit/release/moc/moc_PlannerAgent.cpp
 builds/Lin64bit/release/moc/moc_PlannerAgent.cpp: src/PlannerAgent/PlannerAgent.h
-	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/data/Projects/IPPS/CPPALG/Planner/nbproject -I/data/Projects/IPPS/Common/Include -I/data/Projects/IPPS/Common/Debug -I/data/Projects/IPPS/CPPALG/Planner/Common/src -I/data/Projects/IPPS/CPPALG/Planner/Solvers/VNSPlanner/src -I/data/Projects/IPPS/CPPALG/Planner/Solvers/PriorityScheduler/src -I/data/Projects/IPPS/CPPALG/Planner/Solvers/CombinedScheduler/src -I/data/Projects/IPPS/CPPALG/Planner/Solvers/LocalSearchPM/src -I/data/Projects/IPPS/CPPALG/Planner/Solvers/SBHScheduler/src -I/data/Projects/IPPS/CPPALG/Planner/Solvers/VNSScheduler/src -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtXml -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/4.8 -I/usr/include/c++/4.8/x86_64-suse-linux -I/usr/include/c++/4.8/backward -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include src/PlannerAgent/PlannerAgent.h -o builds/Lin64bit/release/moc/moc_PlannerAgent.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/data/Projects/IPPS/CPPALG/Planner/nbproject -I/data/Projects/IPPS/Common/Include -I/data/Projects/IPPS/Common/Debug -I/data/Projects/IPPS/CPPALG/Planner/Common/src/Include -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtXml -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/4.8 -I/usr/include/c++/4.8/x86_64-suse-linux -I/usr/include/c++/4.8/backward -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include src/PlannerAgent/PlannerAgent.h -o builds/Lin64bit/release/moc/moc_PlannerAgent.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -507,37 +509,56 @@ builds/Lin64bit/release/obj/main.o: src/main.cpp ../../../Common/Debug/DebugExt.
 		../../../Common/RandExt/RandExt_Interfaces.h \
 		../../../Common/RandExt/RandExt_LCG.h \
 		../../../Common/RandExt/RandExt_CombinedRandGen.h \
-		src/PlannerAgent/PlannerAgent.h \
-		../Common/src/Operation.h \
-		../Common/src/Product.h \
-		../Common/src/BillOfProcesses.h \
-		../Common/src/BillOfMaterials.h \
-		../Common/src/Route.h \
-		../Common/src/Resources.h \
-		../Common/src/Plan.h \
-		../Common/src/Saveable.h \
-		../Common/src/Order.h \
-		../Common/src/Item.h \
-		../Common/src/Planner.h \
-		../Common/src/IterativeAlg.h \
-		../Common/src/Schedule.h \
-		../Common/src/ProcessModel.h \
-		../Common/src/Objective.h \
-		../Common/src/TGSelection.h \
-		../Common/src/Scheduler.h \
-		../Common/src/Clonable.h \
-		../Common/src/Protocol.h \
-		../Common/src/ProcessModelManager.h \
-		../Solvers/VNSPlanner/src/VNSPlanner.h \
-		../Solvers/PriorityScheduler/src/PriorityScheduler.h \
-		../Solvers/CombinedScheduler/src/CombinedScheduler.h \
-		../Solvers/LocalSearchPM/src/LocalSearchPM.h \
+		../../../Common/Include/Loader \
+		../../../Common/Loader/Loader.h \
+		../../../Common/Loader/Loader_DLL.h \
 		../../../Common/Include/Solver \
 		../../../Common/Solvers/Solver.h \
-		../Solvers/SBHScheduler/src/SBHScheduler.h \
-		../Solvers/SBHScheduler/src/TGScheduler.h \
-		../Solvers/SBHScheduler/src/TGVNSScheduler.h \
-		../Solvers/VNSScheduler/src/VNSScheduler.h
+		src/PlannerAgent/PlannerAgent.h \
+		../Common/src/Include/Operation \
+		../Common/src/Operation/Operation.h \
+		../Common/src/Include/Product \
+		../Common/src/Product/Product.h \
+		../Common/src/Include/BillOfProcesses \
+		../Common/src/BOP/BillOfProcesses.h \
+		../Common/src/Include/BillOfMaterials \
+		../Common/src/BOM/BillOfMaterials.h \
+		../Common/src/Include/Route \
+		../Common/src/Route/Route.h \
+		../Common/src/Include/Resources \
+		../Common/src/Resources/Resources.h \
+		../Common/src/Include/Plan \
+		../Common/src/Plan/Plan.h \
+		../Common/src/Include/Saveable \
+		../Common/src/Saveable/Saveable.h \
+		../Common/src/Include/Order \
+		../Common/src/Order/Order.h \
+		../Common/src/Include/Item \
+		../Common/src/Item/Item.h \
+		../Common/src/Include/Planner \
+		../Common/src/Planner/Planner.h \
+		../Common/src/Include/IterativeAlg \
+		../Common/src/IterativeAlg/IterativeAlg.h \
+		../Common/src/Include/Schedule \
+		../Common/src/Schedule/Schedule.h \
+		../Common/src/Include/ProcessModel \
+		../Common/src/ProcessModel/ProcessModel.h \
+		../Common/src/Include/Objective \
+		../Common/src/Objective/Objective.h \
+		../Common/src/Include/TGSelection \
+		../Common/src/TGSelection/TGSelection.h \
+		../Common/src/Include/Scheduler \
+		../Common/src/Scheduler/Scheduler.h \
+		../Common/src/Include/Protocol \
+		../Common/src/Protocol/Protocol.h \
+		../Common/src/Include/ProcessModelManager \
+		../Common/src/ProcessModelManager/ProcessModelManager.h \
+		../Common/src/Include/IPPSProblem \
+		../Common/src/IPPSProblem/IPPSProblem.h \
+		../../../Common/Include/SmartPointer \
+		../../../Common/SmartPointer/SmartPointer.h \
+		../../../Common/Include/Comparable \
+		../../../Common/Comparable/Comparable.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/main.o src/main.cpp
 
 builds/Lin64bit/release/obj/moc_PlannerAgent.o: builds/Lin64bit/release/moc/moc_PlannerAgent.cpp 

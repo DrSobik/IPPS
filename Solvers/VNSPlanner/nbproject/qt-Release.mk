@@ -12,10 +12,10 @@ MAKEFILE      = qttmp-Release.mk
 
 CC            = gcc-5
 CXX           = g++-5
-DEFINES       = -DDEBUG -DEDEBUG -DIDEBUG -DLS_MSG -DWDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB
+DEFINES       = -DDEBUG -DDLL_EXPORT -DEDEBUG -DIDEBUG -DLS_MSG -DWDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -std=c++14 -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -Inbproject -I. -I../../../../Common/Include -I../../../../Common/Debug -I../../Common/src -Isrc -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtXml -isystem /usr/include/qt5/QtCore -Ibuilds/Lin64bit/release/moc -I/usr/lib64/qt5/mkspecs/linux-g++
+INCPATH       = -Inbproject -I. -I../../../../Common/Include -I../../../../Common/Debug -I../../Common/src/Include -Isrc/VNSPlanner -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtXml -isystem /usr/include/qt5/QtConcurrent -isystem /usr/include/qt5/QtCore -Ibuilds/Lin64bit/release/moc -I/usr/lib64/qt5/mkspecs/linux-g++
 QMAKE         = /usr/bin/qmake-qt5
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = VNSPlanner1.0.0
 DISTDIR = /data/Projects/IPPS/CPPALG/Solvers/VNSPlanner/builds/Lin64bit/release/obj/VNSPlanner1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -shared -Wl,-soname,libVNSPlanner.so.1
-LIBS          = $(SUBLIBS) -Wl,-rpath,../../Common/builds/Lin64bit/release ../../Common/builds/Lin64bit/release/libCommon.so.1.0.0 -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Xml -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -Wl,-rpath,../../Common/builds/Lin64bit/release ../../Common/builds/Lin64bit/release/libCommon.so.1.0.0 -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Xml -lQt5Concurrent -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -50,10 +50,12 @@ OBJECTS_DIR   = builds/Lin64bit/release/obj/
 
 SOURCES       = ../../../../Common/Debug/DebugExt.cpp \
 		../../../../Common/RandExt/RandExt.cpp \
-		src/VNSPlanner.cpp \
+		src/DLLExportInterface/DLLExportInterface.cpp \
+		src/VNSPlanner/VNSPlanner.cpp \
 		src/newmain.cpp builds/Lin64bit/release/moc/moc_VNSPlanner.cpp
 OBJECTS       = builds/Lin64bit/release/obj/DebugExt.o \
 		builds/Lin64bit/release/obj/RandExt.o \
+		builds/Lin64bit/release/obj/DLLExportInterface.o \
 		builds/Lin64bit/release/obj/VNSPlanner.o \
 		builds/Lin64bit/release/obj/newmain.o \
 		builds/Lin64bit/release/obj/moc_VNSPlanner.o
@@ -138,8 +140,10 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib64/qt5/mkspecs/features/yacc.prf \
 		/usr/lib64/qt5/mkspecs/features/lex.prf \
-		nbproject/nbproject/qt-Release.pro ../../../../Common/Algorithm/Algorithm.h \
+		nbproject/nbproject/qt-Release.pro ../../../../Common/Acceptable/Acceptable.h \
+		../../../../Common/Algorithm/Algorithm.h \
 		../../../../Common/Assignable/Assignable.h \
+		../../../../Common/Changeable/Changeable.h \
 		../../../../Common/Clonable/Clonable.h \
 		../../../../Common/Comparable/Comparable.h \
 		../../../../Common/Debug/DebugExt.h \
@@ -148,17 +152,21 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		../../../../Common/Exceptions/Exception.h \
 		../../../../Common/Exceptions/MsgException.h \
 		../../../../Common/Functor/Functor.h \
+		../../../../Common/Include/Acceptable \
 		../../../../Common/Include/Algorithm \
 		../../../../Common/Include/Assignable \
+		../../../../Common/Include/Changeable \
 		../../../../Common/Include/Clonable \
 		../../../../Common/Include/Comparable \
 		../../../../Common/Include/Driver \
 		../../../../Common/Include/Exceptions \
 		../../../../Common/Include/Functor \
+		../../../../Common/Include/Loader \
 		../../../../Common/Include/MathExt \
 		../../../../Common/Include/Messages \
 		../../../../Common/Include/Object \
 		../../../../Common/Include/Operationable \
+		../../../../Common/Include/Parser \
 		../../../../Common/Include/RandExt \
 		../../../../Common/Include/Runnable \
 		../../../../Common/Include/SavableRestorable \
@@ -167,11 +175,13 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		../../../../Common/Include/SmartPointer \
 		../../../../Common/Include/Solver \
 		../../../../Common/Include/Stopable \
+		../../../../Common/Include/Variables \
 		../../../../Common/Include/WritableReadable \
 		../../../../Common/MathExt/MathExt.h \
 		../../../../Common/Messages/Messages.h \
 		../../../../Common/Object/Object.h \
 		../../../../Common/Operationable/Operationable.h \
+		../../../../Common/Parser/Parser.h \
 		../../../../Common/RandExt/RandExt.h \
 		../../../../Common/RandExt/RandExt_CombinedRandGen.h \
 		../../../../Common/RandExt/RandExt_Interfaces.h \
@@ -184,10 +194,13 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		../../../../Common/SmartPointer/SmartPointer.h \
 		../../../../Common/Solvers/Solver.h \
 		../../../../Common/Stopable/Stopable.h \
+		../../../../Common/Variables/Variables.h \
 		../../../../Common/WritableReadable/WritableReadable.h \
-		src/VNSPlanner.h ../../../../Common/Debug/DebugExt.cpp \
+		src/DLLExportInterface/DLLExportInterface.h \
+		src/VNSPlanner/VNSPlanner.h ../../../../Common/Debug/DebugExt.cpp \
 		../../../../Common/RandExt/RandExt.cpp \
-		src/VNSPlanner.cpp \
+		src/DLLExportInterface/DLLExportInterface.cpp \
+		src/VNSPlanner/VNSPlanner.cpp \
 		src/newmain.cpp
 QMAKE_TARGET  = VNSPlanner
 DESTDIR       = builds/Lin64bit/release/#avoid trailing-slash linebreak
@@ -236,6 +249,7 @@ builds/Lin64bit/release/$(TARGET):  $(OBJECTS) $(SUBLIBS) $(OBJCOMP)
 	-$(MOVE) $(TARGET0) builds/Lin64bit/release/ 
 	-$(MOVE) $(TARGET1) builds/Lin64bit/release/ 
 	-$(MOVE) $(TARGET2) builds/Lin64bit/release/ 
+	mkdir -p ../../bin/DLL/Solvers/VNSPlanner && cp -f -d builds/Lin64bit/release/lib* ../../bin/DLL/Solvers/VNSPlanner
 
 
 
@@ -330,6 +344,7 @@ qttmp-Release.mk: nbproject/qt-Release.pro /usr/lib64/qt5/mkspecs/linux-g++/qmak
 		/usr/lib64/libQt5Widgets.prl \
 		/usr/lib64/libQt5Gui.prl \
 		/usr/lib64/libQt5Xml.prl \
+		/usr/lib64/libQt5Concurrent.prl \
 		/usr/lib64/libQt5Core.prl
 	$(QMAKE) VPATH=. -o qttmp-Release.mk nbproject/qt-Release.pro
 /usr/lib64/qt5/mkspecs/features/spec_pre.prf:
@@ -417,6 +432,7 @@ nbproject/qt-Release.pro:
 /usr/lib64/libQt5Widgets.prl:
 /usr/lib64/libQt5Gui.prl:
 /usr/lib64/libQt5Xml.prl:
+/usr/lib64/libQt5Concurrent.prl:
 /usr/lib64/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) VPATH=. -o qttmp-Release.mk nbproject/qt-Release.pro
@@ -432,8 +448,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../../../Common/Algorithm/Algorithm.h ../../../../Common/Assignable/Assignable.h ../../../../Common/Clonable/Clonable.h ../../../../Common/Comparable/Comparable.h ../../../../Common/Debug/DebugExt.h ../../../../Common/Driver/Driven.h ../../../../Common/Driver/Driver.h ../../../../Common/Exceptions/Exception.h ../../../../Common/Exceptions/MsgException.h ../../../../Common/Functor/Functor.h ../../../../Common/Include/Algorithm ../../../../Common/Include/Assignable ../../../../Common/Include/Clonable ../../../../Common/Include/Comparable ../../../../Common/Include/Driver ../../../../Common/Include/Exceptions ../../../../Common/Include/Functor ../../../../Common/Include/MathExt ../../../../Common/Include/Messages ../../../../Common/Include/Object ../../../../Common/Include/Operationable ../../../../Common/Include/RandExt ../../../../Common/Include/Runnable ../../../../Common/Include/SavableRestorable ../../../../Common/Include/SenderReceiver ../../../../Common/Include/Signals ../../../../Common/Include/SmartPointer ../../../../Common/Include/Solver ../../../../Common/Include/Stopable ../../../../Common/Include/WritableReadable ../../../../Common/MathExt/MathExt.h ../../../../Common/Messages/Messages.h ../../../../Common/Object/Object.h ../../../../Common/Operationable/Operationable.h ../../../../Common/RandExt/RandExt.h ../../../../Common/RandExt/RandExt_CombinedRandGen.h ../../../../Common/RandExt/RandExt_Interfaces.h ../../../../Common/RandExt/RandExt_LCG.h ../../../../Common/RandExt/RandExt_MersenneTwister.h ../../../../Common/Runnable/Runnable.h ../../../../Common/SavableRestorable/SavableRestorable.h ../../../../Common/SenderReceiver/SenderReceiver.h ../../../../Common/Signals/Signal.h ../../../../Common/SmartPointer/SmartPointer.h ../../../../Common/Solvers/Solver.h ../../../../Common/Stopable/Stopable.h ../../../../Common/WritableReadable/WritableReadable.h src/VNSPlanner.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../../../Common/Debug/DebugExt.cpp ../../../../Common/RandExt/RandExt.cpp src/VNSPlanner.cpp src/newmain.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../../../Common/Acceptable/Acceptable.h ../../../../Common/Algorithm/Algorithm.h ../../../../Common/Assignable/Assignable.h ../../../../Common/Changeable/Changeable.h ../../../../Common/Clonable/Clonable.h ../../../../Common/Comparable/Comparable.h ../../../../Common/Debug/DebugExt.h ../../../../Common/Driver/Driven.h ../../../../Common/Driver/Driver.h ../../../../Common/Exceptions/Exception.h ../../../../Common/Exceptions/MsgException.h ../../../../Common/Functor/Functor.h ../../../../Common/Include/Acceptable ../../../../Common/Include/Algorithm ../../../../Common/Include/Assignable ../../../../Common/Include/Changeable ../../../../Common/Include/Clonable ../../../../Common/Include/Comparable ../../../../Common/Include/Driver ../../../../Common/Include/Exceptions ../../../../Common/Include/Functor ../../../../Common/Include/Loader ../../../../Common/Include/MathExt ../../../../Common/Include/Messages ../../../../Common/Include/Object ../../../../Common/Include/Operationable ../../../../Common/Include/Parser ../../../../Common/Include/RandExt ../../../../Common/Include/Runnable ../../../../Common/Include/SavableRestorable ../../../../Common/Include/SenderReceiver ../../../../Common/Include/Signals ../../../../Common/Include/SmartPointer ../../../../Common/Include/Solver ../../../../Common/Include/Stopable ../../../../Common/Include/Variables ../../../../Common/Include/WritableReadable ../../../../Common/MathExt/MathExt.h ../../../../Common/Messages/Messages.h ../../../../Common/Object/Object.h ../../../../Common/Operationable/Operationable.h ../../../../Common/Parser/Parser.h ../../../../Common/RandExt/RandExt.h ../../../../Common/RandExt/RandExt_CombinedRandGen.h ../../../../Common/RandExt/RandExt_Interfaces.h ../../../../Common/RandExt/RandExt_LCG.h ../../../../Common/RandExt/RandExt_MersenneTwister.h ../../../../Common/Runnable/Runnable.h ../../../../Common/SavableRestorable/SavableRestorable.h ../../../../Common/SenderReceiver/SenderReceiver.h ../../../../Common/Signals/Signal.h ../../../../Common/SmartPointer/SmartPointer.h ../../../../Common/Solvers/Solver.h ../../../../Common/Stopable/Stopable.h ../../../../Common/Variables/Variables.h ../../../../Common/WritableReadable/WritableReadable.h src/DLLExportInterface/DLLExportInterface.h src/VNSPlanner/VNSPlanner.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../../../Common/Debug/DebugExt.cpp ../../../../Common/RandExt/RandExt.cpp src/DLLExportInterface/DLLExportInterface.cpp src/VNSPlanner/VNSPlanner.cpp src/newmain.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -460,9 +476,7 @@ compiler_rcc_clean:
 compiler_moc_header_make_all: builds/Lin64bit/release/moc/moc_VNSPlanner.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) builds/Lin64bit/release/moc/moc_VNSPlanner.cpp
-builds/Lin64bit/release/moc/moc_VNSPlanner.cpp: ../../Common/src/Planner.h \
-		../../Common/src/IterativeAlg.h \
-		../../../../Common/Include/MathExt \
+builds/Lin64bit/release/moc/moc_VNSPlanner.cpp: ../../../../Common/Include/MathExt \
 		../../../../Common/MathExt/MathExt.h \
 		../../../../Common/Include/Exceptions \
 		../../../../Common/Exceptions/Exception.h \
@@ -476,16 +490,43 @@ builds/Lin64bit/release/moc/moc_VNSPlanner.cpp: ../../Common/src/Planner.h \
 		../../../../Common/Include/Operationable \
 		../../../../Common/Operationable/Operationable.h \
 		../../../../Common/Debug/DebugExt.h \
-		../../Common/src/Product.h \
-		../../Common/src/BillOfProcesses.h \
-		../../Common/src/BillOfMaterials.h \
-		../../Common/src/Route.h \
-		../../Common/src/Resources.h \
-		../../Common/src/Operation.h \
-		../../../../Common/Include/RandExt \
-		../../../../Common/RandExt/RandExt.h \
+		../../../../Common/Include/Solver \
+		../../../../Common/Solvers/Solver.h \
+		../../../../Common/Include/Loader \
+		../../../../Common/Loader/Loader.h \
+		../../../../Common/Loader/Loader_DLL.h \
+		../../../../Common/Include/SmartPointer \
+		../../../../Common/SmartPointer/SmartPointer.h \
+		../../../../Common/Include/Comparable \
+		../../../../Common/Comparable/Comparable.h \
+		../../../../Common/Include/Runnable \
+		../../../../Common/Runnable/Runnable.h \
+		../../Common/src/Include/IPPSDefinitions \
+		../../Common/src/IPPSDefinitions/IPPSDefinitions.h \
+		../../../../Common/Include/Parser \
+		../../../../Common/Parser/Parser.h \
 		../../../../Common/Include/Clonable \
 		../../../../Common/Clonable/Clonable.h \
+		../../../../Common/Include/Variables \
+		../../../../Common/Variables/Variables.h \
+		../../../../Common/Include/Changeable \
+		../../../../Common/Changeable/Changeable.h \
+		../../../../Common/Include/Functor \
+		../../../../Common/Functor/Functor.h \
+		../../../../Common/Include/Assignable \
+		../../../../Common/Assignable/Assignable.h \
+		../../../../Common/Include/Acceptable \
+		../../../../Common/Acceptable/Acceptable.h \
+		../../Common/src/Include/SchedulingProblem \
+		../../Common/src/SchedulingProblem/SchedulingProblem.h \
+		../../Common/src/Include/ProcessModel \
+		../../Common/src/ProcessModel/ProcessModel.h \
+		../../Common/src/Include/Operation \
+		../../Common/src/Operation/Operation.h \
+		../../Common/src/Include/Resources \
+		../../Common/src/Resources/Resources.h \
+		../../../../Common/Include/RandExt \
+		../../../../Common/RandExt/RandExt.h \
 		../../../../Common/RandExt/RandExt_MersenneTwister.h \
 		../../../../Common/Include/Driver \
 		../../../../Common/Driver/Driver.h \
@@ -493,20 +534,46 @@ builds/Lin64bit/release/moc/moc_VNSPlanner.cpp: ../../Common/src/Planner.h \
 		../../../../Common/RandExt/RandExt_Interfaces.h \
 		../../../../Common/RandExt/RandExt_LCG.h \
 		../../../../Common/RandExt/RandExt_CombinedRandGen.h \
-		../../Common/src/Plan.h \
-		../../Common/src/Saveable.h \
-		../../Common/src/Order.h \
-		../../Common/src/Item.h \
-		../../Common/src/Schedule.h \
-		../../Common/src/ProcessModel.h \
-		../../Common/src/Objective.h \
-		../../Common/src/TGSelection.h \
-		../../Common/src/Scheduler.h \
-		../../Common/src/Clonable.h \
-		../../Common/src/Protocol.h \
-		../../Common/src/ProcessModelManager.h \
-		src/VNSPlanner.h
-	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/data/Projects/IPPS/CPPALG/Solvers/VNSPlanner/nbproject -I/data/Projects/IPPS/Common/Include -I/data/Projects/IPPS/Common/Debug -I/data/Projects/IPPS/CPPALG/Solvers/Common/src -I/data/Projects/IPPS/CPPALG/Solvers/VNSPlanner/nbproject/src -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtXml -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/4.8 -I/usr/include/c++/4.8/x86_64-suse-linux -I/usr/include/c++/4.8/backward -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include src/VNSPlanner.h -o builds/Lin64bit/release/moc/moc_VNSPlanner.cpp
+		../../Common/src/Include/Objective \
+		../../Common/src/Objective/Objective.h \
+		../../Common/src/Include/TGSelection \
+		../../Common/src/TGSelection/TGSelection.h \
+		../../Common/src/Include/Schedule \
+		../../Common/src/Schedule/Schedule.h \
+		../../Common/src/Include/Plan \
+		../../Common/src/Plan/Plan.h \
+		../../Common/src/Include/Saveable \
+		../../Common/src/Saveable/Saveable.h \
+		../../Common/src/Include/PlanSched \
+		../../Common/src/PlanSched/PlanSched.h \
+		../../Common/src/Include/IPPSProblem \
+		../../Common/src/IPPSProblem/IPPSProblem.h \
+		../../Common/src/Include/ProcessModelManager \
+		../../Common/src/ProcessModelManager/ProcessModelManager.h \
+		../../Common/src/Include/Product \
+		../../Common/src/Product/Product.h \
+		../../Common/src/Include/BillOfProcesses \
+		../../Common/src/BOP/BillOfProcesses.h \
+		../../Common/src/Include/BillOfMaterials \
+		../../Common/src/BOM/BillOfMaterials.h \
+		../../Common/src/Include/Route \
+		../../Common/src/Route/Route.h \
+		../../Common/src/Include/Order \
+		../../Common/src/Order/Order.h \
+		../../Common/src/Include/Item \
+		../../Common/src/Item/Item.h \
+		../../Common/src/Include/Planner \
+		../../Common/src/Planner/Planner.h \
+		../../Common/src/Include/IterativeAlg \
+		../../Common/src/IterativeAlg/IterativeAlg.h \
+		../../Common/src/Include/Scheduler \
+		../../Common/src/Scheduler/Scheduler.h \
+		../../Common/src/Include/FlowFactor \
+		../../Common/src/FlowFactor/FlowFactor.h \
+		../../Common/src/Include/Protocol \
+		../../Common/src/Protocol/Protocol.h \
+		src/VNSPlanner/VNSPlanner.h
+	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/data/Projects/IPPS/CPPALG/Solvers/VNSPlanner/nbproject -I/data/Projects/IPPS/Common/Include -I/data/Projects/IPPS/Common/Debug -I/data/Projects/IPPS/CPPALG/Solvers/Common/src/Include -I/data/Projects/IPPS/CPPALG/Solvers/VNSPlanner/nbproject/src/VNSPlanner -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtXml -I/usr/include/qt5/QtConcurrent -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/4.8 -I/usr/include/c++/4.8/x86_64-suse-linux -I/usr/include/c++/4.8/backward -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include src/VNSPlanner/VNSPlanner.h -o builds/Lin64bit/release/moc/moc_VNSPlanner.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -548,11 +615,17 @@ builds/Lin64bit/release/obj/RandExt.o: ../../../../Common/RandExt/RandExt.cpp ..
 		../../../../Common/RandExt/RandExt_Interfaces.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/RandExt.o ../../../../Common/RandExt/RandExt.cpp
 
-builds/Lin64bit/release/obj/VNSPlanner.o: src/VNSPlanner.cpp src/VNSPlanner.h \
-		../../Common/src/Planner.h \
-		../../Common/src/IterativeAlg.h \
-		../../../../Common/Include/MathExt \
-		../../../../Common/MathExt/MathExt.h \
+builds/Lin64bit/release/obj/DLLExportInterface.o: src/DLLExportInterface/DLLExportInterface.cpp src/DLLExportInterface/DLLExportInterface.h \
+		../../../../Common/Include/Solver \
+		../../../../Common/Solvers/Solver.h \
+		../../../../Common/Include/Operationable \
+		../../../../Common/Operationable/Operationable.h \
+		../../Common/src/Include/IPPSProblem \
+		../../Common/src/IPPSProblem/IPPSProblem.h \
+		../../../../Common/Include/SmartPointer \
+		../../../../Common/SmartPointer/SmartPointer.h \
+		../../../../Common/Include/Comparable \
+		../../../../Common/Comparable/Comparable.h \
 		../../../../Common/Include/Exceptions \
 		../../../../Common/Exceptions/Exception.h \
 		../../../../Common/Include/Object \
@@ -562,15 +635,17 @@ builds/Lin64bit/release/obj/VNSPlanner.o: src/VNSPlanner.cpp src/VNSPlanner.h \
 		../../../../Common/WritableReadable/WritableReadable.h \
 		../../../../Common/Include/Messages \
 		../../../../Common/Messages/Messages.h \
-		../../../../Common/Include/Operationable \
-		../../../../Common/Operationable/Operationable.h \
+		../../../../Common/Include/MathExt \
+		../../../../Common/MathExt/MathExt.h \
+		../../Common/src/Include/Objective \
+		../../Common/src/Objective/Objective.h \
+		../../Common/src/Include/ProcessModel \
+		../../Common/src/ProcessModel/ProcessModel.h \
+		../../Common/src/Include/Operation \
+		../../Common/src/Operation/Operation.h \
 		../../../../Common/Debug/DebugExt.h \
-		../../Common/src/Product.h \
-		../../Common/src/BillOfProcesses.h \
-		../../Common/src/BillOfMaterials.h \
-		../../Common/src/Route.h \
-		../../Common/src/Resources.h \
-		../../Common/src/Operation.h \
+		../../Common/src/Include/Resources \
+		../../Common/src/Resources/Resources.h \
 		../../../../Common/Include/RandExt \
 		../../../../Common/RandExt/RandExt.h \
 		../../../../Common/Include/Clonable \
@@ -582,23 +657,65 @@ builds/Lin64bit/release/obj/VNSPlanner.o: src/VNSPlanner.cpp src/VNSPlanner.h \
 		../../../../Common/RandExt/RandExt_Interfaces.h \
 		../../../../Common/RandExt/RandExt_LCG.h \
 		../../../../Common/RandExt/RandExt_CombinedRandGen.h \
-		../../Common/src/Plan.h \
-		../../Common/src/Saveable.h \
-		../../Common/src/Order.h \
-		../../Common/src/Item.h \
-		../../Common/src/Schedule.h \
-		../../Common/src/ProcessModel.h \
-		../../Common/src/Objective.h \
-		../../Common/src/TGSelection.h \
-		../../Common/src/Scheduler.h \
-		../../Common/src/Clonable.h \
-		../../Common/src/Protocol.h \
-		../../Common/src/ProcessModelManager.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/VNSPlanner.o src/VNSPlanner.cpp
+		../../Common/src/Include/TGSelection \
+		../../Common/src/TGSelection/TGSelection.h \
+		../../Common/src/Include/ProcessModelManager \
+		../../Common/src/ProcessModelManager/ProcessModelManager.h \
+		../../Common/src/Include/Product \
+		../../Common/src/Product/Product.h \
+		../../Common/src/Include/BillOfProcesses \
+		../../Common/src/BOP/BillOfProcesses.h \
+		../../Common/src/Include/BillOfMaterials \
+		../../Common/src/BOM/BillOfMaterials.h \
+		../../Common/src/Include/Route \
+		../../Common/src/Route/Route.h \
+		../../Common/src/Include/Plan \
+		../../Common/src/Plan/Plan.h \
+		../../Common/src/Include/Saveable \
+		../../Common/src/Saveable/Saveable.h \
+		../../Common/src/Include/Order \
+		../../Common/src/Order/Order.h \
+		../../Common/src/Include/Item \
+		../../Common/src/Item/Item.h \
+		src/VNSPlanner/VNSPlanner.h \
+		../../../../Common/Include/Loader \
+		../../../../Common/Loader/Loader.h \
+		../../../../Common/Loader/Loader_DLL.h \
+		../../../../Common/Include/Runnable \
+		../../../../Common/Runnable/Runnable.h \
+		../../Common/src/Include/IPPSDefinitions \
+		../../Common/src/IPPSDefinitions/IPPSDefinitions.h \
+		../../../../Common/Include/Parser \
+		../../../../Common/Parser/Parser.h \
+		../../../../Common/Include/Variables \
+		../../../../Common/Variables/Variables.h \
+		../../../../Common/Include/Changeable \
+		../../../../Common/Changeable/Changeable.h \
+		../../../../Common/Include/Functor \
+		../../../../Common/Functor/Functor.h \
+		../../../../Common/Include/Assignable \
+		../../../../Common/Assignable/Assignable.h \
+		../../../../Common/Include/Acceptable \
+		../../../../Common/Acceptable/Acceptable.h \
+		../../Common/src/Include/SchedulingProblem \
+		../../Common/src/SchedulingProblem/SchedulingProblem.h \
+		../../Common/src/Include/Schedule \
+		../../Common/src/Schedule/Schedule.h \
+		../../Common/src/Include/PlanSched \
+		../../Common/src/PlanSched/PlanSched.h \
+		../../Common/src/Include/Planner \
+		../../Common/src/Planner/Planner.h \
+		../../Common/src/Include/IterativeAlg \
+		../../Common/src/IterativeAlg/IterativeAlg.h \
+		../../Common/src/Include/Scheduler \
+		../../Common/src/Scheduler/Scheduler.h \
+		../../Common/src/Include/FlowFactor \
+		../../Common/src/FlowFactor/FlowFactor.h \
+		../../Common/src/Include/Protocol \
+		../../Common/src/Protocol/Protocol.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/DLLExportInterface.o src/DLLExportInterface/DLLExportInterface.cpp
 
-builds/Lin64bit/release/obj/newmain.o: src/newmain.cpp src/VNSPlanner.h \
-		../../Common/src/Planner.h \
-		../../Common/src/IterativeAlg.h \
+builds/Lin64bit/release/obj/VNSPlanner.o: src/VNSPlanner/VNSPlanner.cpp src/VNSPlanner/VNSPlanner.h \
 		../../../../Common/Include/MathExt \
 		../../../../Common/MathExt/MathExt.h \
 		../../../../Common/Include/Exceptions \
@@ -613,16 +730,43 @@ builds/Lin64bit/release/obj/newmain.o: src/newmain.cpp src/VNSPlanner.h \
 		../../../../Common/Include/Operationable \
 		../../../../Common/Operationable/Operationable.h \
 		../../../../Common/Debug/DebugExt.h \
-		../../Common/src/Product.h \
-		../../Common/src/BillOfProcesses.h \
-		../../Common/src/BillOfMaterials.h \
-		../../Common/src/Route.h \
-		../../Common/src/Resources.h \
-		../../Common/src/Operation.h \
-		../../../../Common/Include/RandExt \
-		../../../../Common/RandExt/RandExt.h \
+		../../../../Common/Include/Solver \
+		../../../../Common/Solvers/Solver.h \
+		../../../../Common/Include/Loader \
+		../../../../Common/Loader/Loader.h \
+		../../../../Common/Loader/Loader_DLL.h \
+		../../../../Common/Include/SmartPointer \
+		../../../../Common/SmartPointer/SmartPointer.h \
+		../../../../Common/Include/Comparable \
+		../../../../Common/Comparable/Comparable.h \
+		../../../../Common/Include/Runnable \
+		../../../../Common/Runnable/Runnable.h \
+		../../Common/src/Include/IPPSDefinitions \
+		../../Common/src/IPPSDefinitions/IPPSDefinitions.h \
+		../../../../Common/Include/Parser \
+		../../../../Common/Parser/Parser.h \
 		../../../../Common/Include/Clonable \
 		../../../../Common/Clonable/Clonable.h \
+		../../../../Common/Include/Variables \
+		../../../../Common/Variables/Variables.h \
+		../../../../Common/Include/Changeable \
+		../../../../Common/Changeable/Changeable.h \
+		../../../../Common/Include/Functor \
+		../../../../Common/Functor/Functor.h \
+		../../../../Common/Include/Assignable \
+		../../../../Common/Assignable/Assignable.h \
+		../../../../Common/Include/Acceptable \
+		../../../../Common/Acceptable/Acceptable.h \
+		../../Common/src/Include/SchedulingProblem \
+		../../Common/src/SchedulingProblem/SchedulingProblem.h \
+		../../Common/src/Include/ProcessModel \
+		../../Common/src/ProcessModel/ProcessModel.h \
+		../../Common/src/Include/Operation \
+		../../Common/src/Operation/Operation.h \
+		../../Common/src/Include/Resources \
+		../../Common/src/Resources/Resources.h \
+		../../../../Common/Include/RandExt \
+		../../../../Common/RandExt/RandExt.h \
 		../../../../Common/RandExt/RandExt_MersenneTwister.h \
 		../../../../Common/Include/Driver \
 		../../../../Common/Driver/Driver.h \
@@ -630,18 +774,143 @@ builds/Lin64bit/release/obj/newmain.o: src/newmain.cpp src/VNSPlanner.h \
 		../../../../Common/RandExt/RandExt_Interfaces.h \
 		../../../../Common/RandExt/RandExt_LCG.h \
 		../../../../Common/RandExt/RandExt_CombinedRandGen.h \
-		../../Common/src/Plan.h \
-		../../Common/src/Saveable.h \
-		../../Common/src/Order.h \
-		../../Common/src/Item.h \
-		../../Common/src/Schedule.h \
-		../../Common/src/ProcessModel.h \
-		../../Common/src/Objective.h \
-		../../Common/src/TGSelection.h \
-		../../Common/src/Scheduler.h \
-		../../Common/src/Clonable.h \
-		../../Common/src/Protocol.h \
-		../../Common/src/ProcessModelManager.h
+		../../Common/src/Include/Objective \
+		../../Common/src/Objective/Objective.h \
+		../../Common/src/Include/TGSelection \
+		../../Common/src/TGSelection/TGSelection.h \
+		../../Common/src/Include/Schedule \
+		../../Common/src/Schedule/Schedule.h \
+		../../Common/src/Include/Plan \
+		../../Common/src/Plan/Plan.h \
+		../../Common/src/Include/Saveable \
+		../../Common/src/Saveable/Saveable.h \
+		../../Common/src/Include/PlanSched \
+		../../Common/src/PlanSched/PlanSched.h \
+		../../Common/src/Include/IPPSProblem \
+		../../Common/src/IPPSProblem/IPPSProblem.h \
+		../../Common/src/Include/ProcessModelManager \
+		../../Common/src/ProcessModelManager/ProcessModelManager.h \
+		../../Common/src/Include/Product \
+		../../Common/src/Product/Product.h \
+		../../Common/src/Include/BillOfProcesses \
+		../../Common/src/BOP/BillOfProcesses.h \
+		../../Common/src/Include/BillOfMaterials \
+		../../Common/src/BOM/BillOfMaterials.h \
+		../../Common/src/Include/Route \
+		../../Common/src/Route/Route.h \
+		../../Common/src/Include/Order \
+		../../Common/src/Order/Order.h \
+		../../Common/src/Include/Item \
+		../../Common/src/Item/Item.h \
+		../../Common/src/Include/Planner \
+		../../Common/src/Planner/Planner.h \
+		../../Common/src/Include/IterativeAlg \
+		../../Common/src/IterativeAlg/IterativeAlg.h \
+		../../Common/src/Include/Scheduler \
+		../../Common/src/Scheduler/Scheduler.h \
+		../../Common/src/Include/FlowFactor \
+		../../Common/src/FlowFactor/FlowFactor.h \
+		../../Common/src/Include/Protocol \
+		../../Common/src/Protocol/Protocol.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/VNSPlanner.o src/VNSPlanner/VNSPlanner.cpp
+
+builds/Lin64bit/release/obj/newmain.o: src/newmain.cpp src/VNSPlanner/VNSPlanner.h \
+		../../../../Common/Include/MathExt \
+		../../../../Common/MathExt/MathExt.h \
+		../../../../Common/Include/Exceptions \
+		../../../../Common/Exceptions/Exception.h \
+		../../../../Common/Include/Object \
+		../../../../Common/Object/Object.h \
+		../../../../Common/Exceptions/MsgException.h \
+		../../../../Common/Include/WritableReadable \
+		../../../../Common/WritableReadable/WritableReadable.h \
+		../../../../Common/Include/Messages \
+		../../../../Common/Messages/Messages.h \
+		../../../../Common/Include/Operationable \
+		../../../../Common/Operationable/Operationable.h \
+		../../../../Common/Debug/DebugExt.h \
+		../../../../Common/Include/Solver \
+		../../../../Common/Solvers/Solver.h \
+		../../../../Common/Include/Loader \
+		../../../../Common/Loader/Loader.h \
+		../../../../Common/Loader/Loader_DLL.h \
+		../../../../Common/Include/SmartPointer \
+		../../../../Common/SmartPointer/SmartPointer.h \
+		../../../../Common/Include/Comparable \
+		../../../../Common/Comparable/Comparable.h \
+		../../../../Common/Include/Runnable \
+		../../../../Common/Runnable/Runnable.h \
+		../../Common/src/Include/IPPSDefinitions \
+		../../Common/src/IPPSDefinitions/IPPSDefinitions.h \
+		../../../../Common/Include/Parser \
+		../../../../Common/Parser/Parser.h \
+		../../../../Common/Include/Clonable \
+		../../../../Common/Clonable/Clonable.h \
+		../../../../Common/Include/Variables \
+		../../../../Common/Variables/Variables.h \
+		../../../../Common/Include/Changeable \
+		../../../../Common/Changeable/Changeable.h \
+		../../../../Common/Include/Functor \
+		../../../../Common/Functor/Functor.h \
+		../../../../Common/Include/Assignable \
+		../../../../Common/Assignable/Assignable.h \
+		../../../../Common/Include/Acceptable \
+		../../../../Common/Acceptable/Acceptable.h \
+		../../Common/src/Include/SchedulingProblem \
+		../../Common/src/SchedulingProblem/SchedulingProblem.h \
+		../../Common/src/Include/ProcessModel \
+		../../Common/src/ProcessModel/ProcessModel.h \
+		../../Common/src/Include/Operation \
+		../../Common/src/Operation/Operation.h \
+		../../Common/src/Include/Resources \
+		../../Common/src/Resources/Resources.h \
+		../../../../Common/Include/RandExt \
+		../../../../Common/RandExt/RandExt.h \
+		../../../../Common/RandExt/RandExt_MersenneTwister.h \
+		../../../../Common/Include/Driver \
+		../../../../Common/Driver/Driver.h \
+		../../../../Common/Driver/Driven.h \
+		../../../../Common/RandExt/RandExt_Interfaces.h \
+		../../../../Common/RandExt/RandExt_LCG.h \
+		../../../../Common/RandExt/RandExt_CombinedRandGen.h \
+		../../Common/src/Include/Objective \
+		../../Common/src/Objective/Objective.h \
+		../../Common/src/Include/TGSelection \
+		../../Common/src/TGSelection/TGSelection.h \
+		../../Common/src/Include/Schedule \
+		../../Common/src/Schedule/Schedule.h \
+		../../Common/src/Include/Plan \
+		../../Common/src/Plan/Plan.h \
+		../../Common/src/Include/Saveable \
+		../../Common/src/Saveable/Saveable.h \
+		../../Common/src/Include/PlanSched \
+		../../Common/src/PlanSched/PlanSched.h \
+		../../Common/src/Include/IPPSProblem \
+		../../Common/src/IPPSProblem/IPPSProblem.h \
+		../../Common/src/Include/ProcessModelManager \
+		../../Common/src/ProcessModelManager/ProcessModelManager.h \
+		../../Common/src/Include/Product \
+		../../Common/src/Product/Product.h \
+		../../Common/src/Include/BillOfProcesses \
+		../../Common/src/BOP/BillOfProcesses.h \
+		../../Common/src/Include/BillOfMaterials \
+		../../Common/src/BOM/BillOfMaterials.h \
+		../../Common/src/Include/Route \
+		../../Common/src/Route/Route.h \
+		../../Common/src/Include/Order \
+		../../Common/src/Order/Order.h \
+		../../Common/src/Include/Item \
+		../../Common/src/Item/Item.h \
+		../../Common/src/Include/Planner \
+		../../Common/src/Planner/Planner.h \
+		../../Common/src/Include/IterativeAlg \
+		../../Common/src/IterativeAlg/IterativeAlg.h \
+		../../Common/src/Include/Scheduler \
+		../../Common/src/Scheduler/Scheduler.h \
+		../../Common/src/Include/FlowFactor \
+		../../Common/src/FlowFactor/FlowFactor.h \
+		../../Common/src/Include/Protocol \
+		../../Common/src/Protocol/Protocol.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/newmain.o src/newmain.cpp
 
 builds/Lin64bit/release/obj/moc_VNSPlanner.o: builds/Lin64bit/release/moc/moc_VNSPlanner.cpp 

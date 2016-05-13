@@ -13,7 +13,7 @@
 
 #include <cstdlib>
 
-#include "PriorityScheduler.h"
+#include "PriorityScheduler/PriorityScheduler.h"
 
 using namespace std;
 
