@@ -251,13 +251,12 @@ private:
     QList<Plan> newPlans; // The newly generated plans which have to be considered
     QList<Schedule> newScheds; // The schedules of the newly generated plans
 
-    QList<SchedThread*> schedThreads;
-    QList<Scheduler*> schedAlgs;
-    //QList<QtSchedSolver*> schedSolvers;
+    //    QList<SchedThread*> schedThreads;
+    //    QList<Scheduler*> schedAlgs;
     QList<SmartPointer<SchedSolver>> schedSolvers;
     //QThread* initSchedThread;
 
-    QSet<int> assessedNewPlansIdx; // Indices of the already assessed plans
+    //QSet<int> assessedNewPlansIdx; // Indices of the already assessed plans
 
     VNSPlannerStrategy strategy; // Current strategy for the planner
     bool strategySettings_BEST_PLAN; // Defines whether the best plan so far needs to be amont the currently assessed ones
@@ -266,10 +265,12 @@ private:
 
     QFile proto_file; // File for saving protocol
 
-    
+
     Setting curSchedulerName; // Solver which is currently used for scheduling according to the strategy
     Setting curSchedulerLib; // The solver's librady
     SchedulerOptions curSchedulerSettings; // The solver's settings
+
+    SmartPointer<SchedSolver> initScheduler; // Used for initial scheduling
     
     /** Generate the initial solution. */
     virtual Plan initialSolution();
@@ -278,9 +279,9 @@ private:
 
 public:
 
-    Scheduler *scheduler;
+    //    Scheduler *scheduler;
 
-    SchedulerOptions schedOptions; // Options which must be considered by the scheduling algorithms
+    //    SchedulerOptions schedOptions; // Options which must be considered by the scheduling algorithms
 
     enum SolInitType {
 	SOL_INIT_RND, SOL_INIT_RANK
@@ -419,9 +420,9 @@ public:
 signals:
     void sigInitSched();
 
-    void sigAssessPlan(const int&);
-    void sigPlanAssessFinished(const int&);
-    void sigAllPlansAssessed();
+    //    void sigAssessPlan(const int&);
+    //    void sigPlanAssessFinished(const int&);
+    //    void sigAllPlansAssessed();
 
     void sigCompletelyFinished();
 

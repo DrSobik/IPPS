@@ -32,7 +32,7 @@
  */
 
 #ifndef PLANNER_H
-#define	PLANNER_H
+#define PLANNER_H
 
 #include "IterativeAlg"
 
@@ -64,105 +64,104 @@ using namespace Common;
 
 /** A class which describes how a planning algorithm(agent should behave) */
 class PlannerStrategy : public QObject {
-	Q_OBJECT
+    Q_OBJECT
 private:
-	QString strategyString; // A string which describes the current strategy
+    QString strategyString; // A string which describes the current strategy
 
 public:
 
-	PlannerStrategy();
-	PlannerStrategy(const PlannerStrategy&);
-	virtual ~PlannerStrategy();
+    PlannerStrategy();
+    PlannerStrategy(const PlannerStrategy&);
+    virtual ~PlannerStrategy();
 
-	/** Set a string wihch describes a strategy of the planner. */
-	virtual bool setStrategy(const QString& strStrategy);
+    /** Set a string wihch describes a strategy of the planner. */
+    virtual bool setStrategy(const QString& strStrategy);
 
-	/** Return the strategy string*/
-	QString getStrategy() const;
+    /** Return the strategy string*/
+    QString getStrategy() const;
 
-	virtual PlannerStrategy& operator=(const PlannerStrategy&);
+    virtual PlannerStrategy& operator=(const PlannerStrategy&);
 
-	virtual PlannerStrategy* clone();
+    virtual PlannerStrategy* clone();
 
 protected:
 
-	virtual bool parseStrategy(const QString& strStrategy);
+    virtual bool parseStrategy(const QString& strStrategy);
 
 signals:
 
-	void sigStrategySchanged(const bool&); // Emitted every time a strategy of the planner changes
+    void sigStrategySchanged(const bool&); // Emitted every time a strategy of the planner changes
 
 };
 
-
-class Planner : public EventIterativeAlg {
-	Q_OBJECT
+class Planner : public /*Event*/IterativeAlg {
+    Q_OBJECT
 protected:
-	ProcessModelManager *pmm;
+    ProcessModelManager *pmm;
 
-	Scheduler *scheduler;
-	Resources *rc;
+    Scheduler *scheduler;
+    Resources *rc;
 
-	Protocol protocol;
+    Protocol protocol;
 
-	ScalarObjective* objective; // Objective for the algorithm (its pointer)
+    ScalarObjective* objective; // Objective for the algorithm (its pointer)
 
 public:
 
-	Planner();
-	virtual ~Planner();
+    Planner();
+    virtual ~Planner();
 
-	/** Set the scheduler. */
-	virtual Planner& operator<<(Scheduler *scheduler) {
-		this->scheduler = scheduler;
-		return *this;
+    /** Set the scheduler. */
+    virtual Planner& operator<<(Scheduler *scheduler) {
+	this->scheduler = scheduler;
+	return *this;
+    }
+
+    /** Set the schedule. */
+    virtual Planner& operator<<(Schedule *) {
+	//this->schedule = schedule;
+	return *this;
+    }
+
+    /** Set the resources. */
+    virtual Planner& operator<<(Resources *rc) {
+	this->rc = rc;
+	return *this;
+    }
+
+    /** Set the process model manger. */
+    virtual Planner& operator<<(ProcessModelManager *pmm) {
+	this->pmm = pmm;
+	return *this;
+    }
+
+    /** Set the protocol. */
+    virtual Planner& operator<<(Protocol *protocol) {
+	this->protocol = *protocol;
+	return *this;
+    }
+
+    /** Set the objective. */
+    virtual Planner& operator<<(ScalarObjective* obj) {
+	if (obj == NULL) {
+	    Debugger::err << "Planner& operator<<(ScalarObjective* obj) : Trying to clone a NULL objective!!!" << ENDL;
 	}
-
-	/** Set the schedule. */
-	virtual Planner& operator<<(Schedule *) {
-		//this->schedule = schedule;
-		return *this;
+	if (this->objective != NULL) {
+	    delete this->objective;
 	}
+	this->objective = obj->clone();
+	return *this;
+    }
 
-	/** Set the resources. */
-	virtual Planner& operator<<(Resources *rc) {
-		this->rc = rc;
-		return *this;
-	}
+    /** Set the strategy. */
+    virtual Planner& operator<<(PlannerStrategy&) {
 
-	/** Set the process model manger. */
-	virtual Planner& operator<<(ProcessModelManager *pmm) {
-		this->pmm = pmm;
-		return *this;
-	}
+	Debugger::err << "Planner& operator<<(PlannerStrategy& strategy) : Not implemented!!!" << ENDL;
 
-	/** Set the protocol. */
-	virtual Planner& operator<<(Protocol *protocol) {
-		this->protocol = *protocol;
-		return *this;
-	}
-
-	/** Set the objective. */
-	virtual Planner& operator<<(ScalarObjective* obj) {
-		if (obj == NULL) {
-			Debugger::err << "Planner& operator<<(ScalarObjective* obj) : Trying to clone a NULL objective!!!" << ENDL;
-		}
-		if (this->objective != NULL) {
-			delete this->objective;
-		}
-		this->objective = obj->clone();
-		return *this;
-	}
-
-	/** Set the strategy. */
-	virtual Planner& operator<<(PlannerStrategy&) {
-
-		Debugger::err << "Planner& operator<<(PlannerStrategy& strategy) : Not implemented!!!" << ENDL;
-
-		return *this;
-	}
+	return *this;
+    }
 
 };
 
-#endif	/* PLANNER_H */
+#endif /* PLANNER_H */
 

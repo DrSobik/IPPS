@@ -10,8 +10,10 @@
             <file>file:/data/Projects/IPPS/CPPALG/Solvers/PriorityScheduler/src/PriorityScheduler/PriorityScheduler.h</file>
         </group>
         <group>
+            <file>file:/data/Projects/Common/Variables/Variables.h</file>
             <file>file:/data/Projects/IPPS/CPPALG/Solvers/PriorityScheduler/src/PriorityScheduler/PriorityScheduler.cpp</file>
             <file>file:/data/Projects/IPPS/CPPALG/Solvers/PriorityScheduler/src/PriorityScheduler/PriorityScheduler.h</file>
+            <file>file:/data/Projects/Common/MathExt/MathExt.h</file>
         </group>
     </open-files>
 </project-private>

@@ -3027,7 +3027,9 @@ int main_VNS(int argc, char *argv[]) {
 
     ps = planner->solve(ippsProblem, plannerOptions);
 
-    out << "Finished running" << endl;
+    delete planner;
+
+    out << "Planner: Finished running" << endl;
 
     return 0; //*/ app.exec();
 }

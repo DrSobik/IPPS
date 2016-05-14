@@ -508,7 +508,7 @@ void LocalSearchPM::parse(const SchedulerOptions& options) {
     settings.setChanged(false);
 
     out << "LocalSearchPM::parse : Parsed all settings." << endl;
-    getchar();
+    //getchar();
 
 }
 
