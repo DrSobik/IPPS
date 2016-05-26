@@ -17,6 +17,11 @@ int main(int argc, char *argv[]){
     //hostAddress.setAddress("132.176.74.101"); // IP my laptop at the university
     //hostAddress.setAddress("176.198.54.196"); // IP of my home router (it does port forwarding)
     //hostAddress.setAddress("10.0.2.15"); //
+    //hostAddress.setAddress("37.201.195.224"); // IP of my home router (it does port forwarding)
+    //hostAddress.setAddress("37.201.192.228");
+    //hostAddress.setAddress("84.116.198.88"); // IP of my home router (it does port forwarding)
+    //hostAddress.setAddress("192.168.0.10"); // IP of my home router (it does port forwarding)
+    //hostAddress.setAddress("2a02:908:f61b:1400:3a59:f9ff:fe1a:a8b5"); // IP of my home router (it does port forwarding)
 
     message = "Hello";
 

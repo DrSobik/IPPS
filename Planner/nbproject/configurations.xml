@@ -156,7 +156,7 @@
         <defs>
           <Elem>OBJECTS_DIR=$$DESTDIR/obj</Elem>
           <Elem>QMAKE_CXXFLAGS += -std=c++14</Elem>
-          <Elem>AFTERBUILDDIR = ../bin/</Elem>
+          <Elem>AFTERBUILDDIR = ../bin/$$TARGET</Elem>
           <Elem>unix:QMAKE_POST_LINK = mkdir -p $$AFTERBUILDDIR &amp;&amp;  cp -f -d $$DESTDIR/$$TARGET $$AFTERBUILDDIR</Elem>
         </defs>
       </qt>
@@ -394,7 +394,7 @@
         <defs>
           <Elem>OBJECTS_DIR=$$DESTDIR/obj</Elem>
           <Elem>QMAKE_CXXFLAGS += -std=c++14</Elem>
-          <Elem>AFTERBUILDDIR = ../bin/</Elem>
+          <Elem>AFTERBUILDDIR = ../bin/$$TARGET</Elem>
           <Elem>unix:QMAKE_POST_LINK = mkdir -p $$AFTERBUILDDIR &amp;&amp;  cp -f -d $$DESTDIR/$$TARGET $$AFTERBUILDDIR</Elem>
         </defs>
       </qt>

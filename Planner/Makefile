@@ -220,7 +220,7 @@ first: all
 $(TARGET):  $(OBJECTS)  
 	@test -d builds/Lin64bit/release/ || mkdir -p builds/Lin64bit/release/
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
-	mkdir -p ../bin/ && cp -f -d builds/Lin64bit/release/Planner ../bin/
+	mkdir -p ../bin/Planner && cp -f -d builds/Lin64bit/release/Planner ../bin/Planner
 
 Makefile: nbproject/qt-Release.pro /usr/lib64/qt5/mkspecs/linux-g++/qmake.conf /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
@@ -539,26 +539,46 @@ builds/Lin64bit/release/obj/main.o: src/main.cpp ../../../Common/Debug/DebugExt.
 		../Common/src/Planner/Planner.h \
 		../Common/src/Include/IterativeAlg \
 		../Common/src/IterativeAlg/IterativeAlg.h \
-		../Common/src/Include/Schedule \
-		../Common/src/Schedule/Schedule.h \
+		../Common/src/Include/IPPSDefinitions \
+		../Common/src/IPPSDefinitions/IPPSDefinitions.h \
+		../../../Common/Include/Parser \
+		../../../Common/Parser/Parser.h \
+		../../../Common/Include/Variables \
+		../../../Common/Variables/Variables.h \
+		../../../Common/Include/Changeable \
+		../../../Common/Changeable/Changeable.h \
+		../../../Common/Include/Functor \
+		../../../Common/Functor/Functor.h \
+		../../../Common/Include/Assignable \
+		../../../Common/Assignable/Assignable.h \
+		../../../Common/Include/Acceptable \
+		../../../Common/Acceptable/Acceptable.h \
+		../Common/src/Include/SchedulingProblem \
+		../Common/src/SchedulingProblem/SchedulingProblem.h \
 		../Common/src/Include/ProcessModel \
 		../Common/src/ProcessModel/ProcessModel.h \
 		../Common/src/Include/Objective \
 		../Common/src/Objective/Objective.h \
 		../Common/src/Include/TGSelection \
 		../Common/src/TGSelection/TGSelection.h \
-		../Common/src/Include/Scheduler \
-		../Common/src/Scheduler/Scheduler.h \
-		../Common/src/Include/Protocol \
-		../Common/src/Protocol/Protocol.h \
-		../Common/src/Include/ProcessModelManager \
-		../Common/src/ProcessModelManager/ProcessModelManager.h \
+		../Common/src/Include/Schedule \
+		../Common/src/Schedule/Schedule.h \
+		../Common/src/Include/PlanSched \
+		../Common/src/PlanSched/PlanSched.h \
 		../Common/src/Include/IPPSProblem \
 		../Common/src/IPPSProblem/IPPSProblem.h \
 		../../../Common/Include/SmartPointer \
 		../../../Common/SmartPointer/SmartPointer.h \
 		../../../Common/Include/Comparable \
-		../../../Common/Comparable/Comparable.h
+		../../../Common/Comparable/Comparable.h \
+		../Common/src/Include/ProcessModelManager \
+		../Common/src/ProcessModelManager/ProcessModelManager.h \
+		../Common/src/Include/Scheduler \
+		../Common/src/Scheduler/Scheduler.h \
+		../Common/src/Include/FlowFactor \
+		../Common/src/FlowFactor/FlowFactor.h \
+		../Common/src/Include/Protocol \
+		../Common/src/Protocol/Protocol.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/main.o src/main.cpp
 
 builds/Lin64bit/release/obj/moc_PlannerAgent.o: builds/Lin64bit/release/moc/moc_PlannerAgent.cpp 

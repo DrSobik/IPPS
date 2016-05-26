@@ -230,7 +230,7 @@ first: all
 $(TARGET):  $(OBJECTS)  
 	@test -d builds/Lin64bit/release/ || mkdir -p builds/Lin64bit/release/
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
-	mkdir -p ../bin/ && cp -f -d builds/Lin64bit/release/PlanSchedServer ../bin/
+	mkdir -p ../bin/PlanSchedServer && cp -f -d builds/Lin64bit/release/PlanSchedServer ../bin/PlanSchedServer
 
 Makefile: nbproject/qt-Release.pro /usr/lib64/qt5/mkspecs/linux-g++/qmake.conf /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
@@ -465,13 +465,16 @@ builds/Lin64bit/release/moc/moc_PlanSchedServer.cpp: ../../../Common/Include/Mat
 		../../../Common/SmartPointer/SmartPointer.h \
 		../../../Common/Include/Comparable \
 		../../../Common/Comparable/Comparable.h \
+		../../../Common/Include/Loader \
+		../../../Common/Loader/Loader.h \
+		../../../Common/Loader/Loader_DLL.h \
+		../../../Common/Include/Parser \
+		../../../Common/Parser/Parser.h \
 		../../../Common/Debug/DebugExt.h \
 		../Common/src/Include/IPPSDefinitions \
 		../Common/src/IPPSDefinitions/IPPSDefinitions.h \
 		../../../Common/Include/Solver \
 		../../../Common/Solvers/Solver.h \
-		../../../Common/Include/Parser \
-		../../../Common/Parser/Parser.h \
 		../../../Common/Include/Clonable \
 		../../../Common/Clonable/Clonable.h \
 		../../../Common/Include/Variables \
@@ -600,13 +603,16 @@ builds/Lin64bit/release/obj/PlanSchedServer.o: src/PlanSchedServer/PlanSchedServ
 		../../../Common/SmartPointer/SmartPointer.h \
 		../../../Common/Include/Comparable \
 		../../../Common/Comparable/Comparable.h \
+		../../../Common/Include/Loader \
+		../../../Common/Loader/Loader.h \
+		../../../Common/Loader/Loader_DLL.h \
+		../../../Common/Include/Parser \
+		../../../Common/Parser/Parser.h \
 		../../../Common/Debug/DebugExt.h \
 		../Common/src/Include/IPPSDefinitions \
 		../Common/src/IPPSDefinitions/IPPSDefinitions.h \
 		../../../Common/Include/Solver \
 		../../../Common/Solvers/Solver.h \
-		../../../Common/Include/Parser \
-		../../../Common/Parser/Parser.h \
 		../../../Common/Include/Clonable \
 		../../../Common/Clonable/Clonable.h \
 		../../../Common/Include/Variables \
@@ -676,8 +682,7 @@ builds/Lin64bit/release/obj/PlanSchedServer.o: src/PlanSchedServer/PlanSchedServ
 		../Common/src/Protocol/Protocol.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/PlanSchedServer.o src/PlanSchedServer/PlanSchedServer.cpp
 
-builds/Lin64bit/release/obj/main.o: src/main.cpp src/PlanSchedServer/PlanSchedServer.h \
-		../../../Common/Include/MathExt \
+builds/Lin64bit/release/obj/main.o: src/main.cpp ../../../Common/Include/MathExt \
 		../../../Common/MathExt/MathExt.h \
 		../../../Common/Include/Exceptions \
 		../../../Common/Exceptions/Exception.h \
@@ -690,19 +695,32 @@ builds/Lin64bit/release/obj/main.o: src/main.cpp src/PlanSchedServer/PlanSchedSe
 		../../../Common/Messages/Messages.h \
 		../../../Common/Include/Operationable \
 		../../../Common/Operationable/Operationable.h \
+		../../../Common/Include/RandExt \
+		../../../Common/RandExt/RandExt.h \
+		../../../Common/Include/Clonable \
+		../../../Common/Clonable/Clonable.h \
+		../../../Common/RandExt/RandExt_MersenneTwister.h \
+		../../../Common/Include/Driver \
+		../../../Common/Driver/Driver.h \
+		../../../Common/Driver/Driven.h \
+		../../../Common/RandExt/RandExt_Interfaces.h \
+		../../../Common/RandExt/RandExt_LCG.h \
+		../../../Common/RandExt/RandExt_CombinedRandGen.h \
+		src/PlanSchedServer/PlanSchedServer.h \
 		../../../Common/Include/SmartPointer \
 		../../../Common/SmartPointer/SmartPointer.h \
 		../../../Common/Include/Comparable \
 		../../../Common/Comparable/Comparable.h \
+		../../../Common/Include/Loader \
+		../../../Common/Loader/Loader.h \
+		../../../Common/Loader/Loader_DLL.h \
+		../../../Common/Include/Parser \
+		../../../Common/Parser/Parser.h \
 		../../../Common/Debug/DebugExt.h \
 		../Common/src/Include/IPPSDefinitions \
 		../Common/src/IPPSDefinitions/IPPSDefinitions.h \
 		../../../Common/Include/Solver \
 		../../../Common/Solvers/Solver.h \
-		../../../Common/Include/Parser \
-		../../../Common/Parser/Parser.h \
-		../../../Common/Include/Clonable \
-		../../../Common/Clonable/Clonable.h \
 		../../../Common/Include/Variables \
 		../../../Common/Variables/Variables.h \
 		../../../Common/Include/Changeable \
@@ -721,15 +739,6 @@ builds/Lin64bit/release/obj/main.o: src/main.cpp src/PlanSchedServer/PlanSchedSe
 		../Common/src/Operation/Operation.h \
 		../Common/src/Include/Resources \
 		../Common/src/Resources/Resources.h \
-		../../../Common/Include/RandExt \
-		../../../Common/RandExt/RandExt.h \
-		../../../Common/RandExt/RandExt_MersenneTwister.h \
-		../../../Common/Include/Driver \
-		../../../Common/Driver/Driver.h \
-		../../../Common/Driver/Driven.h \
-		../../../Common/RandExt/RandExt_Interfaces.h \
-		../../../Common/RandExt/RandExt_LCG.h \
-		../../../Common/RandExt/RandExt_CombinedRandGen.h \
 		../Common/src/Include/Objective \
 		../Common/src/Objective/Objective.h \
 		../Common/src/Include/TGSelection \
