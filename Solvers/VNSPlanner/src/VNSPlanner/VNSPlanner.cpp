@@ -2339,351 +2339,486 @@ void VNSPlanner::parse(const PlannerOptions& plannerOptions) {
     //        out << curOptionKey << " : " << settings[curOptionKey].get() << endl;
     //    }
 
-    // For now, ALL_SETTINGS is not considered for the planner. This might change in the future.
-
     //  #################  Protocol object  ################################
 
-    if (settings.container().contains("VNSPLANNER_PROTOCOLFILE")) {
+    bool checkSingleSettings = true;
 
-	if (settings["VNSPLANNER_PROTOCOLFILE"].changed()) {
+    if (settings.container().contains("ALL_SETTINGS")) {
 
-	    //QFile proto_file;
-	    proto_file.setFileName(settings["VNSPLANNER_PROTOCOLFILE"].get());
-	    out << "VNSPlanner::parse : Protocol file : " << proto_file.fileName() << endl;
-	    Protocol protocol;
-	    protocol.init();
-	    protocol.setFile(proto_file);
-	    *this << &protocol;
+	if (settings["ALL_SETTINGS"].changed()) {
 
-	}
+	    QString allSettingsStr = settings["ALL_SETTINGS"].get();
 
-    } else {
-	throw ErrMsgException<>(std::string("VNSPlanner::parse : VNSPLANNER_PROTOCOLFILE not specified!"));
-    }
-
-    //  ####################################################################
-
-    //  ######################  Objective  #################################
-
-    if (settings.container().contains("VNSPLANNER_PRIMARY_OBJECTIVE")) {
-
-	if (settings["VNSPLANNER_PRIMARY_OBJECTIVE"].changed()) {
-
-	    QString objStr = settings["VNSPLANNER_PRIMARY_OBJECTIVE"].get();
-
-	    QRegularExpression curObjRE("([^\\(\\)]+)@([^\\(\\)]+)");
+	    QRegularExpression settingsRE;
 	    QRegularExpressionMatch match;
-	    match = curObjRE.match(objStr);
 
-	    QString objLibName = match.captured(2); // Library where the objective is located
-	    QString objName = match.captured(1); // Objective name
-
-	    QLibrary objLib(objLibName);
-
-	    out << "VNSPlanner::parse : VNSPLANNER_PRIMARY_OBJECTIVE : objLibName : " << objLibName << endl;
-	    out << "VNSPlanner::parse : VNSPLANNER_PRIMARY_OBJECTIVE : objName : " << objName << endl;
-
-	    // The search algorithm
-	    Common::Util::DLLCallLoader<ScalarObjective*, QLibrary&, const char*> objLoader;
-	    SmartPointer<ScalarObjective> curObj;
-	    try {
-
-		//curObj = objLoader.load(objLib, QString("new_" + initSchedulerName).toStdString().data());
-		curObj.setPointer(objLoader.load(objLib, QString("new_" + objName).toStdString().data()));
-
-	    } catch (...) {
-
-		out << objLib.fileName() << endl;
-		throw ErrMsgException<>(std::string("VNSPlanner::parse : Failed to resolve objective!"));
-
-	    }
-
-	    // Set the objective
-	    *this << curObj.getPointer();
-
-	}
-
-    } else {
-	throw ErrMsgException<>(std::string("VNSPlanner::parse : VNSPLANNER_PRIMARY_OBJECTIVE not specified!"));
-    }
-
-    //  ####################################################################
-
-    //  #######################  SolInitrule  ##############################
-    if (settings.container().contains("VNSPLANNER_SOLINITRULE")) {
-
-	if (settings["VNSPLANNER_SOLINITRULE"].changed()) {
-
-	    out << "VNSPlanner::parse : VNSPLANNER_SOLINITRULE has changed." << endl;
-
-	    if (settings["VNSPLANNER_SOLINITRULE"].get() == "SOL_INIT_RND") {
-
-		solInitType = VNSPlanner::SOL_INIT_RND;
-
-	    } else if (settings["VNSPLANNER_SOLINITRULE"].get() == "SOL_INIT_RANK") {
-
-		solInitType = VNSPlanner::SOL_INIT_RANK;
-
-	    } else {
-
-		throw ErrMsgException<>(std::string("PlannerInitRule: " + settings["VNSPLANNER_SOLINITRULE"].get().toStdString() + " " + "is incorrect"));
-
-	    }
-
-	}
-
-    } else {
-	throw ErrMsgException<>("VNSPlanner::parse : VNSPLANNER_SOLINITRULE not specified");
-    }
-    //  ####################################################################
-
-    //  #######################  NS  #######################################
-
-    if (settings.container().contains("VNSPLANNER_NS")) {
-
-	if (settings["VNSPLANNER_NS"].changed()) {
-
-	    out << "VNSPlanner::parse : VNSPLANNER_NS has changed." << endl;
-
-	    if (settings["VNSPLANNER_NS"].get() == "NS_N1") {
-
-		ns = VNSPlanner::NS_N1;
-
-	    } else if (settings["VNSPLANNER_NS"].get() == "NS_N2") {
-
-		ns = VNSPlanner::NS_N2;
-
-	    } else if (settings["VNSPLANNER_NS"].get() == "NS_N3") {
-
-		ns = VNSPlanner::NS_N3;
-
-	    } else if (settings["VNSPLANNER_NS"].get() == "NS_N2N1") {
-
-		ns = VNSPlanner::NS_N2N1;
-
-	    } else if (settings["VNSPLANNER_NS"].get() == "NS_N2N3") {
-
-		ns = VNSPlanner::NS_N2N3;
-
-	    } else if (settings["VNSPLANNER_NS"].get() == "NS_N1N3") {
-
-		ns = VNSPlanner::NS_N1N3;
-
-	    } else if (settings["VNSPLANNER_NS"].get() == "NS_N3N1") {
-
-		ns = VNSPlanner::NS_N3N1;
-
-	    } else if (settings["VNSPLANNER_NS"].get() == "NS_N2N3N1") {
-
-		ns = VNSPlanner::NS_N2N3N1;
-
-	    } else if (settings["VNSPLANNER_NS"].get() == "NS_N2N1N3") {
-
-		ns = VNSPlanner::NS_N2N1N3;
-
-	    } else if (settings["VNSPLANNER_NS"].get() == "NS_N2N1PN3") {
-
-		ns = VNSPlanner::NS_N2N1PN3;
-
-	    } else if (settings["VNSPLANNER_NS"].get() == "NS_PN2PN1PN3") {
-
-		ns = VNSPlanner::NS_PN2PN1PN3;
-
-	    } else if (settings["VNSPLANNER_NS"].get() == "NS_N4") {
-
-		ns = VNSPlanner::NS_N4;
-
-	    } else if (settings["VNSPLANNER_NS"].get() == "NS_N5") {
-
-		ns = VNSPlanner::NS_N5;
-
-	    } else {
-
-		throw ErrMsgException<>(std::string("No correct general NS for the planner specified!"));
-
-	    }
-
-	}
-
-    } else {
-	throw ErrMsgException<>("VNSPlanner::parse : VNSPLANNER_NS not specified");
-    }
-
-    //  ####################################################################
-
-
-    //  #######################  StepN  ####################################
-    if (settings.container().contains("VNSPLANNER_STEPN1")) {
-
-	if (settings["VNSPLANNER_STEPN1"].changed()) {
-
-	    out << "VNSPlanner::parse : VNSPLANNER_STEPN1 has changed." << endl;
-
-	    this->setStepN1(settings["VNSPLANNER_STEPN1"].get().toInt());
-
-	}
-
-    }
-    if (settings.container().contains("VNSPLANNER_STEPN2")) {
-
-	if (settings["VNSPLANNER_STEPN2"].changed()) {
-
-	    out << "VNSPlanner::parse : VNSPLANNER_STEPN2 has changed." << endl;
-
-	    this->setStepN2(settings["VNSPLANNER_STEPN2"].get().toInt());
-
-	}
-
-    }
-    if (settings.container().contains("VNSPLANNER_STEPN3")) {
-
-	if (settings["VNSPLANNER_STEPN3"].changed()) {
-
-	    out << "VNSPlanner::parse : VNSPLANNER_STEPN3 has changed." << endl;
-
-	    this->setStepN3(settings["VNSPLANNER_STEPN3"].get().toInt());
-
-	}
-
-    }
-    //  ####################################################################
-
-
-    //  ################  Number of neighborhoods to search  ###############
-
-    if (settings.container().contains("VNSPLANNER_NUMNEIGH")) {
-
-	if (settings["VNSPLANNER_NUMNEIGH"].changed()) {
-
-	    out << "VNSPlanner::parse : VNSPLANNER_NUMNEIGH has changed." << endl;
-
-	    this->setNumNeighbors(settings["VNSPLANNER_NUMNEIGH"].get().toInt());
-
-	}
-
-    } else {
-
-	throw ErrMsgException<>(std::string("VNSPLANNER_NUMNEIGH not defined!"));
-
-    }
-
-    //  ####################################################################
-
-
-    //  ############  Max. global iterations of the planning algorithm  ####
-    // Max. global iterations of the planning algorithm
-    if (settings.container().contains("VNSPLANNER_GLOBMAXITER")) {
-
-	if (settings["VNSPLANNER_GLOBMAXITER"].changed()) {
-
-	    out << "VNSPlanner::parse : VNSPLANNER_GLOBMAXITER has changed." << endl;
-
-	    this->maxIter(settings["VNSPLANNER_GLOBMAXITER"].get().toInt());
-
-	}
-
-    } else {
-
-	throw ErrMsgException<>(std::string("VNSPLANNER_GLOBMAXITER not defined!"));
-
-    }
-    //  ####################################################################
-
-    //  #########  Max. global time ms of the planning algorithm  ##########
-    // 
-    if (settings.container().contains("VNSPLANNER_GLOBMAXTIMEMINUTES")) {
-
-	if (settings["VNSPLANNER_GLOBMAXTIMEMINUTES"].changed()) {
-
-	    out << "VNSPlanner::parse : VNSPLANNER_GLOBMAXTIMEMINUTES has changed." << endl;
-
-	    this->maxTimeMs(settings["VNSPLANNER_GLOBMAXTIMEMINUTES"].get().toInt() * 60 * 1000);
-
-	}
-
-    } else {
-
-	throw ErrMsgException<>(std::string("VNSPLANNER_GLOBMAXTIMEMINUTES not defined!"));
-
-    }
-    //  ####################################################################
-
-    //  ###################  Planner scheduling strategy  ##################
-    if (settings.container().contains("VNSPLANNER_SCHEDSTRATEGY")) {
-
-	if (settings["VNSPLANNER_SCHEDSTRATEGY"].changed()) {
-
-	    out << "VNSPlanner::parse : VNSPLANNER_SCHEDSTRATEGY has changed." << endl;
-
-	    strategy.setStrategy(settings["VNSPLANNER_SCHEDSTRATEGY"].get());
-
-	}
-
-    } else {
-
-	throw ErrMsgException<>(std::string("VNSPLANNER_SCHEDSTRATEGY not defined!"));
-
-    }
-    //  ####################################################################
-
-
-    //  ################  Initial scheduler  ###############################
-
-    if (settings.container().contains("VNSPLANNER_INITSCHEDULER")) {
-
-	if (settings["VNSPLANNER_INITSCHEDULER"].changed()) {
-
-	    out << "VNSPlanner::parse : VNSPLANNER_INITSCHEDULER has changed!" << endl;
-
-	    QString initSchedStr = settings["VNSPLANNER_INITSCHEDULER"].get();
-
-	    QRegularExpression curInitSchedulerRE("([^\\(]+)\\({1,1}(.*)\\){1,1}@([^@^\\(^\\)]+)");
-	    QRegularExpressionMatch match = curInitSchedulerRE.match(initSchedStr);
-
-	    QString initSchedulerLibName = match.captured(3); // Library where the scheduler is to be looked for
-	    QString initSchedulerName = match.captured(1); // Scheduler name
-	    QString allInitSchedulerSettings = match.captured(2);
-
-	    QLibrary initSchedureLib(initSchedulerLibName);
-
-	    out << "VNSPlanner::parse : initSchedulerLibName : " << initSchedulerLibName << endl;
-	    out << "VNSPlanner::parse : initSchedulerName : " << initSchedulerName << endl;
-	    out << "VNSPlanner::parse : initSchedulerParams : " << allInitSchedulerSettings << endl;
-
-	    // The search algorithm
-	    Common::Util::DLLCallLoader<SchedSolver*, QLibrary&, const char*> initSchedulerLoader;
-
-	    try {
-
-		initScheduler.setPointer(initSchedulerLoader.load(initSchedureLib, QString("new_" + initSchedulerName).toStdString().data()), true);
-
-	    } catch (...) {
-
-		out << initSchedureLib.fileName() << endl;
-		Debugger::err << "VNSPlanner::parse : Failed to resolve InitScheduler algorithm!" << ENDL;
-
-	    }
-
-	    // The scheduler options
-	    SchedulerOptions curSchedSettings;
-	    curSchedSettings["ALL_SETTINGS"] = allInitSchedulerSettings; // Let the scheduler parse the settings
-
-	    // Let the initScheduler parse its settings
-	    initScheduler->parse(curSchedSettings);
-
-	    //out << "VNSPlanner::parse: initScheduler ALL_SETTINGS = " << curSchedSettings["ALL_SETTINGS"].get() << endl;
+	    // VNSPLANNER_PROTOCOLFILE
+	    settingsRE.setPattern("VNSPLANNER_PROTOCOLFILE=([^,;\\(\\)\\[\\]]+);{0,1}");
+	    match = settingsRE.match(allSettingsStr);
+	    out << "VNSPlanner::parse :Parsed: VNSPLANNER_PROTOCOLFILE=" << match.captured(1) << endl;
 	    //getchar();
+	    if (match.captured(1) != "") {
+		settings["VNSPLANNER_PROTOCOLFILE"] = match.captured(1);
+	    }
 
+	    // VNSPLANNER_SOLINITRULE
+	    settingsRE.setPattern("VNSPLANNER_SOLINITRULE=([^,;\\(\\)\\[\\]]+);{0,1}");
+	    match = settingsRE.match(allSettingsStr);
+	    out << "VNSPlanner::parse :Parsed: VNSPLANNER_SOLINITRULE=" << match.captured(1) << endl;
+	    //getchar();
+	    if (match.captured(1) != "") {
+		settings["VNSPLANNER_SOLINITRULE"] = match.captured(1);
+	    }
+
+	    // VNSPLANNER_NS
+	    settingsRE.setPattern("VNSPLANNER_NS=([^,;\\(\\)\\[\\]]+);{0,1}");
+	    match = settingsRE.match(allSettingsStr);
+	    out << "VNSPlanner::parse :Parsed: VNSPLANNER_NS=" << match.captured(1) << endl;
+	    //getchar();
+	    if (match.captured(1) != "") {
+		settings["VNSPLANNER_NS"] = match.captured(1);
+	    }
+
+	    // VNSPLANNER_STEPN1
+	    settingsRE.setPattern("VNSPLANNER_STEPN1=(\\d+);{0,1}");
+	    match = settingsRE.match(allSettingsStr);
+	    out << "VNSPlanner::parse :Parsed: VNSPLANNER_STEPN1=" << match.captured(1) << endl;
+	    //getchar();
+	    if (match.captured(1) != "") {
+		settings["VNSPLANNER_STEPN1"] = match.captured(1);
+	    }
+
+	    // VNSPLANNER_STEPN2
+	    settingsRE.setPattern("VNSPLANNER_STEPN2=(\\d+);{0,1}");
+	    match = settingsRE.match(allSettingsStr);
+	    out << "VNSPlanner::parse :Parsed: VNSPLANNER_STEPN2=" << match.captured(1) << endl;
+	    //getchar();
+	    if (match.captured(1) != "") {
+		settings["VNSPLANNER_STEPN2"] = match.captured(1);
+	    }
+
+	    // VNSPLANNER_STEPN3
+	    settingsRE.setPattern("VNSPLANNER_STEPN3=(\\d+);{0,1}");
+	    match = settingsRE.match(allSettingsStr);
+	    out << "VNSPlanner::parse :Parsed: VNSPLANNER_STEPN3=" << match.captured(1) << endl;
+	    //getchar();
+	    if (match.captured(1) != "") {
+		settings["VNSPLANNER_STEPN3"] = match.captured(1);
+	    }
+
+	    // VNSPLANNER_NUMNEIGH
+	    settingsRE.setPattern("VNSPLANNER_NUMNEIGH=(\\d+);{0,1}");
+	    match = settingsRE.match(allSettingsStr);
+	    out << "VNSPlanner::parse :Parsed: VNSPLANNER_NUMNEIGH=" << match.captured(1) << endl;
+	    //getchar();
+	    if (match.captured(1) != "") {
+		settings["VNSPLANNER_NUMNEIGH"] = match.captured(1);
+	    }
+
+	    // VNSPLANNER_GLOBMAXITER
+	    settingsRE.setPattern("VNSPLANNER_GLOBMAXITER=(\\d+);{0,1}");
+	    match = settingsRE.match(allSettingsStr);
+	    out << "VNSPlanner::parse :Parsed: VNSPLANNER_GLOBMAXITER=" << match.captured(1) << endl;
+	    //getchar();
+	    if (match.captured(1) != "") {
+		settings["VNSPLANNER_GLOBMAXITER"] = match.captured(1);
+	    }
+
+	    // VNSPLANNER_GLOBMAXTIMEMINUTES
+	    settingsRE.setPattern("VNSPLANNER_GLOBMAXTIMEMINUTES=(\\d+);{0,1}");
+	    match = settingsRE.match(allSettingsStr);
+	    out << "VNSPlanner::parse :Parsed: VNSPLANNER_GLOBMAXTIMEMINUTES=" << match.captured(1) << endl;
+	    //getchar();
+	    if (match.captured(1) != "") {
+		settings["VNSPLANNER_GLOBMAXTIMEMINUTES"] = match.captured(1);
+	    }
+
+	    // VNSPLANNER_SCHEDSTRATEGY
+	    settingsRE.setPattern("VNSPLANNER_SCHEDSTRATEGY=(?<strategy>PLANNER(\\{(?:[^\\{\\}]*(?2)*[^\\{\\}]*)*\\}),SCHEDULER(\\{(?:[^\\{\\}]*(?3)*[^\\{\\}]*)*\\}));?");
+	    match = settingsRE.match(allSettingsStr);
+	    out << "VNSPlanner::parse :Parsed: VNSPLANNER_SCHEDSTRATEGY=" << match.captured(1) << endl;
+	    //getchar();
+	    if (match.captured(1) != "") {
+		settings["VNSPLANNER_SCHEDSTRATEGY"] = match.captured(1);
+	    }
+
+	    // VNSPLANNER_INITSCHEDULER
+	    settingsRE.setPattern("VNSPLANNER_INITSCHEDULER=([^\\(]+\\(.*\\)@[^@\\(\\),;]+);?");
+	    match = settingsRE.match(allSettingsStr);
+	    out << "VNSPlanner::parse :Parsed: VNSPLANNER_INITSCHEDULER=" << match.captured(1) << endl;
+	    //getchar();
+	    if (match.captured(1) != "") {
+		settings["VNSPLANNER_INITSCHEDULER"] = match.captured(1);
+	    }
+
+	    // VNSPLANNER_PRIMARY_OBJECTIVE
+	    settingsRE.setPattern("VNSPLANNER_PRIMARY_OBJECTIVE=([^;]+@[^;]+);?");
+	    match = settingsRE.match(allSettingsStr);
+	    out << "VNSPlanner::parse :Parsed: VNSPLANNER_PRIMARY_OBJECTIVE=" << match.captured(1) << endl;
+	    //getchar();
+	    if (match.captured(1) != "") {
+		settings["VNSPLANNER_PRIMARY_OBJECTIVE"] = match.captured(1);
+	    }
+
+
+	    checkSingleSettings = true;
+
+	} else {
+	    checkSingleSettings = false;
 	}
 
     } else {
-
-	throw ErrMsgException<>(std::string("VNSPLANNER_INITSCHEDULER not defined!"));
-
+	checkSingleSettings = true;
     }
 
     //  ####################################################################
 
+    if (checkSingleSettings) {
+
+	//  #################  Protocol object  ################################
+
+	if (settings.container().contains("VNSPLANNER_PROTOCOLFILE")) {
+
+	    if (settings["VNSPLANNER_PROTOCOLFILE"].changed()) {
+
+		//QFile proto_file;
+		proto_file.setFileName(settings["VNSPLANNER_PROTOCOLFILE"].get());
+		out << "VNSPlanner::parse : Protocol file : " << proto_file.fileName() << endl;
+		Protocol protocol;
+		protocol.init();
+		protocol.setFile(proto_file);
+		*this << &protocol;
+
+	    }
+
+	} else {
+	    throw ErrMsgException<>(std::string("VNSPlanner::parse : VNSPLANNER_PROTOCOLFILE not specified!"));
+	}
+
+	//  ####################################################################
+
+	//  ######################  Objective  #################################
+
+	if (settings.container().contains("VNSPLANNER_PRIMARY_OBJECTIVE")) {
+
+	    if (settings["VNSPLANNER_PRIMARY_OBJECTIVE"].changed()) {
+
+		QString objStr = settings["VNSPLANNER_PRIMARY_OBJECTIVE"].get();
+
+		QRegularExpression curObjRE("([^\\(\\)]+)@([^\\(\\)]+)");
+		QRegularExpressionMatch match;
+		match = curObjRE.match(objStr);
+
+		QString objLibName = match.captured(2); // Library where the objective is located
+		QString objName = match.captured(1); // Objective name
+
+		QLibrary objLib(objLibName);
+
+		out << "VNSPlanner::parse : VNSPLANNER_PRIMARY_OBJECTIVE : objLibName : " << objLibName << endl;
+		out << "VNSPlanner::parse : VNSPLANNER_PRIMARY_OBJECTIVE : objName : " << objName << endl;
+
+		// The search algorithm
+		Common::Util::DLLCallLoader<ScalarObjective*, QLibrary&, const char*> objLoader;
+		SmartPointer<ScalarObjective> curObj;
+		try {
+
+		    //curObj = objLoader.load(objLib, QString("new_" + initSchedulerName).toStdString().data());
+		    curObj.setPointer(objLoader.load(objLib, QString("new_" + objName).toStdString().data()));
+
+		} catch (...) {
+
+		    out << objLib.fileName() << endl;
+		    throw ErrMsgException<>(std::string("VNSPlanner::parse : Failed to resolve objective!"));
+
+		}
+
+		// Set the objective
+		*this << curObj.getPointer();
+
+	    }
+
+	} else {
+	    throw ErrMsgException<>(std::string("VNSPlanner::parse : VNSPLANNER_PRIMARY_OBJECTIVE not specified!"));
+	}
+
+	//  ####################################################################
+
+	//  #######################  SolInitrule  ##############################
+	if (settings.container().contains("VNSPLANNER_SOLINITRULE")) {
+
+	    if (settings["VNSPLANNER_SOLINITRULE"].changed()) {
+
+		out << "VNSPlanner::parse : VNSPLANNER_SOLINITRULE has changed." << endl;
+
+		if (settings["VNSPLANNER_SOLINITRULE"].get() == "SOL_INIT_RND") {
+
+		    solInitType = VNSPlanner::SOL_INIT_RND;
+
+		} else if (settings["VNSPLANNER_SOLINITRULE"].get() == "SOL_INIT_RANK") {
+
+		    solInitType = VNSPlanner::SOL_INIT_RANK;
+
+		} else {
+
+		    throw ErrMsgException<>(std::string("PlannerInitRule: " + settings["VNSPLANNER_SOLINITRULE"].get().toStdString() + " " + "is incorrect"));
+
+		}
+
+	    }
+
+	} else {
+	    throw ErrMsgException<>("VNSPlanner::parse : VNSPLANNER_SOLINITRULE not specified");
+	}
+	//  ####################################################################
+
+	//  #######################  NS  #######################################
+
+	if (settings.container().contains("VNSPLANNER_NS")) {
+
+	    if (settings["VNSPLANNER_NS"].changed()) {
+
+		out << "VNSPlanner::parse : VNSPLANNER_NS has changed." << endl;
+
+		if (settings["VNSPLANNER_NS"].get() == "NS_N1") {
+
+		    ns = VNSPlanner::NS_N1;
+
+		} else if (settings["VNSPLANNER_NS"].get() == "NS_N2") {
+
+		    ns = VNSPlanner::NS_N2;
+
+		} else if (settings["VNSPLANNER_NS"].get() == "NS_N3") {
+
+		    ns = VNSPlanner::NS_N3;
+
+		} else if (settings["VNSPLANNER_NS"].get() == "NS_N2N1") {
+
+		    ns = VNSPlanner::NS_N2N1;
+
+		} else if (settings["VNSPLANNER_NS"].get() == "NS_N2N3") {
+
+		    ns = VNSPlanner::NS_N2N3;
+
+		} else if (settings["VNSPLANNER_NS"].get() == "NS_N1N3") {
+
+		    ns = VNSPlanner::NS_N1N3;
+
+		} else if (settings["VNSPLANNER_NS"].get() == "NS_N3N1") {
+
+		    ns = VNSPlanner::NS_N3N1;
+
+		} else if (settings["VNSPLANNER_NS"].get() == "NS_N2N3N1") {
+
+		    ns = VNSPlanner::NS_N2N3N1;
+
+		} else if (settings["VNSPLANNER_NS"].get() == "NS_N2N1N3") {
+
+		    ns = VNSPlanner::NS_N2N1N3;
+
+		} else if (settings["VNSPLANNER_NS"].get() == "NS_N2N1PN3") {
+
+		    ns = VNSPlanner::NS_N2N1PN3;
+
+		} else if (settings["VNSPLANNER_NS"].get() == "NS_PN2PN1PN3") {
+
+		    ns = VNSPlanner::NS_PN2PN1PN3;
+
+		} else if (settings["VNSPLANNER_NS"].get() == "NS_N4") {
+
+		    ns = VNSPlanner::NS_N4;
+
+		} else if (settings["VNSPLANNER_NS"].get() == "NS_N5") {
+
+		    ns = VNSPlanner::NS_N5;
+
+		} else {
+
+		    throw ErrMsgException<>(std::string("No correct general NS for the planner specified!"));
+
+		}
+
+	    }
+
+	} else {
+	    throw ErrMsgException<>("VNSPlanner::parse : VNSPLANNER_NS not specified");
+	}
+
+	//  ####################################################################
+
+
+	//  #######################  StepN  ####################################
+	if (settings.container().contains("VNSPLANNER_STEPN1")) {
+
+	    if (settings["VNSPLANNER_STEPN1"].changed()) {
+
+		out << "VNSPlanner::parse : VNSPLANNER_STEPN1 has changed." << endl;
+
+		this->setStepN1(settings["VNSPLANNER_STEPN1"].get().toInt());
+
+	    }
+
+	}
+	if (settings.container().contains("VNSPLANNER_STEPN2")) {
+
+	    if (settings["VNSPLANNER_STEPN2"].changed()) {
+
+		out << "VNSPlanner::parse : VNSPLANNER_STEPN2 has changed." << endl;
+
+		this->setStepN2(settings["VNSPLANNER_STEPN2"].get().toInt());
+
+	    }
+
+	}
+	if (settings.container().contains("VNSPLANNER_STEPN3")) {
+
+	    if (settings["VNSPLANNER_STEPN3"].changed()) {
+
+		out << "VNSPlanner::parse : VNSPLANNER_STEPN3 has changed." << endl;
+
+		this->setStepN3(settings["VNSPLANNER_STEPN3"].get().toInt());
+
+	    }
+
+	}
+	//  ####################################################################
+
+
+	//  ################  Number of neighborhoods to search  ###############
+
+	if (settings.container().contains("VNSPLANNER_NUMNEIGH")) {
+
+	    if (settings["VNSPLANNER_NUMNEIGH"].changed()) {
+
+		out << "VNSPlanner::parse : VNSPLANNER_NUMNEIGH has changed." << endl;
+
+		this->setNumNeighbors(settings["VNSPLANNER_NUMNEIGH"].get().toInt());
+
+	    }
+
+	} else {
+
+	    throw ErrMsgException<>(std::string("VNSPLANNER_NUMNEIGH not defined!"));
+
+	}
+
+	//  ####################################################################
+
+
+	//  ############  Max. global iterations of the planning algorithm  ####
+	// Max. global iterations of the planning algorithm
+	if (settings.container().contains("VNSPLANNER_GLOBMAXITER")) {
+
+	    if (settings["VNSPLANNER_GLOBMAXITER"].changed()) {
+
+		out << "VNSPlanner::parse : VNSPLANNER_GLOBMAXITER has changed." << endl;
+
+		this->maxIter(settings["VNSPLANNER_GLOBMAXITER"].get().toInt());
+
+	    }
+
+	} else {
+
+	    throw ErrMsgException<>(std::string("VNSPLANNER_GLOBMAXITER not defined!"));
+
+	}
+	//  ####################################################################
+
+	//  #########  Max. global time ms of the planning algorithm  ##########
+	// 
+	if (settings.container().contains("VNSPLANNER_GLOBMAXTIMEMINUTES")) {
+
+	    if (settings["VNSPLANNER_GLOBMAXTIMEMINUTES"].changed()) {
+
+		out << "VNSPlanner::parse : VNSPLANNER_GLOBMAXTIMEMINUTES has changed." << endl;
+
+		this->maxTimeMs(settings["VNSPLANNER_GLOBMAXTIMEMINUTES"].get().toInt() * 60 * 1000);
+
+	    }
+
+	} else {
+
+	    throw ErrMsgException<>(std::string("VNSPLANNER_GLOBMAXTIMEMINUTES not defined!"));
+
+	}
+	//  ####################################################################
+
+	//  ###################  Planner scheduling strategy  ##################
+	if (settings.container().contains("VNSPLANNER_SCHEDSTRATEGY")) {
+
+	    if (settings["VNSPLANNER_SCHEDSTRATEGY"].changed()) {
+
+		out << "VNSPlanner::parse : VNSPLANNER_SCHEDSTRATEGY has changed." << endl;
+
+		strategy.setStrategy(settings["VNSPLANNER_SCHEDSTRATEGY"].get());
+
+	    }
+
+	} else {
+
+	    throw ErrMsgException<>(std::string("VNSPLANNER_SCHEDSTRATEGY not defined!"));
+
+	}
+	//  ####################################################################
+
+
+	//  ################  Initial scheduler  ###############################
+
+	if (settings.container().contains("VNSPLANNER_INITSCHEDULER")) {
+
+	    if (settings["VNSPLANNER_INITSCHEDULER"].changed()) {
+
+		out << "VNSPlanner::parse : VNSPLANNER_INITSCHEDULER has changed!" << endl;
+
+		QString initSchedStr = settings["VNSPLANNER_INITSCHEDULER"].get();
+
+		QRegularExpression curInitSchedulerRE("([^\\(]+)\\({1,1}(.*)\\){1,1}@([^@^\\(^\\)]+)");
+		QRegularExpressionMatch match = curInitSchedulerRE.match(initSchedStr);
+
+		QString initSchedulerLibName = match.captured(3); // Library where the scheduler is to be looked for
+		QString initSchedulerName = match.captured(1); // Scheduler name
+		QString allInitSchedulerSettings = match.captured(2);
+
+		QLibrary initSchedureLib(initSchedulerLibName);
+
+		out << "VNSPlanner::parse : initSchedulerLibName : " << initSchedulerLibName << endl;
+		out << "VNSPlanner::parse : initSchedulerName : " << initSchedulerName << endl;
+		out << "VNSPlanner::parse : initSchedulerParams : " << allInitSchedulerSettings << endl;
+
+		// The search algorithm
+		Common::Util::DLLCallLoader<SchedSolver*, QLibrary&, const char*> initSchedulerLoader;
+
+		try {
+
+		    initScheduler.setPointer(initSchedulerLoader.load(initSchedureLib, QString("new_" + initSchedulerName).toStdString().data()), true);
+
+		} catch (...) {
+
+		    out << initSchedureLib.fileName() << endl;
+		    Debugger::err << "VNSPlanner::parse : Failed to resolve InitScheduler algorithm!" << ENDL;
+
+		}
+
+		// The scheduler options
+		SchedulerOptions curSchedSettings;
+		curSchedSettings["ALL_SETTINGS"] = allInitSchedulerSettings; // Let the scheduler parse the settings
+
+		// Let the initScheduler parse its settings
+		initScheduler->parse(curSchedSettings);
+
+		//out << "VNSPlanner::parse: initScheduler ALL_SETTINGS = " << curSchedSettings["ALL_SETTINGS"].get() << endl;
+		//getchar();
+
+	    }
+
+	} else {
+
+	    throw ErrMsgException<>(std::string("VNSPLANNER_INITSCHEDULER not defined!"));
+
+	}
+
+	//  ####################################################################
+
+    }
 
     //  ###################  Planner scheduling strategy  ##################
     bool considerSingleStrategySettings = true;
@@ -2785,6 +2920,8 @@ PlanSched VNSPlanner::solve(const IPPSProblem& ippsProblem/*, const PlannerOptio
     run();
 
     // Collect results
+    res.plan = this->bestPlan;
+    res.schedule = this->bestSched;
 
     return res;
 }

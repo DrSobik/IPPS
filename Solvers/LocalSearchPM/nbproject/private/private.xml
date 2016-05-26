@@ -9,9 +9,6 @@
         <group name="Common">
             <file>file:/data/Projects/IPPS/CPPALG/Solvers/LocalSearchPM/src/LocalSearchPM/LocalSearchPM.h</file>
         </group>
-        <group>
-            <file>file:/data/Projects/IPPS/CPPALG/Solvers/LocalSearchPM/src/LocalSearchPM/LocalSearchPM.h</file>
-            <file>file:/data/Projects/IPPS/CPPALG/Solvers/LocalSearchPM/src/LocalSearchPM/LocalSearchPM.cpp</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

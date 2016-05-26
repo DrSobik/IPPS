@@ -3,6 +3,7 @@
 
 #include <QCoreApplication>
 #include <iostream>
+#include <qt5/QtCore/qglobal.h>
 
 
 SchedClient::SchedClient() : QObject(0), socket(this) {
@@ -73,7 +74,7 @@ void SchedClient::waitForReply(){
     socket.waitForReadyRead(-1);
 
     // Wait for the message size
-    while(socket.bytesAvailable() < sizeof(quint64)){
+    while(socket.bytesAvailable() < (qint64) sizeof(quint64)){
         if(!socket.waitForReadyRead(-1)){
 
         }

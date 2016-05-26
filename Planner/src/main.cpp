@@ -31,12 +31,12 @@ int Main(int argc, char *argv[]) {
 
     // Start listening
     if (planner.schedlistener.listen(QHostAddress::LocalHost, 5555)) {
-        qDebug() << "Started " << planner.objectName() << " on " << planner.schedlistener.serverAddress().toString() << ":" << planner.schedlistener.serverPort();
-        //qDebug() << "Listening Product Agent.";
-        planner.connectTo(QHostAddress::LocalHost, 7777);
+	qDebug() << "Started " << planner.objectName() << " on " << planner.schedlistener.serverAddress().toString() << ":" << planner.schedlistener.serverPort();
+	//qDebug() << "Listening Product Agent.";
+	planner.connectTo(QHostAddress::LocalHost, 7777);
     } else {
-        qDebug() << "Failed to start " << planner.objectName() << " on " << planner.schedlistener.serverAddress().toString() << ":" << planner.schedlistener.serverPort() << ". " << "Error message : " << planner.schedlistener.errorString();
-        return 0;
+	qDebug() << "Failed to start " << planner.objectName() << " on " << planner.schedlistener.serverAddress().toString() << ":" << planner.schedlistener.serverPort() << ". " << "Error message : " << planner.schedlistener.errorString();
+	return 0;
     }
 
 
@@ -54,7 +54,7 @@ int Main(int argc, char *argv[]) {
 #include <QXmlStreamReader>
 #include <QDomDocument>
 #include <QTime>
-#include <qt5/QtCore/qlibrary.h>
+#include <QLibrary>
 
 #include "Operation"
 #include "Product"
@@ -64,18 +64,12 @@ int Main(int argc, char *argv[]) {
 #include "BillOfProcesses"
 #include "Planner"
 #include "IPPSProblem"
-//#include "VNSPlanner"
-
 #include "Schedule"
 #include "Scheduler"
 #include "Resources"
-//#include "PriorityScheduler"
-//#include "CombinedScheduler"
-//#include "BiDirScheduler.h"
-//#include "OneDirScheduler.h"
-//#include "SBHScheduler"
-//#include "LocalSearchPM"
-//#include "VNSScheduler"
+
+#include "IPPSDefinitions"
+
 
 #ifdef GA_ALG
 
@@ -110,69 +104,69 @@ int old_main_VNS(int argc, char *argv[]) {
 
     QHash<QString, QString> prefix2arg;
     for (int i = 1; i < arguments.size(); i++) { // The first one is the program's directory
-        out << arguments[i] << endl;
-        QStringList argssplitted = arguments[i].split(":");
-        if (argssplitted.size() < 2) {
-            Debugger::err << "Arguments not specified correctly!!!" << ENDL;
-        } else {
+	out << arguments[i] << endl;
+	QStringList argssplitted = arguments[i].split(":");
+	if (argssplitted.size() < 2) {
+	    Debugger::err << "Arguments not specified correctly!!!" << ENDL;
+	} else {
 
-            for (int j = 1; j < argssplitted.size() - 1; j++) {
-                prefix2arg[argssplitted[0]] += argssplitted[j] + ":";
-            }
-            prefix2arg[argssplitted[0]] += argssplitted.last();
-        }
+	    for (int j = 1; j < argssplitted.size() - 1; j++) {
+		prefix2arg[argssplitted[0]] += argssplitted[j] + ":";
+	    }
+	    prefix2arg[argssplitted[0]] += argssplitted.last();
+	}
     }
 
     if (!prefix2arg.contains("Test")) {
-        Debugger::err << "No test specified!" << ENDL;
+	Debugger::err << "No test specified!" << ENDL;
     } else {
-        test_inst_dir = prefix2arg["Test"];
+	test_inst_dir = prefix2arg["Test"];
     }
 
     QFile proto_file;
 
     if (!prefix2arg.contains("Protocol")) {
-        Debugger::err << "No protocol specified" << ENDL;
+	Debugger::err << "No protocol specified" << ENDL;
     } else {
-        proto_file.setFileName(test_inst_dir + prefix2arg["Protocol"]);
-        out << "Protocol file : " << proto_file.fileName() << endl;
+	proto_file.setFileName(test_inst_dir + prefix2arg["Protocol"]);
+	out << "Protocol file : " << proto_file.fileName() << endl;
     }
 
     if (!prefix2arg.contains("GlobMaxIter")) {
-        Debugger::err << "No number of global iterations specified!" << ENDL;
+	Debugger::err << "No number of global iterations specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("GlobMaxTimeM")) {
-        Debugger::err << "No global time limit specified!" << ENDL;
+	Debugger::err << "No global time limit specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("RandSeed")) {
-        Debugger::err << "No seed for randomization specified!" << ENDL;
+	Debugger::err << "No seed for randomization specified!" << ENDL;
     } else {
-        // Set the seed 
-        out << "Input for RandSeed: " << prefix2arg["RandSeed"].toInt() << endl;
-        Rand::rndSeed(prefix2arg["RandSeed"].toInt());
-        out << "Returned RandSeed: " << Rand::rndSeed() << endl;
+	// Set the seed 
+	out << "Input for RandSeed: " << prefix2arg["RandSeed"].toInt() << endl;
+	Rand::rndSeed(prefix2arg["RandSeed"].toInt());
+	out << "Returned RandSeed: " << Rand::rndSeed() << endl;
     }
 
     if (!prefix2arg.contains("PlannerInitRule")) {
-        Debugger::err << "No initialization rule for the planner specified!" << ENDL;
+	Debugger::err << "No initialization rule for the planner specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("NS")) {
-        Debugger::err << "No general NS for the planner specified!" << ENDL;
+	Debugger::err << "No general NS for the planner specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("PrioScheduler")) {
-        Debugger::err << "No priority scheduler specified!" << ENDL;
+	Debugger::err << "No priority scheduler specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("NumNeigh")) {
-        Debugger::err << "No number of neighbors specified!" << ENDL;
+	Debugger::err << "No number of neighbors specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("SchedStrategy")) {
-        Debugger::err << "No scheduling strategy specified!" << ENDL;
+	Debugger::err << "No scheduling strategy specified!" << ENDL;
     }
 
     // Path to the directory with the input test instance
@@ -273,14 +267,14 @@ int old_main_VNS(int argc, char *argv[]) {
     QDomDocument rc_doc("rc");
     QFile rc_file(test_inst_dir + "resources.xml");
     if (!rc_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << rc_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << rc_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!rc_doc.setContent(&rc_file)) {
-        rc_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	rc_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     rc_file.close();
 
@@ -301,14 +295,14 @@ int old_main_VNS(int argc, char *argv[]) {
     QDomDocument iroutes_doc("iroutes");
     QFile routes_file(test_inst_dir + "iroutes.xml");
     if (!routes_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << routes_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << routes_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!iroutes_doc.setContent(&routes_file)) {
-        routes_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	routes_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     routes_file.close();
     out << "Done reading the routes information." << endl;
@@ -319,23 +313,23 @@ int old_main_VNS(int argc, char *argv[]) {
     QDomNodeList route_list;
     int itm_type_id;
     for (int i = 0; i < item_list.size(); i++) {
-                                    itm_type_id = item_list.item(i).toElement().attribute("id").toInt();
-                                    //out << "Reading item type " << itm_type_id << endl;
-                                    route_list = item_list.item(i).toElement().elementsByTagName("route");
-                                    for (int j = 0; j < route_list.size(); j++) {
-                                                                    iroutes[itm_type_id].append(new Route());
-                                                                    iroutes[itm_type_id].last()->fromDOMElement(route_list.item(j).toElement());
-                                    }
+				    itm_type_id = item_list.item(i).toElement().attribute("id").toInt();
+				    //out << "Reading item type " << itm_type_id << endl;
+				    route_list = item_list.item(i).toElement().elementsByTagName("route");
+				    for (int j = 0; j < route_list.size(); j++) {
+								    iroutes[itm_type_id].append(new Route());
+								    iroutes[itm_type_id].last()->fromDOMElement(route_list.item(j).toElement());
+				    }
     }
      */
     ProductManager::iroutesFromDOMElement(iroutes_doc.documentElement(), itype2routes);
 
     for (QHash<int, QList<Route*> >::iterator iter = itype2routes.begin(); iter != itype2routes.end(); iter++) {
-        out << "Item type : " << iter.key() << endl;
-        cout << "Routes : " << endl;
-        for (int i = 0; i < iter.value().size(); i++) {
-            out << *iter.value()[i] << endl;
-        }
+	out << "Item type : " << iter.key() << endl;
+	cout << "Routes : " << endl;
+	for (int i = 0; i < iter.value().size(); i++) {
+	    out << *iter.value()[i] << endl;
+	}
     }
 
     /* ######################  Done reading routes  ######################### */
@@ -348,14 +342,14 @@ int old_main_VNS(int argc, char *argv[]) {
     QDomDocument boms_doc("boms");
     QFile bom_file(test_inst_dir + "boms.xml");
     if (!bom_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << bom_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << bom_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!boms_doc.setContent(&bom_file)) {
-        bom_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	bom_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     bom_file.close();
     out << "Done reading the BOMs information." << endl;
@@ -368,22 +362,22 @@ int old_main_VNS(int argc, char *argv[]) {
     int prod_type_id; // ID of the current product
     // For every node create the corresponding BOMs
     for (int i = 0; i < prod_list.size(); i++) {
-                                    prod_type_id = prod_list.item(i).toElement().attribute("type").toInt();
-                                    //out << "Current product type: " << prod_type_id << endl;
+				    prod_type_id = prod_list.item(i).toElement().attribute("type").toInt();
+				    //out << "Current product type: " << prod_type_id << endl;
 
-                                    // Get the list of BOMs for the current product
-                                    prod_bom_list = prod_list.item(i).toElement().elementsByTagName("bom");
+				    // Get the list of BOMs for the current product
+				    prod_bom_list = prod_list.item(i).toElement().elementsByTagName("bom");
 
-                                    // Iterate over all BOM descriptions and create the actual BOMs
-                                    for (int cb = 0; cb < prod_bom_list.size(); cb++) {
-                                                                    pboms[prod_type_id].append(new BillOfMaterials());
+				    // Iterate over all BOM descriptions and create the actual BOMs
+				    for (int cb = 0; cb < prod_bom_list.size(); cb++) {
+								    pboms[prod_type_id].append(new BillOfMaterials());
 
-                                                                    // Extract the BOM from the DOM element
-                                                                    //out << "Parsing pbom from the DOM element ..." << endl;
-                                                                    //out << prod_bom_list.item(cb).toElement() << endl;
-                                                                    pboms[prod_type_id].last()->fromDOMElement(prod_bom_list.item(cb).toElement());
-                                                                    //out << "Done parsing pbom from the DOM element." << endl;
-                                    }
+								    // Extract the BOM from the DOM element
+								    //out << "Parsing pbom from the DOM element ..." << endl;
+								    //out << prod_bom_list.item(cb).toElement() << endl;
+								    pboms[prod_type_id].last()->fromDOMElement(prod_bom_list.item(cb).toElement());
+								    //out << "Done parsing pbom from the DOM element." << endl;
+				    }
     }
      */
     //out << "ProductManager::pbomsFromDOMElement..." << endl;
@@ -400,19 +394,19 @@ int old_main_VNS(int argc, char *argv[]) {
 
     // Prepare the hash with the BOPs for different product types
     for (int i = 0; i < /*prod_list*/ptype2boms.size(); i++) {
-        ptype2bops.insert(/*prod_list.item(i).toElement().attribute("type").toInt()*/ptype2boms.keys()[i], QList<BillOfProcesses*>());
+	ptype2bops.insert(/*prod_list.item(i).toElement().attribute("type").toInt()*/ptype2boms.keys()[i], QList<BillOfProcesses*>());
     }
 
     // Iterate over all product types
     double total_comb = 1.0;
     double total_bops = 0.0;
     for (QHash<int, QList<BillOfProcesses*> >::iterator ptiter = ptype2bops.begin(); ptiter != ptype2bops.end(); ptiter++) {
-        out << "BillOfProcesses::generateAll..." << endl;
-        BillOfProcesses::generateAll(ptype2boms[ptiter.key()], itype2routes, ptype2bops[ptiter.key()]);
-        out << "Finished BillOfProcesses::generateAll." << endl;
-        out << "Generated " << ptype2bops[ptiter.key()].size() << " BOPs for product " << ptiter.key() << endl;
-        total_comb *= double(ptype2bops[ptiter.key()].size());
-        total_bops += ptype2bops[ptiter.key()].size();
+	out << "BillOfProcesses::generateAll..." << endl;
+	BillOfProcesses::generateAll(ptype2boms[ptiter.key()], itype2routes, ptype2bops[ptiter.key()]);
+	out << "Finished BillOfProcesses::generateAll." << endl;
+	out << "Generated " << ptype2bops[ptiter.key()].size() << " BOPs for product " << ptiter.key() << endl;
+	total_comb *= double(ptype2bops[ptiter.key()].size());
+	total_bops += ptype2bops[ptiter.key()].size();
     }
     out << "Done generating BOPs for each product type." << endl;
     out << "Total generated BOPs : " << total_bops << endl;
@@ -426,32 +420,32 @@ int old_main_VNS(int argc, char *argv[]) {
     QList<int> ptypes = ptype2boms.keys();
     for (int i = 0; i < ptypes.size(); i++) {
 
-        out << "Creating product " << i + 1 << endl;
+	out << "Creating product " << i + 1 << endl;
 
-        products.append(Product());
-        products.last().ID = ptypes[i]; // i + 1; //1;
-        products.last().type = ptypes[i];
-        for (int j = 0; j < ptype2bops[products.last().type].size(); j++) {
-            // Generate the ID for the current BOM of the current product
-            //ptype2bops[products.last().type][j]->ID = products.last().ID;
-            //ptype2bops[products.last().type][j]->ID = ptype2bops[products.last().type][j]->ID << 16; // Shift by 16 bits
-            //ptype2bops[products.last().type][j]->ID += j;
+	products.append(Product());
+	products.last().ID = ptypes[i]; // i + 1; //1;
+	products.last().type = ptypes[i];
+	for (int j = 0; j < ptype2bops[products.last().type].size(); j++) {
+	    // Generate the ID for the current BOM of the current product
+	    //ptype2bops[products.last().type][j]->ID = products.last().ID;
+	    //ptype2bops[products.last().type][j]->ID = ptype2bops[products.last().type][j]->ID << 16; // Shift by 16 bits
+	    //ptype2bops[products.last().type][j]->ID += j;
 
-            // IMPORTANT!!! It is assumed that BOP ID = BOM ID
+	    // IMPORTANT!!! It is assumed that BOP ID = BOM ID
 
-            // Add the BOP to the product
-            products.last() << ptype2bops[products.last().type][j];
-        }
+	    // Add the BOP to the product
+	    products.last() << ptype2bops[products.last().type][j];
+	}
 
-        out << "Product before ranking BOPs : " << endl << products.last() << endl;
+	out << "Product before ranking BOPs : " << endl << products.last() << endl;
 
-        //products.last().bopsDecompRate(0.0);
-        //products.last().rc = &rc;
-        out << "Ranking BOPs... " << endl;
-        products.last().rankBOPs(rc);
-        out << "Done ranking BOPs." << endl;
+	//products.last().bopsDecompRate(0.0);
+	//products.last().rc = &rc;
+	out << "Ranking BOPs... " << endl;
+	products.last().rankBOPs(rc);
+	out << "Done ranking BOPs." << endl;
 
-        out << "Created product " << i + 1 << endl;
+	out << "Created product " << i + 1 << endl;
 
     }
     out << "Done creating products." << endl;
@@ -460,7 +454,7 @@ int old_main_VNS(int argc, char *argv[]) {
     out << "Creating product manager ..." << endl;
     ProductManager prodman;
     for (int i = 0; i < products.size(); i++) {
-        prodman << &products[i];
+	prodman << &products[i];
     }
     out << "Product manager created." << endl;
 
@@ -469,14 +463,14 @@ int old_main_VNS(int argc, char *argv[]) {
     QDomDocument ord_doc("orders");
     QFile ord_file(test_inst_dir + "orders.xml");
     if (!ord_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << ord_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << ord_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!ord_doc.setContent(&ord_file)) {
-        ord_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	ord_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     ord_file.close();
 
@@ -486,8 +480,8 @@ int old_main_VNS(int argc, char *argv[]) {
     QList<Order*> orders;
 
     for (int i = 0; i < ords_list.size(); i++) {
-        orders.append(new Order);
-        orders.last()->fromDOMElement(ords_list.item(i).toElement());
+	orders.append(new Order);
+	orders.last()->fromDOMElement(ords_list.item(i).toElement());
     }
     out << "Done reading the orders information." << endl;
     /* ####################  Done reading orders  ######################## */
@@ -495,7 +489,7 @@ int old_main_VNS(int argc, char *argv[]) {
     out << "Creating order manager ..." << endl;
     OrderManager ordman;
     for (int i = 0; i < orders.size(); i++) {
-        ordman << *orders[i];
+	ordman << *orders[i];
     }
     out << "Order manager created." << endl;
 
@@ -535,28 +529,28 @@ int old_main_VNS(int argc, char *argv[]) {
     IPPSProblem ippsProblem;
 
     if (!prefix2arg.contains("Objective")) {
-        Debugger::err << "No objective specified!!!" << ENDL;
+	Debugger::err << "No objective specified!!!" << ENDL;
     } else if (prefix2arg["Objective"] == "Cmax") {
-        plannerVNS.schedOptions["OBJECTIVE"] = "Cmax";
+	plannerVNS.schedOptions["OBJECTIVE"] = "Cmax";
     } else if (prefix2arg["Objective"] == "TWT") {
-        plannerVNS.schedOptions["OBJECTIVE"] = "TWT";
+	plannerVNS.schedOptions["OBJECTIVE"] = "TWT";
     } else {
-        out << prefix2arg["Objective"] << endl;
-        Debugger::err << "Unknown objective!!!" << ENDL;
+	out << prefix2arg["Objective"] << endl;
+	Debugger::err << "Unknown objective!!!" << ENDL;
     }
 
     ScalarObjective* objective = NULL;
 
     if (!plannerVNS.schedOptions.contains("OBJECTIVE")) {
-        Debugger::err << "No objective specified!!!" << ENDL;
+	Debugger::err << "No objective specified!!!" << ENDL;
     } else {
-        if (plannerVNS.schedOptions["OBJECTIVE"] == "TWT") {
-            objective = new TWT;
-        } else if (plannerVNS.schedOptions["OBJECTIVE"] == "Cmax") {
-            objective = new Cmax;
-        } else {
-            Debugger::err << "Invalid objective!!!" << ENDL;
-        }
+	if (plannerVNS.schedOptions["OBJECTIVE"] == "TWT") {
+	    objective = new TWT;
+	} else if (plannerVNS.schedOptions["OBJECTIVE"] == "Cmax") {
+	    objective = new Cmax;
+	} else {
+	    Debugger::err << "Invalid objective!!!" << ENDL;
+	}
     }
 
     // Set the objective for the planner
@@ -566,1865 +560,1865 @@ int old_main_VNS(int argc, char *argv[]) {
 
     if (prefix2arg["PlannerInitRule"] == "RND") {
 
-        plannerVNS.solInitType = VNSPlanner::SOL_INIT_RND;
+	plannerVNS.solInitType = VNSPlanner::SOL_INIT_RND;
 
     } else if (prefix2arg["PlannerInitRule"] == "TPTRANK") {
 
-        plannerVNS.solInitType = VNSPlanner::SOL_INIT_RANK;
+	plannerVNS.solInitType = VNSPlanner::SOL_INIT_RANK;
 
     } else {
 
-        Debugger::warn << "PlannerInitRule: " << prefix2arg["PlannerInitRule"].toStdString() << ENDL;
-        Debugger::err << "Incorrect planner initialization rule set!" << ENDL;
+	Debugger::warn << "PlannerInitRule: " << prefix2arg["PlannerInitRule"].toStdString() << ENDL;
+	Debugger::err << "Incorrect planner initialization rule set!" << ENDL;
 
     }
 
 
     if (prefix2arg["NS"] == "N1") {
 
-        plannerVNS.ns = VNSPlanner::NS_N1;
+	plannerVNS.ns = VNSPlanner::NS_N1;
 
     } else if (prefix2arg["NS"] == "N2") {
 
-        plannerVNS.ns = VNSPlanner::NS_N2;
+	plannerVNS.ns = VNSPlanner::NS_N2;
 
     } else if (prefix2arg["NS"] == "N3") {
 
-        plannerVNS.ns = VNSPlanner::NS_N3;
+	plannerVNS.ns = VNSPlanner::NS_N3;
 
     } else if (prefix2arg["NS"] == "N2N1") {
 
-        plannerVNS.ns = VNSPlanner::NS_N2N1;
+	plannerVNS.ns = VNSPlanner::NS_N2N1;
 
     } else if (prefix2arg["NS"] == "N2N3") {
 
-        plannerVNS.ns = VNSPlanner::NS_N2N3;
+	plannerVNS.ns = VNSPlanner::NS_N2N3;
 
     } else if (prefix2arg["NS"] == "N1N3") {
 
-        plannerVNS.ns = VNSPlanner::NS_N1N3;
+	plannerVNS.ns = VNSPlanner::NS_N1N3;
 
     } else if (prefix2arg["NS"] == "N3N1") {
 
-        plannerVNS.ns = VNSPlanner::NS_N3N1;
+	plannerVNS.ns = VNSPlanner::NS_N3N1;
 
     } else if (prefix2arg["NS"] == "N2N3N1") {
 
-        plannerVNS.ns = VNSPlanner::NS_N2N3N1;
+	plannerVNS.ns = VNSPlanner::NS_N2N3N1;
 
     } else if (prefix2arg["NS"] == "N2N1N3") {
 
-        plannerVNS.ns = VNSPlanner::NS_N2N1N3;
+	plannerVNS.ns = VNSPlanner::NS_N2N1N3;
 
     } else if (prefix2arg["NS"] == "N2N1PN3") {
 
-        plannerVNS.ns = VNSPlanner::NS_N2N1PN3;
+	plannerVNS.ns = VNSPlanner::NS_N2N1PN3;
 
     } else if (prefix2arg["NS"] == "PN2PN1PN3") {
 
-        plannerVNS.ns = VNSPlanner::NS_PN2PN1PN3;
+	plannerVNS.ns = VNSPlanner::NS_PN2PN1PN3;
 
     } else if (prefix2arg["NS"] == "N4") {
 
-        plannerVNS.ns = VNSPlanner::NS_N4;
+	plannerVNS.ns = VNSPlanner::NS_N4;
 
     } else if (prefix2arg["NS"] == "N5") {
 
-        plannerVNS.ns = VNSPlanner::NS_N5;
+	plannerVNS.ns = VNSPlanner::NS_N5;
 
     } else {
-        Debugger::err << "No correct general NS for the planner specified!" << ENDL;
+	Debugger::err << "No correct general NS for the planner specified!" << ENDL;
     }
 
 
     if (prefix2arg.contains("StepN1")) {
-        plannerVNS.setStepN1(prefix2arg["StepN1"].toInt());
+	plannerVNS.setStepN1(prefix2arg["StepN1"].toInt());
     }
     if (prefix2arg.contains("StepN2")) {
-        plannerVNS.setStepN1(prefix2arg["StepN2"].toInt());
+	plannerVNS.setStepN1(prefix2arg["StepN2"].toInt());
     }
     if (prefix2arg.contains("StepN3")) {
-        plannerVNS.setStepN1(prefix2arg["StepN3"].toInt());
+	plannerVNS.setStepN1(prefix2arg["StepN3"].toInt());
     }
 
     if (prefix2arg.contains("NumNeigh")) {
-        plannerVNS.setNumNeighbors(prefix2arg["NumNeigh"].toInt());
+	plannerVNS.setNumNeighbors(prefix2arg["NumNeigh"].toInt());
     }
 
     if (prefix2arg["PrioScheduler"] == "RND") {
 
-        plannerVNS.scheduler = new RNDScheduler;
+	plannerVNS.scheduler = new RNDScheduler;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "FIFO") {
 
-        plannerVNS.scheduler = new WFIFOScheduler;
-        ((WFIFOScheduler*) plannerVNS.scheduler)->weightedFIFO(false);
+	plannerVNS.scheduler = new WFIFOScheduler;
+	((WFIFOScheduler*) plannerVNS.scheduler)->weightedFIFO(false);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "WFIFO") {
 
-        plannerVNS.scheduler = new WFIFOScheduler;
-        ((WFIFOScheduler*) plannerVNS.scheduler)->weightedFIFO(true);
+	plannerVNS.scheduler = new WFIFOScheduler;
+	((WFIFOScheduler*) plannerVNS.scheduler)->weightedFIFO(true);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "W") {
 
-        plannerVNS.scheduler = new WScheduler;
+	plannerVNS.scheduler = new WScheduler;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "SPT") {
 
-        plannerVNS.scheduler = new WSPTScheduler;
-        ((WSPTScheduler*) plannerVNS.scheduler)->weightedSPT(false);
+	plannerVNS.scheduler = new WSPTScheduler;
+	((WSPTScheduler*) plannerVNS.scheduler)->weightedSPT(false);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "WSPT") {
 
-        plannerVNS.scheduler = new WSPTScheduler;
-        ((WSPTScheduler*) plannerVNS.scheduler)->weightedSPT(true);
+	plannerVNS.scheduler = new WSPTScheduler;
+	((WSPTScheduler*) plannerVNS.scheduler)->weightedSPT(true);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "EDD") {
 
-        plannerVNS.scheduler = new WEDDScheduler;
-        ((WEDDScheduler*) plannerVNS.scheduler)->weightedEDD(false);
+	plannerVNS.scheduler = new WEDDScheduler;
+	((WEDDScheduler*) plannerVNS.scheduler)->weightedEDD(false);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "WEDD") {
 
-        plannerVNS.scheduler = new WEDDScheduler;
-        ((WEDDScheduler*) plannerVNS.scheduler)->weightedEDD(true);
+	plannerVNS.scheduler = new WEDDScheduler;
+	((WEDDScheduler*) plannerVNS.scheduler)->weightedEDD(true);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "EOD") {
 
-        //planner.scheduler = new EODScheduler;
-        plannerVNS.scheduler = new WEODScheduler;
-        ((WEODScheduler*) plannerVNS.scheduler)->weightedEOD(false);
+	//planner.scheduler = new EODScheduler;
+	plannerVNS.scheduler = new WEODScheduler;
+	((WEODScheduler*) plannerVNS.scheduler)->weightedEOD(false);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "WEOD") {
 
-        plannerVNS.scheduler = new WEODScheduler;
-        ((WEODScheduler*) plannerVNS.scheduler)->weightedEOD(true);
+	plannerVNS.scheduler = new WEODScheduler;
+	((WEODScheduler*) plannerVNS.scheduler)->weightedEOD(true);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "WEDD2") {
 
-        plannerVNS.scheduler = new WEDD2Scheduler;
-        ((WEDD2Scheduler*) plannerVNS.scheduler)->weightedEDD(true);
+	plannerVNS.scheduler = new WEDD2Scheduler;
+	((WEDD2Scheduler*) plannerVNS.scheduler)->weightedEDD(true);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "MOD") {
 
-        plannerVNS.scheduler = new WMODScheduler;
-        ((WMODScheduler*) plannerVNS.scheduler)->weightedMOD(false);
+	plannerVNS.scheduler = new WMODScheduler;
+	((WMODScheduler*) plannerVNS.scheduler)->weightedMOD(false);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "WMOD") {
 
-        plannerVNS.scheduler = new WMODScheduler;
-        ((WMODScheduler*) plannerVNS.scheduler)->weightedMOD(true);
+	plannerVNS.scheduler = new WMODScheduler;
+	((WMODScheduler*) plannerVNS.scheduler)->weightedMOD(true);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "MDD") {
 
-        plannerVNS.scheduler = new WMDDScheduler;
-        ((WMDDScheduler*) plannerVNS.scheduler)->weightedMDD(false);
+	plannerVNS.scheduler = new WMDDScheduler;
+	((WMDDScheduler*) plannerVNS.scheduler)->weightedMDD(false);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "WMDD") {
 
-        plannerVNS.scheduler = new WMDDScheduler;
-        ((WMDDScheduler*) plannerVNS.scheduler)->weightedMDD(true);
+	plannerVNS.scheduler = new WMDDScheduler;
+	((WMDDScheduler*) plannerVNS.scheduler)->weightedMDD(true);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "ATC") {
 
-        plannerVNS.scheduler = new ATCANScheduler;
-        ((ATCANScheduler*) plannerVNS.scheduler)->considerSucc(false);
-        ((ATCANScheduler*) plannerVNS.scheduler)->kappaOptim(false);
+	plannerVNS.scheduler = new ATCANScheduler;
+	((ATCANScheduler*) plannerVNS.scheduler)->considerSucc(false);
+	((ATCANScheduler*) plannerVNS.scheduler)->kappaOptim(false);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "ATCK") {
 
-        plannerVNS.scheduler = new ATCANScheduler;
-        ((ATCANScheduler*) plannerVNS.scheduler)->considerSucc(false);
-        ((ATCANScheduler*) plannerVNS.scheduler)->kappaOptim(true);
+	plannerVNS.scheduler = new ATCANScheduler;
+	((ATCANScheduler*) plannerVNS.scheduler)->considerSucc(false);
+	((ATCANScheduler*) plannerVNS.scheduler)->kappaOptim(true);
 
-        plannerVNS.scheduler->setObjective(*(objective->clone()));
+	plannerVNS.scheduler->setObjective(*(objective->clone()));
 
     } else if (prefix2arg["PrioScheduler"] == "ATCKTest") {
 
-        plannerVNS.scheduler = new ATCSchedulerTest;
-        ((ATCSchedulerTest*) plannerVNS.scheduler)->considerSucc(false);
-        ((ATCSchedulerTest*) plannerVNS.scheduler)->kappaOptim(true);
+	plannerVNS.scheduler = new ATCSchedulerTest;
+	((ATCSchedulerTest*) plannerVNS.scheduler)->considerSucc(false);
+	((ATCSchedulerTest*) plannerVNS.scheduler)->kappaOptim(true);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "ATCCS") {
 
-        plannerVNS.scheduler = new ATCANScheduler;
-        ((ATCANScheduler*) plannerVNS.scheduler)->considerSucc(true);
-        ((ATCANScheduler*) plannerVNS.scheduler)->kappaOptim(false);
+	plannerVNS.scheduler = new ATCANScheduler;
+	((ATCANScheduler*) plannerVNS.scheduler)->considerSucc(true);
+	((ATCANScheduler*) plannerVNS.scheduler)->kappaOptim(false);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "ATCCSK") {
 
-        plannerVNS.scheduler = new ATCANScheduler;
-        ((ATCANScheduler*) plannerVNS.scheduler)->considerSucc(true);
-        ((ATCANScheduler*) plannerVNS.scheduler)->kappaOptim(true);
+	plannerVNS.scheduler = new ATCANScheduler;
+	((ATCANScheduler*) plannerVNS.scheduler)->considerSucc(true);
+	((ATCANScheduler*) plannerVNS.scheduler)->kappaOptim(true);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "MUB") {
 
-        plannerVNS.scheduler = new MUBScheduler;
+	plannerVNS.scheduler = new MUBScheduler;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "MTB") {
 
-        plannerVNS.scheduler = new MTBScheduler;
+	plannerVNS.scheduler = new MTBScheduler;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "T") {
 
-        plannerVNS.scheduler = new WTScheduler;
-        ((WTScheduler*) plannerVNS.scheduler)->weightedT(false);
+	plannerVNS.scheduler = new WTScheduler;
+	((WTScheduler*) plannerVNS.scheduler)->weightedT(false);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "WT") {
 
-        plannerVNS.scheduler = new WTScheduler;
-        ((WTScheduler*) plannerVNS.scheduler)->weightedT(true);
+	plannerVNS.scheduler = new WTScheduler;
+	((WTScheduler*) plannerVNS.scheduler)->weightedT(true);
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
     } else if (prefix2arg["PrioScheduler"] == "SBHNR") { // SBH with ATC rule for subproblem solution and no reoptimization
 
-        out << "Creating SBHATCNR scheduler ... " << endl;
+	out << "Creating SBHATCNR scheduler ... " << endl;
 
-        plannerVNS.scheduler = new SBHScheduler;
+	plannerVNS.scheduler = new SBHScheduler;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
-        plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "NONE";
-        plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "5000";
+	plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "NONE";
+	plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "5000";
 
-        // Set the tool group scheduler for the SBHScheduler
-        out << "Creating TG scheduler ... " << endl;
+	// Set the tool group scheduler for the SBHScheduler
+	out << "Creating TG scheduler ... " << endl;
 
-        ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGSchedulerLS;
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.maxIter(plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"].toInt());
-        out << "Done. " << endl;
+	((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGSchedulerLS;
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.maxIter(plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"].toInt());
+	out << "Done. " << endl;
 
-        // Set the initial tool group scheduler 
-        out << "Creating TG ini scheduler ... " << endl;
+	// Set the initial tool group scheduler 
+	out << "Creating TG ini scheduler ... " << endl;
 
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
-        ((TGATCScheduler*) ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
-        //((TGATCScheduler*) ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
+	((TGATCScheduler*) ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
+	//((TGATCScheduler*) ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
 
-        out << "Done. " << endl;
+	out << "Done. " << endl;
 
     } else if (prefix2arg["PrioScheduler"] == "SBHATCNR") { // SBH with ATC rule for subproblem solution and no reoptimization
 
-        out << "Creating SBHATCNR scheduler ... " << endl;
+	out << "Creating SBHATCNR scheduler ... " << endl;
 
-        plannerVNS.scheduler = new SBHScheduler;
+	plannerVNS.scheduler = new SBHScheduler;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
-        plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "NONE";
-        plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "0"; // ATC only for solving SSP
+	plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "NONE";
+	plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "0"; // ATC only for solving SSP
 
-        // Set the tool group scheduler for the SBHScheduler
-        out << "Creating TG scheduler ... " << endl;
+	// Set the tool group scheduler for the SBHScheduler
+	out << "Creating TG scheduler ... " << endl;
 
-        ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGSchedulerLS;
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.maxIter(plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"].toInt());
-        out << "Done. " << endl;
+	((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGSchedulerLS;
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.maxIter(plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"].toInt());
+	out << "Done. " << endl;
 
-        // Set the initial tool group scheduler 
-        out << "Creating TG ini scheduler ... " << endl;
+	// Set the initial tool group scheduler 
+	out << "Creating TG ini scheduler ... " << endl;
 
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
-        ((TGATCScheduler*) ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
-        //((TGATCScheduler*) ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
+	((TGATCScheduler*) ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
+	//((TGATCScheduler*) ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
 
-        out << "Done. " << endl;
+	out << "Done. " << endl;
 
     } else if (prefix2arg["PrioScheduler"] == "SBHLS") { // SBH scheduler with LS for SSP
 
-        out << "Creating SBHLS scheduler ... " << endl;
+	out << "Creating SBHLS scheduler ... " << endl;
 
-        plannerVNS.scheduler = new SBHScheduler;
+	plannerVNS.scheduler = new SBHScheduler;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
-        plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
-        plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "false";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
-        plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "5000";
+	plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
+	plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "false";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
+	plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "5000";
 
-        // Set the tool group scheduler for the SBHScheduler
-        out << "Creating TG scheduler ... " << endl;
+	// Set the tool group scheduler for the SBHScheduler
+	out << "Creating TG scheduler ... " << endl;
 
-        //TGScheduler* curTGScheduer = new TGWEODScheduler;
+	//TGScheduler* curTGScheduer = new TGWEODScheduler;
 
-        /*new TGATCScheduler;
+	/*new TGATCScheduler;
         
-        ((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
-        ((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
-         */
+	((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
+	((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
+	 */
 
-        //((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
-
-
-
-        /*
-        ((SBHScheduler*) planner.scheduler)->tgscheduler = new TGVNSScheduler;
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxIter(5000);
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxIterDecl(3000);
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxTimeMs(30000);
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
-
-        ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGSchedulerLS;
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.maxIter(plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"].toInt());
-
-        //RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
-        Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
-        Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
-        // Set the initial random number generator for the Ls
-        //((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.setRandGen(randGen);
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.setRandGens(intRandGen, floatRandGen);
-
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.setObjective(objective);
-
-        out << "Done. " << endl;
-
-        // Set the initial tool group scheduler 
-        out << "Creating TG ini scheduler ... " << endl;
-        /*
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
-        //((TGSchedulerLS*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
-        //((TGSchedulerLS*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	//((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
 
 
 
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
-        ((TGATCScheduler*) ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
-        //((TGATCScheduler*) ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
-        out << "Done. " << endl;
+	/*
+	((SBHScheduler*) planner.scheduler)->tgscheduler = new TGVNSScheduler;
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxIter(5000);
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxIterDecl(3000);
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxTimeMs(30000);
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
+
+	((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGSchedulerLS;
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.maxIter(plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"].toInt());
+
+	//RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
+	Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
+	Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
+	// Set the initial random number generator for the Ls
+	//((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.setRandGen(randGen);
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.setRandGens(intRandGen, floatRandGen);
+
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.setObjective(objective);
+
+	out << "Done. " << endl;
+
+	// Set the initial tool group scheduler 
+	out << "Creating TG ini scheduler ... " << endl;
+	/*
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
+	//((TGSchedulerLS*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
+	//((TGSchedulerLS*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
 
 
-        out << "Done. " << endl;
+
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
+	((TGATCScheduler*) ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
+	//((TGATCScheduler*) ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
+	out << "Done. " << endl;
+
+
+	out << "Done. " << endl;
 
     } else if (prefix2arg["PrioScheduler"] == "SBHLS650s") { // SBH scheduler with LS for SSP
 
-        out << "Creating SBHLS650s scheduler ... " << endl;
+	out << "Creating SBHLS650s scheduler ... " << endl;
 
-        plannerVNS.scheduler = new SBHScheduler;
+	plannerVNS.scheduler = new SBHScheduler;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
-        plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
-        plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "false";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "800000";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "120000";
-        plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "10000";
+	plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
+	plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "false";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "800000";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "120000";
+	plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "10000";
 
-        // Set the tool group scheduler for the SBHScheduler
-        out << "Creating TG scheduler ... " << endl;
+	// Set the tool group scheduler for the SBHScheduler
+	out << "Creating TG scheduler ... " << endl;
 
-        //TGScheduler* curTGScheduer = new TGWEODScheduler;
+	//TGScheduler* curTGScheduer = new TGWEODScheduler;
 
-        /*new TGATCScheduler;
+	/*new TGATCScheduler;
         
-        ((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
-        ((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
-         */
+	((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
+	((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
+	 */
 
-        //((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
-
-
-
-        /*
-        ((SBHScheduler*) planner.scheduler)->tgscheduler = new TGVNSScheduler;
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxIter(5000);
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxIterDecl(3000);
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxTimeMs(30000);
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
-
-        ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGSchedulerLS;
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.maxIter(plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"].toInt());
-        out << "Done. " << endl;
-
-        // Set the initial tool group scheduler 
-        out << "Creating TG ini scheduler ... " << endl;
-        /*
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
-        //((TGSchedulerLS*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
-        //((TGSchedulerLS*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	//((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
 
 
 
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
-        ((TGATCScheduler*) ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
-        //((TGATCScheduler*) ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
-        out << "Done. " << endl;
+	/*
+	((SBHScheduler*) planner.scheduler)->tgscheduler = new TGVNSScheduler;
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxIter(5000);
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxIterDecl(3000);
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxTimeMs(30000);
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
+
+	((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGSchedulerLS;
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.maxIter(plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"].toInt());
+	out << "Done. " << endl;
+
+	// Set the initial tool group scheduler 
+	out << "Creating TG ini scheduler ... " << endl;
+	/*
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
+	//((TGSchedulerLS*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
+	//((TGSchedulerLS*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
 
 
-        out << "Done. " << endl;
+
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
+	((TGATCScheduler*) ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
+	//((TGATCScheduler*) ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
+	out << "Done. " << endl;
+
+
+	out << "Done. " << endl;
 
     } else if (prefix2arg["PrioScheduler"] == "SBHLSLI") { // SBH scheduler with LS for SSP
 
-        out << "Creating SBHLSLI scheduler ... " << endl;
+	out << "Creating SBHLSLI scheduler ... " << endl;
 
-        plannerVNS.scheduler = new SBHScheduler;
+	plannerVNS.scheduler = new SBHScheduler;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
-        plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
-        plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "true"; // Reoptimize only in the last iteration
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
-        plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "5000";
+	plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
+	plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "true"; // Reoptimize only in the last iteration
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
+	plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "5000";
 
-        // Set the tool group scheduler for the SBHScheduler
-        out << "Creating TG scheduler ... " << endl;
+	// Set the tool group scheduler for the SBHScheduler
+	out << "Creating TG scheduler ... " << endl;
 
-        //TGScheduler* curTGScheduer = new TGWEODScheduler;
+	//TGScheduler* curTGScheduer = new TGWEODScheduler;
 
-        /*new TGATCScheduler;
+	/*new TGATCScheduler;
         
-        ((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
-        ((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
-         */
+	((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
+	((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
+	 */
 
-        //((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
-
-
-
-        /*
-        ((SBHScheduler*) planner.scheduler)->tgscheduler = new TGVNSScheduler;
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxIter(5000);
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxIterDecl(3000);
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxTimeMs(30000);
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
-
-        ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGSchedulerLS;
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.maxIter(plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"].toInt());
-
-
-        //RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
-        Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
-        Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
-        // Set the initial random number generator for the Ls
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.setRandGens(intRandGen, floatRandGen);
-
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.setObjective(objective);
-
-        out << "Done. " << endl;
-
-        // Set the initial tool group scheduler 
-        out << "Creating TG ini scheduler ... " << endl;
-        /*
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
-        ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
-        //((TGSchedulerLS*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
-        //((TGSchedulerLS*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	//((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
 
 
 
-        ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
-        ((TGATCScheduler*) ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
-        //((TGATCScheduler*) ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
-        out << "Done. " << endl;
+	/*
+	((SBHScheduler*) planner.scheduler)->tgscheduler = new TGVNSScheduler;
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxIter(5000);
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxIterDecl(3000);
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->maxTimeMs(30000);
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
+
+	((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGSchedulerLS;
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.maxIter(plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"].toInt());
 
 
-        out << "Done. " << endl;
+	//RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
+	Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
+	Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
+	// Set the initial random number generator for the Ls
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.setRandGens(intRandGen, floatRandGen);
+
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->ls.setObjective(objective);
+
+	out << "Done. " << endl;
+
+	// Set the initial tool group scheduler 
+	out << "Creating TG ini scheduler ... " << endl;
+	/*
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
+	((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
+	//((TGSchedulerLS*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
+	//((TGSchedulerLS*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+
+
+
+	((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
+	((TGATCScheduler*) ((TGSchedulerLS*) ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
+	//((TGATCScheduler*) ((TGVNSScheduler*) ((SBHScheduler*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
+	out << "Done. " << endl;
+
+
+	out << "Done. " << endl;
 
     } else if (prefix2arg["PrioScheduler"] == "SBHVNS") { // SBH scheduler with VNS for SSP
 
-        out << "Creating SBHVNS scheduler ... " << endl;
+	out << "Creating SBHVNS scheduler ... " << endl;
 
-        plannerVNS.scheduler = new SBHSchedulerVNS;
+	plannerVNS.scheduler = new SBHSchedulerVNS;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
-        plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
-        plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "false";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
+	plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
+	plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "false";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
 
-        // Set the tool group scheduler for the SBHSchedulerVNS
-        out << "Creating TG scheduler ... " << endl;
+	// Set the tool group scheduler for the SBHSchedulerVNS
+	out << "Creating TG scheduler ... " << endl;
 
-        //TGScheduler* curTGScheduer = new TGWEODScheduler;
+	//TGScheduler* curTGScheduer = new TGWEODScheduler;
 
-        ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGVNSScheduler;
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIter(100);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIterDecl(300000);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxTimeMs(30 * 1000);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
-
-
-        out << "Done. " << endl;
-
-        // Set the initial tool group scheduler 
-        out << "Creating TG ini scheduler ... " << endl;
-
-        //((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGFIFOScheduler;
-        //((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-
-        /*
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
+	((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGVNSScheduler;
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIter(100);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIterDecl(300000);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxTimeMs(30 * 1000);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
 
 
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
-        ((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
-        //((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(2.0);
-        out << "Done. " << endl;
+	out << "Done. " << endl;
+
+	// Set the initial tool group scheduler 
+	out << "Creating TG ini scheduler ... " << endl;
+
+	//((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGFIFOScheduler;
+	//((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+
+	/*
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
 
 
-        out << "Done. " << endl;
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
+	((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
+	//((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(2.0);
+	out << "Done. " << endl;
+
+
+	out << "Done. " << endl;
 
     } else if (prefix2arg["PrioScheduler"] == "SBHVNSLI") { // SBH scheduler with VNS for SSP
 
-        out << "Creating SBHVNSLI scheduler ... " << endl;
+	out << "Creating SBHVNSLI scheduler ... " << endl;
 
-        plannerVNS.scheduler = new SBHSchedulerVNS;
+	plannerVNS.scheduler = new SBHSchedulerVNS;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
-        plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
-        plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "true"; // Reoptimize only in the last iteration
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
+	plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
+	plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "true"; // Reoptimize only in the last iteration
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
 
-        // Set the tool group scheduler for the SBHSchedulerVNS
-        out << "Creating TG scheduler ... " << endl;
+	// Set the tool group scheduler for the SBHSchedulerVNS
+	out << "Creating TG scheduler ... " << endl;
 
-        //TGScheduler* curTGScheduer = new TGWEODScheduler;
+	//TGScheduler* curTGScheduer = new TGWEODScheduler;
 
-        ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGVNSScheduler;
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIter(100);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIterDecl(300000);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxTimeMs(30 * 1000);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
-
-
-        out << "Done. " << endl;
-
-        // Set the initial tool group scheduler 
-        out << "Creating TG ini scheduler ... " << endl;
-
-        //((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGFIFOScheduler;
-        //((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-
-        /*
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
+	((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGVNSScheduler;
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIter(100);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIterDecl(300000);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxTimeMs(30 * 1000);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
 
 
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
-        ((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
-        //((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(2.0);
-        out << "Done. " << endl;
+	out << "Done. " << endl;
+
+	// Set the initial tool group scheduler 
+	out << "Creating TG ini scheduler ... " << endl;
+
+	//((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGFIFOScheduler;
+	//((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+
+	/*
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
 
 
-        out << "Done. " << endl;
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
+	((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
+	//((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(2.0);
+	out << "Done. " << endl;
+
+
+	out << "Done. " << endl;
 
     } else if (prefix2arg["PrioScheduler"] == "SBHATC") {
 
-        out << "Creating SBHVNS scheduler ... " << endl;
+	out << "Creating SBHVNS scheduler ... " << endl;
 
-        plannerVNS.scheduler = new SBHSchedulerVNS;
+	plannerVNS.scheduler = new SBHSchedulerVNS;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
-        plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
-        plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "false";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
-        plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "0"; // Only ATC initial SSP solution
+	plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
+	plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "false";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
+	plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "0"; // Only ATC initial SSP solution
 
-        // Set the tool group scheduler for the SBHSchedulerVNS
-        out << "Creating TG scheduler ... " << endl;
+	// Set the tool group scheduler for the SBHSchedulerVNS
+	out << "Creating TG scheduler ... " << endl;
 
-        //TGScheduler* curTGScheduer = new TGWEODScheduler;
+	//TGScheduler* curTGScheduer = new TGWEODScheduler;
 
-        /*new TGATCScheduler;
+	/*new TGATCScheduler;
         
-        ((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
-        ((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
-         */
+	((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
+	((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
+	 */
 
-        //((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
-
-
+	//((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
 
 
-        ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGVNSScheduler;
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIter(00);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIterDecl(300000);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxTimeMs(30 * 1000);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
-
-        /*
-        ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler = new TGSchedulerLS;
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
-
-        out << "Done. " << endl;
-
-        // Set the initial tool group scheduler 
-        out << "Creating TG ini scheduler ... " << endl;
-
-        //((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGFIFOScheduler;
-        //((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-
-        /*
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
 
 
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
-        ((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
-        //((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(2.0);
-        out << "Done. " << endl;
+	((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGVNSScheduler;
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIter(00);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIterDecl(300000);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxTimeMs(30 * 1000);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
+
+	/*
+	((SBHSchedulerVNS*) planner.scheduler)->tgscheduler = new TGSchedulerLS;
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
+
+	out << "Done. " << endl;
+
+	// Set the initial tool group scheduler 
+	out << "Creating TG ini scheduler ... " << endl;
+
+	//((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGFIFOScheduler;
+	//((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+
+	/*
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
 
 
-        out << "Done. " << endl;
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
+	((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
+	//((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(2.0);
+	out << "Done. " << endl;
+
+
+	out << "Done. " << endl;
 
     } else if (prefix2arg["PrioScheduler"] == "SBHATCAI") { // Reoptimization in all iterations of SBHATC with 200000 iterations in total
 
-        out << "Creating SBHATC_AI scheduler ... " << endl;
+	out << "Creating SBHATC_AI scheduler ... " << endl;
 
-        plannerVNS.scheduler = new SBHSchedulerVNS;
+	plannerVNS.scheduler = new SBHSchedulerVNS;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
-        plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
-        plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "false";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = QString::number(Math::round(200000.0 / double(rc.tools.size() - 1)));
+	plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
+	plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "false";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = QString::number(Math::round(200000.0 / double(rc.tools.size() - 1)));
 
-        //out << "Number of iterations per machine group : " << planner.schedOptions["SBH_REOPT_LS_MAX_ITER"] << endl;
-        //getchar();
+	//out << "Number of iterations per machine group : " << planner.schedOptions["SBH_REOPT_LS_MAX_ITER"] << endl;
+	//getchar();
 
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
-        plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "0"; // Only ATC initial SSP solution
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
+	plannerVNS.schedOptions["SBH_TG_LS_MAX_ITER"] = "0"; // Only ATC initial SSP solution
 
-        // Set the tool group scheduler for the SBHSchedulerVNS
-        out << "Creating TG scheduler ... " << endl;
+	// Set the tool group scheduler for the SBHSchedulerVNS
+	out << "Creating TG scheduler ... " << endl;
 
-        //TGScheduler* curTGScheduer = new TGWEODScheduler;
+	//TGScheduler* curTGScheduer = new TGWEODScheduler;
 
-        /*new TGATCScheduler;
+	/*new TGATCScheduler;
         
-        ((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
-        ((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
-         */
+	((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
+	((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
+	 */
 
-        //((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
-
-
+	//((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
 
 
-        ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGVNSScheduler;
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIter(00);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIterDecl(300000);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxTimeMs(30 * 1000);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
-
-        /*
-        ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler = new TGSchedulerLS;
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
-
-        out << "Done. " << endl;
-
-        // Set the initial tool group scheduler 
-        out << "Creating TG ini scheduler ... " << endl;
-
-        //((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGFIFOScheduler;
-        //((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-
-        /*
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
 
 
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
-        ((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
-        //((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(2.0);
-        out << "Done. " << endl;
+	((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGVNSScheduler;
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIter(00);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIterDecl(300000);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxTimeMs(30 * 1000);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
+
+	/*
+	((SBHSchedulerVNS*) planner.scheduler)->tgscheduler = new TGSchedulerLS;
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
+
+	out << "Done. " << endl;
+
+	// Set the initial tool group scheduler 
+	out << "Creating TG ini scheduler ... " << endl;
+
+	//((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGFIFOScheduler;
+	//((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+
+	/*
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
 
 
-        out << "Done. " << endl;
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
+	((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
+	//((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(2.0);
+	out << "Done. " << endl;
+
+
+	out << "Done. " << endl;
 
     } else if (prefix2arg["PrioScheduler"] == "VNSLS") {
 
-        out << "Creating SBHVNS scheduler ... " << endl;
+	out << "Creating SBHVNS scheduler ... " << endl;
 
-        plannerVNS.scheduler = new SBHSchedulerVNS;
+	plannerVNS.scheduler = new SBHSchedulerVNS;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
-        plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
-        plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "true"; // Reoptimize only in the last iteration
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
+	plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
+	plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "true"; // Reoptimize only in the last iteration
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
 
-        // Set the tool group scheduler for the SBHSchedulerVNS
-        out << "Creating TG scheduler ... " << endl;
+	// Set the tool group scheduler for the SBHSchedulerVNS
+	out << "Creating TG scheduler ... " << endl;
 
-        //TGScheduler* curTGScheduer = new TGWEODScheduler;
+	//TGScheduler* curTGScheduer = new TGWEODScheduler;
 
-        /*new TGATCScheduler;
+	/*new TGATCScheduler;
         
-        ((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
-        ((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
-         */
+	((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
+	((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
+	 */
 
-        //((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
-
-
+	//((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
 
 
-        ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGVNSScheduler;
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIter(10000);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIterDecl(300000);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxTimeMs(30 * 1000);
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
-
-        /*
-        ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler = new TGSchedulerLS;
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
-
-        out << "Done. " << endl;
-
-        // Set the initial tool group scheduler 
-        out << "Creating TG ini scheduler ... " << endl;
-
-        //((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGFIFOScheduler;
-        //((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-
-        /*
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
 
 
-        ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
-        ((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
-        //((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
-        out << "Done. " << endl;
+	((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGVNSScheduler;
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIter(10000);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxIterDecl(300000);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->maxTimeMs(30 * 1000);
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
+
+	/*
+	((SBHSchedulerVNS*) planner.scheduler)->tgscheduler = new TGSchedulerLS;
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
+
+	out << "Done. " << endl;
+
+	// Set the initial tool group scheduler 
+	out << "Creating TG ini scheduler ... " << endl;
+
+	//((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGFIFOScheduler;
+	//((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+
+	/*
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
 
 
-        out << "Done. " << endl;
+	((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCScheduler;
+	((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
+	//((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
+	out << "Done. " << endl;
+
+
+	out << "Done. " << endl;
 
     } else if (prefix2arg["PrioScheduler"] == "BigVNS") {
 
-        // Merge the resources
-        //rc.mergeToolGroups();
+	// Merge the resources
+	//rc.mergeToolGroups();
 
-        out << "Creating BigVNS scheduler ... " << endl;
+	out << "Creating BigVNS scheduler ... " << endl;
 
-        VNSScheduler* vnsScheduler = new VNSScheduler;
+	VNSScheduler* vnsScheduler = new VNSScheduler;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        vnsScheduler->getCS() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        vnsScheduler->getCS() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        vnsScheduler->getCS() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        vnsScheduler->getCS() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        vnsScheduler->getCS() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        vnsScheduler->getCS() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->setObjective(*objective);
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        vnsScheduler->getCS() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->setObjective(*objective);
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        // Set the objective
-        vnsScheduler->getCS().setObjective(*objective);
-        vnsScheduler->getLS().setObjective(objective);
+	// Set the objective
+	vnsScheduler->getCS().setObjective(*objective);
+	vnsScheduler->getLS().setObjective(objective);
 
-        //RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
-        Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
-        Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
-        // Set the initial random number generator for the Ls
-        vnsScheduler->getLS().setRandGens(intRandGen, floatRandGen);
+	//RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
+	Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
+	Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
+	// Set the initial random number generator for the Ls
+	vnsScheduler->getLS().setRandGens(intRandGen, floatRandGen);
 
-        plannerVNS.scheduler = vnsScheduler;
-        plannerVNS.scheduler->setObjective(*objective);
+	plannerVNS.scheduler = vnsScheduler;
+	plannerVNS.scheduler->setObjective(*objective);
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_BEST_POS_TO_MOVE"] = "false";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "2000";
-        plannerVNS.schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "-1";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_BEST_POS_TO_MOVE"] = "false";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "2000";
+	plannerVNS.schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "-1";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
 
-        plannerVNS.schedOptions["VNSG_MAX_ITER"] = "100";
-        plannerVNS.schedOptions["VNSG_MAX_ITER_DECL"] = "1000000";
-        plannerVNS.schedOptions["VNSG_MAX_TIME_MS"] = "300000";
-        plannerVNS.schedOptions["VNSG_TIME_BASED_ACCEPTANCE"] = "false";
-        plannerVNS.schedOptions["VNSG_K_MAX"] = "5";
-        plannerVNS.schedOptions["VNSG_K_STEP"] = "1";
-        plannerVNS.schedOptions["VNSG_SMR"] = "2";
+	plannerVNS.schedOptions["VNSG_MAX_ITER"] = "100";
+	plannerVNS.schedOptions["VNSG_MAX_ITER_DECL"] = "1000000";
+	plannerVNS.schedOptions["VNSG_MAX_TIME_MS"] = "300000";
+	plannerVNS.schedOptions["VNSG_TIME_BASED_ACCEPTANCE"] = "false";
+	plannerVNS.schedOptions["VNSG_K_MAX"] = "5";
+	plannerVNS.schedOptions["VNSG_K_STEP"] = "1";
+	plannerVNS.schedOptions["VNSG_SMR"] = "2";
 
-        out << "Done. " << endl;
+	out << "Done. " << endl;
 
 
     } else if (prefix2arg["PrioScheduler"] == "BigVNS110s") {
 
-        // Merge the resources
-        //rc.mergeToolGroups();
+	// Merge the resources
+	//rc.mergeToolGroups();
 
-        out << "Creating BigVNS110s scheduler ... " << endl;
+	out << "Creating BigVNS110s scheduler ... " << endl;
 
-        VNSScheduler* vnsScheduler = new VNSScheduler;
+	VNSScheduler* vnsScheduler = new VNSScheduler;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        vnsScheduler->getCS() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        vnsScheduler->getCS() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        vnsScheduler->getCS() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        vnsScheduler->getCS() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        vnsScheduler->getCS() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        vnsScheduler->getCS() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->setObjective(*objective);
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        vnsScheduler->getCS() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->setObjective(*objective);
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        // Set the objective
-        vnsScheduler->getCS().setObjective(*objective);
-        vnsScheduler->getLS().setObjective(objective);
+	// Set the objective
+	vnsScheduler->getCS().setObjective(*objective);
+	vnsScheduler->getLS().setObjective(objective);
 
-        //RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
-        Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
-        Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
-        // Set the initial random number generator for the Ls
-        vnsScheduler->getLS().setRandGens(intRandGen, floatRandGen);
+	//RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
+	Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
+	Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
+	// Set the initial random number generator for the Ls
+	vnsScheduler->getLS().setRandGens(intRandGen, floatRandGen);
 
-        plannerVNS.scheduler = vnsScheduler;
-        plannerVNS.scheduler->setObjective(*objective);
+	plannerVNS.scheduler = vnsScheduler;
+	plannerVNS.scheduler->setObjective(*objective);
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_BEST_POS_TO_MOVE"] = "false";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "2000";
-        plannerVNS.schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "-1";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_BEST_POS_TO_MOVE"] = "false";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "2000";
+	plannerVNS.schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "-1";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
 
-        plannerVNS.schedOptions["VNSG_MAX_ITER"] = "10000000";
-        plannerVNS.schedOptions["VNSG_MAX_ITER_DECL"] = "10000000";
-        plannerVNS.schedOptions["VNSG_MAX_TIME_MS"] = "110000";
-        plannerVNS.schedOptions["VNSG_TIME_BASED_ACCEPTANCE"] = "true";
-        plannerVNS.schedOptions["VNSG_K_MAX"] = "5";
-        plannerVNS.schedOptions["VNSG_K_STEP"] = "1";
-        plannerVNS.schedOptions["VNSG_SMR"] = "2";
+	plannerVNS.schedOptions["VNSG_MAX_ITER"] = "10000000";
+	plannerVNS.schedOptions["VNSG_MAX_ITER_DECL"] = "10000000";
+	plannerVNS.schedOptions["VNSG_MAX_TIME_MS"] = "110000";
+	plannerVNS.schedOptions["VNSG_TIME_BASED_ACCEPTANCE"] = "true";
+	plannerVNS.schedOptions["VNSG_K_MAX"] = "5";
+	plannerVNS.schedOptions["VNSG_K_STEP"] = "1";
+	plannerVNS.schedOptions["VNSG_SMR"] = "2";
 
-        out << "Done. " << endl;
+	out << "Done. " << endl;
 
 
     } else if (prefix2arg["PrioScheduler"] == "BigVNS400s") {
 
-        // Merge the resources
-        //rc.mergeToolGroups();
+	// Merge the resources
+	//rc.mergeToolGroups();
 
-        out << "Creating BigVNS400s scheduler ... " << endl;
+	out << "Creating BigVNS400s scheduler ... " << endl;
 
-        VNSScheduler* vnsScheduler = new VNSScheduler;
+	VNSScheduler* vnsScheduler = new VNSScheduler;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        vnsScheduler->getCS() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        vnsScheduler->getCS() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        vnsScheduler->getCS() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        vnsScheduler->getCS() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        vnsScheduler->getCS() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        vnsScheduler->getCS() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->setObjective(*objective);
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        vnsScheduler->getCS() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->setObjective(*objective);
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        // Set the objective
-        vnsScheduler->getCS().setObjective(*objective);
-        vnsScheduler->getLS().setObjective(objective);
+	// Set the objective
+	vnsScheduler->getCS().setObjective(*objective);
+	vnsScheduler->getLS().setObjective(objective);
 
-        //RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
-        Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
-        Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
-        // Set the initial random number generator for the Ls
-        vnsScheduler->getLS().setRandGens(intRandGen, floatRandGen);
+	//RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
+	Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
+	Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
+	// Set the initial random number generator for the Ls
+	vnsScheduler->getLS().setRandGens(intRandGen, floatRandGen);
 
-        plannerVNS.scheduler = vnsScheduler;
-        plannerVNS.scheduler->setObjective(*objective);
+	plannerVNS.scheduler = vnsScheduler;
+	plannerVNS.scheduler->setObjective(*objective);
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_BEST_POS_TO_MOVE"] = "false";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "2000";
-        plannerVNS.schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "-1";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_BEST_POS_TO_MOVE"] = "false";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "2000";
+	plannerVNS.schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "-1";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
 
-        plannerVNS.schedOptions["VNSG_MAX_ITER"] = "10000000";
-        plannerVNS.schedOptions["VNSG_MAX_ITER_DECL"] = "10000000";
-        plannerVNS.schedOptions["VNSG_MAX_TIME_MS"] = "400000";
-        plannerVNS.schedOptions["VNSG_TIME_BASED_ACCEPTANCE"] = "true";
-        plannerVNS.schedOptions["VNSG_K_MAX"] = "5";
-        plannerVNS.schedOptions["VNSG_K_STEP"] = "1";
-        plannerVNS.schedOptions["VNSG_SMR"] = "2";
+	plannerVNS.schedOptions["VNSG_MAX_ITER"] = "10000000";
+	plannerVNS.schedOptions["VNSG_MAX_ITER_DECL"] = "10000000";
+	plannerVNS.schedOptions["VNSG_MAX_TIME_MS"] = "400000";
+	plannerVNS.schedOptions["VNSG_TIME_BASED_ACCEPTANCE"] = "true";
+	plannerVNS.schedOptions["VNSG_K_MAX"] = "5";
+	plannerVNS.schedOptions["VNSG_K_STEP"] = "1";
+	plannerVNS.schedOptions["VNSG_SMR"] = "2";
 
-        out << "Done. " << endl;
+	out << "Done. " << endl;
 
 
     } else if (prefix2arg["PrioScheduler"] == "BigVNS650s") {
 
-        // Merge the resources
-        //rc.mergeToolGroups();
+	// Merge the resources
+	//rc.mergeToolGroups();
 
-        out << "Creating BigVNS400s scheduler ... " << endl;
+	out << "Creating BigVNS400s scheduler ... " << endl;
 
-        VNSScheduler* vnsScheduler = new VNSScheduler;
+	VNSScheduler* vnsScheduler = new VNSScheduler;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        vnsScheduler->getCS() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        vnsScheduler->getCS() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        vnsScheduler->getCS() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        vnsScheduler->getCS() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        vnsScheduler->getCS() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	vnsScheduler->getCS() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        vnsScheduler->getCS() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->setObjective(*objective);
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        vnsScheduler->getCS() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->setObjective(*objective);
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	vnsScheduler->getCS() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        // Set the objective
-        vnsScheduler->getCS().setObjective(*objective);
-        vnsScheduler->getLS().setObjective(objective);
+	// Set the objective
+	vnsScheduler->getCS().setObjective(*objective);
+	vnsScheduler->getLS().setObjective(objective);
 
-        //RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
-        Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
-        Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
-        // Set the initial random number generator for the Ls
-        vnsScheduler->getLS().setRandGens(intRandGen, floatRandGen);
+	//RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
+	Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
+	Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
+	// Set the initial random number generator for the Ls
+	vnsScheduler->getLS().setRandGens(intRandGen, floatRandGen);
 
-        plannerVNS.scheduler = vnsScheduler;
-        plannerVNS.scheduler->setObjective(*objective);
+	plannerVNS.scheduler = vnsScheduler;
+	plannerVNS.scheduler->setObjective(*objective);
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_BEST_POS_TO_MOVE"] = "false";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "2000";
-        plannerVNS.schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "-1";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_BEST_POS_TO_MOVE"] = "false";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "2000";
+	plannerVNS.schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "-1";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
 
-        plannerVNS.schedOptions["VNSG_MAX_ITER"] = "10000000";
-        plannerVNS.schedOptions["VNSG_MAX_ITER_DECL"] = "10000000";
-        plannerVNS.schedOptions["VNSG_MAX_TIME_MS"] = "650000";
-        plannerVNS.schedOptions["VNSG_TIME_BASED_ACCEPTANCE"] = "true";
-        plannerVNS.schedOptions["VNSG_K_MAX"] = "5";
-        plannerVNS.schedOptions["VNSG_K_STEP"] = "1";
-        plannerVNS.schedOptions["VNSG_SMR"] = "2";
+	plannerVNS.schedOptions["VNSG_MAX_ITER"] = "10000000";
+	plannerVNS.schedOptions["VNSG_MAX_ITER_DECL"] = "10000000";
+	plannerVNS.schedOptions["VNSG_MAX_TIME_MS"] = "650000";
+	plannerVNS.schedOptions["VNSG_TIME_BASED_ACCEPTANCE"] = "true";
+	plannerVNS.schedOptions["VNSG_K_MAX"] = "5";
+	plannerVNS.schedOptions["VNSG_K_STEP"] = "1";
+	plannerVNS.schedOptions["VNSG_SMR"] = "2";
 
-        out << "Done. " << endl;
+	out << "Done. " << endl;
 
 
     } else if (prefix2arg["PrioScheduler"] == "VNSLSPinSin") {
 
-        out << "Creating SBHVNSPinSin scheduler ... " << endl;
+	out << "Creating SBHVNSPinSin scheduler ... " << endl;
 
-        plannerVNS.scheduler = new SBHSchedulerPinSin;
+	plannerVNS.scheduler = new SBHSchedulerPinSin;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
-        plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
-        plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "true"; // Reoptimize only in the last iteration
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
-        plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
+	plannerVNS.schedOptions["SBH_REOPT_TYPE"] = "LS"; // or "STD" - standard reoptimization, or "NONE" - no reoptimization
+	plannerVNS.schedOptions["SBH_REOPT_LAST_ITER"] = "true"; // Reoptimize only in the last iteration
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_ITER"] = "50000";
+	plannerVNS.schedOptions["SBH_REOPT_LS_MAX_TIME_MS"] = "60000";
 
-        // Set the tool group scheduler for the SBHSchedulerVNS
-        out << "Creating TG scheduler ... " << endl;
+	// Set the tool group scheduler for the SBHSchedulerVNS
+	out << "Creating TG scheduler ... " << endl;
 
-        //TGScheduler* curTGScheduer = new TGWEODScheduler;
+	//TGScheduler* curTGScheduer = new TGWEODScheduler;
 
-        /*new TGATCScheduler;
+	/*new TGATCScheduler;
         
-        ((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
-        ((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
-         */
+	((TGATCScheduler*) curTGScheduer)->setKappa(2.0);
+	((TGATCScheduler*) curTGScheduer)->kappaOptim(true);
+	 */
 
-        //((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
-
-
+	//((SBHScheduler*) planner.scheduler)->tgscheduler = curTGScheduer;
 
 
-        ((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGVNSSchedulerPinSin;
-        ((TGVNSSchedulerPinSin*) ((SBHSchedulerPinSin*) plannerVNS.scheduler)->tgscheduler)->maxIter(100000);
-        ((TGVNSSchedulerPinSin*) ((SBHSchedulerPinSin*) plannerVNS.scheduler)->tgscheduler)->maxIterDecl(300000);
-        ((TGVNSSchedulerPinSin*) ((SBHSchedulerPinSin*) plannerVNS.scheduler)->tgscheduler)->maxTimeMs(30 * 1000);
-        ((TGVNSSchedulerPinSin*) ((SBHSchedulerPinSin*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
-
-        /*
-        ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler = new TGSchedulerLS;
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
-
-        out << "Done. " << endl;
-
-        // Set the initial tool group scheduler 
-        out << "Creating TG ini scheduler ... " << endl;
-
-        //((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGFIFOScheduler;
-        //((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-
-        /*
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
-        ((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
-         */
 
 
-        ((TGVNSSchedulerPinSin*) ((SBHSchedulerPinSin*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCSchedulerPinSin;
-        ((TGATCSchedulerPinSin*) ((TGVNSSchedulerPinSin*) ((SBHSchedulerPinSin*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
-        //((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
-        out << "Done. " << endl;
+	((SBHScheduler*) plannerVNS.scheduler)->tgscheduler = new TGVNSSchedulerPinSin;
+	((TGVNSSchedulerPinSin*) ((SBHSchedulerPinSin*) plannerVNS.scheduler)->tgscheduler)->maxIter(100000);
+	((TGVNSSchedulerPinSin*) ((SBHSchedulerPinSin*) plannerVNS.scheduler)->tgscheduler)->maxIterDecl(300000);
+	((TGVNSSchedulerPinSin*) ((SBHSchedulerPinSin*) plannerVNS.scheduler)->tgscheduler)->maxTimeMs(30 * 1000);
+	((TGVNSSchedulerPinSin*) ((SBHSchedulerPinSin*) plannerVNS.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) plannerVNS.scheduler;
+
+	/*
+	((SBHSchedulerVNS*) planner.scheduler)->tgscheduler = new TGSchedulerLS;
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
+
+	out << "Done. " << endl;
+
+	// Set the initial tool group scheduler 
+	out << "Creating TG ini scheduler ... " << endl;
+
+	//((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGFIFOScheduler;
+	//((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+
+	/*
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler = new TGWEODScheduler;
+	((TGSchedulerLS*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler->sbhscheduler = (SBHScheduler*) planner.scheduler;
+	 */
 
 
-        out << "Done. " << endl;
+	((TGVNSSchedulerPinSin*) ((SBHSchedulerPinSin*) plannerVNS.scheduler)->tgscheduler)->iniScheduler = new TGATCSchedulerPinSin;
+	((TGATCSchedulerPinSin*) ((TGVNSSchedulerPinSin*) ((SBHSchedulerPinSin*) plannerVNS.scheduler)->tgscheduler)->iniScheduler)->kappaOptim(true);
+	//((TGATCScheduler*) ((TGVNSScheduler*) ((SBHSchedulerVNS*) planner.scheduler)->tgscheduler)->iniScheduler)->setKappa(1.0);
+	out << "Done. " << endl;
+
+
+	out << "Done. " << endl;
 
     } else if (prefix2arg["PrioScheduler"] == "CS") {
 
-        plannerVNS.scheduler = new CombinedScheduler;
+	plannerVNS.scheduler = new CombinedScheduler;
 
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler->obj = objective->clone();
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        *((CombinedScheduler*) plannerVNS.scheduler) << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	*((CombinedScheduler*) plannerVNS.scheduler) << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        *((CombinedScheduler*) plannerVNS.scheduler) << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	*((CombinedScheduler*) plannerVNS.scheduler) << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        *((CombinedScheduler*) plannerVNS.scheduler) << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	*((CombinedScheduler*) plannerVNS.scheduler) << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        *((CombinedScheduler*) plannerVNS.scheduler) << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	*((CombinedScheduler*) plannerVNS.scheduler) << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        *((CombinedScheduler*) plannerVNS.scheduler) << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	*((CombinedScheduler*) plannerVNS.scheduler) << sch;
 
-        sch = new WMDDScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        *((CombinedScheduler*) plannerVNS.scheduler) << sch;
+	sch = new WMDDScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	*((CombinedScheduler*) plannerVNS.scheduler) << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->obj = objective->clone();
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        *((CombinedScheduler*) plannerVNS.scheduler) << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->obj = objective->clone();
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	*((CombinedScheduler*) plannerVNS.scheduler) << sch;
 
-        sch = NULL;
+	sch = NULL;
 
-        ((CombinedScheduler*) plannerVNS.scheduler)->setObjective(*objective);
+	((CombinedScheduler*) plannerVNS.scheduler)->setObjective(*objective);
 
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
 
     } else if (prefix2arg["PrioScheduler"] == "CSLS20k") {
 
-        CombinedSchedulerLS* csls = new CombinedSchedulerLS;
+	CombinedSchedulerLS* csls = new CombinedSchedulerLS;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->obj = objective->clone();
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->obj = objective->clone();
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        //RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
-        Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
-        Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
+	//RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
+	Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
+	Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
 
-        out << "Random Seed: " << intRandGen->getSeed() << endl;
-        //getchar();
+	out << "Random Seed: " << intRandGen->getSeed() << endl;
+	//getchar();
 
-        csls->combinedSchedulerObject().setObjective(*objective);
-        csls->localSearchObject().setObjective(objective);
+	csls->combinedSchedulerObject().setObjective(*objective);
+	csls->localSearchObject().setObjective(objective);
 
-        // Set the initial random number generator for the Ls
-        csls->localSearchObject().setRandGens(intRandGen, floatRandGen);
+	// Set the initial random number generator for the Ls
+	csls->localSearchObject().setRandGens(intRandGen, floatRandGen);
 
-        plannerVNS.scheduler = csls;
-        plannerVNS.scheduler->setObjective(*objective);
+	plannerVNS.scheduler = csls;
+	plannerVNS.scheduler->setObjective(*objective);
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_BEST_POS_TO_MOVE"] = "false";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "20000";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_BEST_POS_TO_MOVE"] = "false";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "20000";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
 
     } else if (prefix2arg["PrioScheduler"] == "CSLS2k") {
 
-        CombinedSchedulerLS* csls = new CombinedSchedulerLS;
+	CombinedSchedulerLS* csls = new CombinedSchedulerLS;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->setObjective(*objective);
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->setObjective(*objective);
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        //RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
-        Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
-        Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
+	//RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
+	Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
+	Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
 
-        csls->combinedSchedulerObject().obj = objective->clone();
-        csls->localSearchObject().setObjective(objective);
+	csls->combinedSchedulerObject().obj = objective->clone();
+	csls->localSearchObject().setObjective(objective);
 
-        // Set the initial random number generator for the Ls
-        csls->localSearchObject().setRandGens(intRandGen, floatRandGen);
+	// Set the initial random number generator for the Ls
+	csls->localSearchObject().setRandGens(intRandGen, floatRandGen);
 
-        plannerVNS.scheduler = csls;
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler = csls;
+	plannerVNS.scheduler->obj = objective->clone();
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "20";
-        plannerVNS.schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "100000";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "20";
+	plannerVNS.schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "100000";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6";
 
     } else if (prefix2arg["PrioScheduler"] == "VNS1ICSLS20k") { // Only one iteration of VNS => randomly selected process plan
 
-        CombinedSchedulerLS* csls = new CombinedSchedulerLS;
+	CombinedSchedulerLS* csls = new CombinedSchedulerLS;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->obj = objective->clone();
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->obj = objective->clone();
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        csls->combinedSchedulerObject().obj = objective->clone();
-        csls->localSearchObject().setObjective(objective);
+	csls->combinedSchedulerObject().obj = objective->clone();
+	csls->localSearchObject().setObjective(objective);
 
-        plannerVNS.scheduler = csls;
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler = csls;
+	plannerVNS.scheduler->obj = objective->clone();
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "20";
-        plannerVNS.schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "20000";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "20";
+	plannerVNS.schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "20000";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6";
 
-        // Perform only one iteration
-        plannerVNS.maxIter(0);
+	// Perform only one iteration
+	plannerVNS.maxIter(0);
 
     } else if (prefix2arg["PrioScheduler"] == "CSLS400s") {
 
-        CombinedSchedulerLS* csls = new CombinedSchedulerLS;
+	CombinedSchedulerLS* csls = new CombinedSchedulerLS;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->obj = objective->clone();
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->obj = objective->clone();
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        plannerVNS.scheduler = csls;
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler = csls;
+	plannerVNS.scheduler->obj = objective->clone();
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "200000000";
-        plannerVNS.schedOptions["LS_MAX_TIME_MS"] = "400000";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "200000000";
+	plannerVNS.schedOptions["LS_MAX_TIME_MS"] = "400000";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
 
     } else if (prefix2arg["PrioScheduler"] == "CSLS650s") {
 
-        CombinedSchedulerLS* csls = new CombinedSchedulerLS;
+	CombinedSchedulerLS* csls = new CombinedSchedulerLS;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->obj = objective->clone();
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->obj = objective->clone();
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        plannerVNS.scheduler = csls;
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler = csls;
+	plannerVNS.scheduler->obj = objective->clone();
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "200000000";
-        plannerVNS.schedOptions["LS_MAX_TIME_MS"] = "650000";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "200000000";
+	plannerVNS.schedOptions["LS_MAX_TIME_MS"] = "650000";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
 
     } else if (prefix2arg["PrioScheduler"] == "CSLS200k") { // 200000 iterations of the LS
 
-        CombinedSchedulerLS* csls = new CombinedSchedulerLS;
+	CombinedSchedulerLS* csls = new CombinedSchedulerLS;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->obj = objective->clone();
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->obj = objective->clone();
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        //RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
-        Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
-        Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
+	//RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
+	Common::Rand::MT19937<Math::uint32>* intRandGen = new Common::Rand::MT19937<Math::uint32>(Rand::rndSeed()); // The random numbers generator (integers)
+	Common::Rand::MT19937<double>* floatRandGen = new Common::Rand::MT19937<double>(Rand::rndSeed()); // The random numbers generator (floats)
 
-        csls->combinedSchedulerObject().setObjective(*objective);
-        csls->localSearchObject().setObjective(objective);
+	csls->combinedSchedulerObject().setObjective(*objective);
+	csls->localSearchObject().setObjective(objective);
 
-        // Set the initial random number generator for the Ls
-        csls->localSearchObject().setRandGens(intRandGen, floatRandGen);
+	// Set the initial random number generator for the Ls
+	csls->localSearchObject().setRandGens(intRandGen, floatRandGen);
 
-        plannerVNS.scheduler = csls;
-        plannerVNS.scheduler->setObjective(*objective);
+	plannerVNS.scheduler = csls;
+	plannerVNS.scheduler->setObjective(*objective);
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_BEST_POS_TO_MOVE"] = "false";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "200000";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_BEST_POS_TO_MOVE"] = "false";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "200000";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
 
     } else if (prefix2arg["PrioScheduler"] == "CSLSMod300k") { // 200000 iterations of the LS
 
-        CombinedSchedulerModLS* csls = new CombinedSchedulerModLS;
+	CombinedSchedulerModLS* csls = new CombinedSchedulerModLS;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->obj = objective->clone();
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->obj = objective->clone();
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        plannerVNS.scheduler = csls;
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler = csls;
+	plannerVNS.scheduler->obj = objective->clone();
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "300000";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "300000";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
 
     } else if (prefix2arg["PrioScheduler"] == "CSLSCP200k") { // 200000 iterations of the LS
 
-        CombinedSchedulerLSCP* csls = new CombinedSchedulerLSCP;
+	CombinedSchedulerLSCP* csls = new CombinedSchedulerLSCP;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->obj = objective->clone();
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->obj = objective->clone();
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        plannerVNS.scheduler = csls;
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler = csls;
+	plannerVNS.scheduler->obj = objective->clone();
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "200000";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "200000";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
 
     } else if (prefix2arg["PrioScheduler"] == "CSLSCP20k") { // 200000 iterations of the LS
 
-        CombinedSchedulerLSCP* csls = new CombinedSchedulerLSCP;
+	CombinedSchedulerLSCP* csls = new CombinedSchedulerLSCP;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->obj = objective->clone();
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->obj = objective->clone();
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        plannerVNS.scheduler = csls;
-        plannerVNS.scheduler->obj = objective->clone();
+	plannerVNS.scheduler = csls;
+	plannerVNS.scheduler->obj = objective->clone();
 
-        // Options
-        plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
-        plannerVNS.schedOptions["LS_CHK_COR"] = "false";
-        plannerVNS.schedOptions["LS_MAX_ITER"] = "20000";
-        plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
+	// Options
+	plannerVNS.schedOptions["LS_CRIT_NODES_UPDATE_FREQ"] = "100";
+	plannerVNS.schedOptions["LS_CHK_COR"] = "false";
+	plannerVNS.schedOptions["LS_MAX_ITER"] = "20000";
+	plannerVNS.schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7";
 
     } else {
 
-        Debugger::err << "No feasible priority scheduling rule specified!" << ENDL;
+	Debugger::err << "No feasible priority scheduling rule specified!" << ENDL;
 
     }
 
@@ -2453,11 +2447,11 @@ int old_main_VNS(int argc, char *argv[]) {
     /*
     out << "List of BOPs in p1:" << endl;
     for (int i = 0; i < p1.bops.size(); i++) {
-                                    out << p1.bops[i]->ID << endl;
+				    out << p1.bops[i]->ID << endl;
     }
     out << "List of keys in p1:" << endl;
     for (int i = 0; i < p1.bopid2idx.size(); i++) {
-                                    out << p1.bopid2idx.keys()[i] << endl;
+				    out << p1.bopid2idx.keys()[i] << endl;
     }
     getchar();
      */
@@ -2488,48 +2482,48 @@ int main_VNS(int argc, char *argv[]) {
 
     QHash<QString, QString> prefix2arg;
     for (int i = 1; i < arguments.size(); i++) { // The first one is the program's directory
-        out << arguments[i] << endl;
-        QStringList argssplitted = arguments[i].split(":");
-        if (argssplitted.size() < 2) {
-            Debugger::err << "Arguments not specified correctly!!!" << ENDL;
-        } else {
+	out << arguments[i] << endl;
+	QStringList argssplitted = arguments[i].split(":");
+	if (argssplitted.size() < 2) {
+	    Debugger::err << "Arguments not specified correctly!!!" << ENDL;
+	} else {
 
-            for (int j = 1; j < argssplitted.size() - 1; j++) {
-                prefix2arg[argssplitted[0]] += argssplitted[j] + ":";
-            }
-            prefix2arg[argssplitted[0]] += argssplitted.last();
-        }
+	    for (int j = 1; j < argssplitted.size() - 1; j++) {
+		prefix2arg[argssplitted[0]] += argssplitted[j] + ":";
+	    }
+	    prefix2arg[argssplitted[0]] += argssplitted.last();
+	}
     }
 
     if (!prefix2arg.contains("Test")) {
-        Debugger::err << "No test specified!" << ENDL;
+	Debugger::err << "No test specified!" << ENDL;
     } else {
-        test_inst_dir = prefix2arg["Test"];
+	test_inst_dir = prefix2arg["Test"];
     }
 
     if (!prefix2arg.contains("GlobMaxIter")) {
-        Debugger::err << "No number of global iterations specified!" << ENDL;
+	Debugger::err << "No number of global iterations specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("GlobMaxTimeM")) {
-        Debugger::err << "No global time limit specified!" << ENDL;
+	Debugger::err << "No global time limit specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("RandSeed")) {
-        Debugger::err << "No seed for randomization specified!" << ENDL;
+	Debugger::err << "No seed for randomization specified!" << ENDL;
     } else {
-        // Set the seed 
-        out << "Input for RandSeed: " << prefix2arg["RandSeed"].toInt() << endl;
-        Rand::rndSeed(prefix2arg["RandSeed"].toInt());
-        out << "Returned RandSeed: " << Rand::rndSeed() << endl;
+	// Set the seed 
+	out << "Input for RandSeed: " << prefix2arg["RandSeed"].toInt() << endl;
+	Rand::rndSeed(prefix2arg["RandSeed"].toInt());
+	out << "Returned RandSeed: " << Rand::rndSeed() << endl;
     }
 
     if (!prefix2arg.contains("PlannerInitRule")) {
-        Debugger::err << "No initialization rule for the planner specified!" << ENDL;
+	Debugger::err << "No initialization rule for the planner specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("NS")) {
-        Debugger::err << "No general NS for the planner specified!" << ENDL;
+	Debugger::err << "No general NS for the planner specified!" << ENDL;
     }
 
     //    if (!prefix2arg.contains("PrioScheduler")) {
@@ -2537,25 +2531,25 @@ int main_VNS(int argc, char *argv[]) {
     //    }
 
     if (!prefix2arg.contains("NumNeigh")) {
-        Debugger::err << "No number of neighbors specified!" << ENDL;
+	Debugger::err << "No number of neighbors specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("SchedStrategy")) {
-        Debugger::err << "No scheduling strategy specified!" << ENDL;
+	Debugger::err << "No scheduling strategy specified!" << ENDL;
     }
 
     out << "Reading the resources information..." << endl;
     QDomDocument rc_doc("rc");
     QFile rc_file(test_inst_dir + "resources.xml");
     if (!rc_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << rc_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << rc_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!rc_doc.setContent(&rc_file)) {
-        rc_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	rc_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     rc_file.close();
 
@@ -2576,14 +2570,14 @@ int main_VNS(int argc, char *argv[]) {
     QDomDocument iroutes_doc("iroutes");
     QFile routes_file(test_inst_dir + "iroutes.xml");
     if (!routes_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << routes_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << routes_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!iroutes_doc.setContent(&routes_file)) {
-        routes_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	routes_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     routes_file.close();
     out << "Done reading the routes information." << endl;
@@ -2594,23 +2588,23 @@ int main_VNS(int argc, char *argv[]) {
     QDomNodeList route_list;
     int itm_type_id;
     for (int i = 0; i < item_list.size(); i++) {
-                                    itm_type_id = item_list.item(i).toElement().attribute("id").toInt();
-                                    //out << "Reading item type " << itm_type_id << endl;
-                                    route_list = item_list.item(i).toElement().elementsByTagName("route");
-                                    for (int j = 0; j < route_list.size(); j++) {
-                                                                    iroutes[itm_type_id].append(new Route());
-                                                                    iroutes[itm_type_id].last()->fromDOMElement(route_list.item(j).toElement());
-                                    }
+				    itm_type_id = item_list.item(i).toElement().attribute("id").toInt();
+				    //out << "Reading item type " << itm_type_id << endl;
+				    route_list = item_list.item(i).toElement().elementsByTagName("route");
+				    for (int j = 0; j < route_list.size(); j++) {
+								    iroutes[itm_type_id].append(new Route());
+								    iroutes[itm_type_id].last()->fromDOMElement(route_list.item(j).toElement());
+				    }
     }
      */
     ProductManager::iroutesFromDOMElement(iroutes_doc.documentElement(), itype2routes);
 
     for (QHash<int, QList<Route*> >::iterator iter = itype2routes.begin(); iter != itype2routes.end(); iter++) {
-        out << "Item type : " << iter.key() << endl;
-        cout << "Routes : " << endl;
-        for (int i = 0; i < iter.value().size(); i++) {
-            out << *iter.value()[i] << endl;
-        }
+	out << "Item type : " << iter.key() << endl;
+	cout << "Routes : " << endl;
+	for (int i = 0; i < iter.value().size(); i++) {
+	    out << *iter.value()[i] << endl;
+	}
     }
 
     /* ######################  Done reading routes  ######################### */
@@ -2623,14 +2617,14 @@ int main_VNS(int argc, char *argv[]) {
     QDomDocument boms_doc("boms");
     QFile bom_file(test_inst_dir + "boms.xml");
     if (!bom_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << bom_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << bom_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!boms_doc.setContent(&bom_file)) {
-        bom_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	bom_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     bom_file.close();
     out << "Done reading the BOMs information." << endl;
@@ -2643,22 +2637,22 @@ int main_VNS(int argc, char *argv[]) {
     int prod_type_id; // ID of the current product
     // For every node create the corresponding BOMs
     for (int i = 0; i < prod_list.size(); i++) {
-                                    prod_type_id = prod_list.item(i).toElement().attribute("type").toInt();
-                                    //out << "Current product type: " << prod_type_id << endl;
+				    prod_type_id = prod_list.item(i).toElement().attribute("type").toInt();
+				    //out << "Current product type: " << prod_type_id << endl;
 
-                                    // Get the list of BOMs for the current product
-                                    prod_bom_list = prod_list.item(i).toElement().elementsByTagName("bom");
+				    // Get the list of BOMs for the current product
+				    prod_bom_list = prod_list.item(i).toElement().elementsByTagName("bom");
 
-                                    // Iterate over all BOM descriptions and create the actual BOMs
-                                    for (int cb = 0; cb < prod_bom_list.size(); cb++) {
-                                                                    pboms[prod_type_id].append(new BillOfMaterials());
+				    // Iterate over all BOM descriptions and create the actual BOMs
+				    for (int cb = 0; cb < prod_bom_list.size(); cb++) {
+								    pboms[prod_type_id].append(new BillOfMaterials());
 
-                                                                    // Extract the BOM from the DOM element
-                                                                    //out << "Parsing pbom from the DOM element ..." << endl;
-                                                                    //out << prod_bom_list.item(cb).toElement() << endl;
-                                                                    pboms[prod_type_id].last()->fromDOMElement(prod_bom_list.item(cb).toElement());
-                                                                    //out << "Done parsing pbom from the DOM element." << endl;
-                                    }
+								    // Extract the BOM from the DOM element
+								    //out << "Parsing pbom from the DOM element ..." << endl;
+								    //out << prod_bom_list.item(cb).toElement() << endl;
+								    pboms[prod_type_id].last()->fromDOMElement(prod_bom_list.item(cb).toElement());
+								    //out << "Done parsing pbom from the DOM element." << endl;
+				    }
     }
      */
     //out << "ProductManager::pbomsFromDOMElement..." << endl;
@@ -2675,19 +2669,19 @@ int main_VNS(int argc, char *argv[]) {
 
     // Prepare the hash with the BOPs for different product types
     for (int i = 0; i < /*prod_list*/ptype2boms.size(); i++) {
-        ptype2bops.insert(/*prod_list.item(i).toElement().attribute("type").toInt()*/ptype2boms.keys()[i], QList<BillOfProcesses*>());
+	ptype2bops.insert(/*prod_list.item(i).toElement().attribute("type").toInt()*/ptype2boms.keys()[i], QList<BillOfProcesses*>());
     }
 
     // Iterate over all product types
     double total_comb = 1.0;
     double total_bops = 0.0;
     for (QHash<int, QList<BillOfProcesses*> >::iterator ptiter = ptype2bops.begin(); ptiter != ptype2bops.end(); ptiter++) {
-        out << "BillOfProcesses::generateAll..." << endl;
-        BillOfProcesses::generateAll(ptype2boms[ptiter.key()], itype2routes, ptype2bops[ptiter.key()]);
-        out << "Finished BillOfProcesses::generateAll." << endl;
-        out << "Generated " << ptype2bops[ptiter.key()].size() << " BOPs for product " << ptiter.key() << endl;
-        total_comb *= double(ptype2bops[ptiter.key()].size());
-        total_bops += ptype2bops[ptiter.key()].size();
+	out << "BillOfProcesses::generateAll..." << endl;
+	BillOfProcesses::generateAll(ptype2boms[ptiter.key()], itype2routes, ptype2bops[ptiter.key()]);
+	out << "Finished BillOfProcesses::generateAll." << endl;
+	out << "Generated " << ptype2bops[ptiter.key()].size() << " BOPs for product " << ptiter.key() << endl;
+	total_comb *= double(ptype2bops[ptiter.key()].size());
+	total_bops += ptype2bops[ptiter.key()].size();
     }
     out << "Done generating BOPs for each product type." << endl;
     out << "Total generated BOPs : " << total_bops << endl;
@@ -2701,32 +2695,32 @@ int main_VNS(int argc, char *argv[]) {
     QList<int> ptypes = ptype2boms.keys();
     for (int i = 0; i < ptypes.size(); i++) {
 
-        out << "Creating product " << i + 1 << endl;
+	out << "Creating product " << i + 1 << endl;
 
-        products.append(Product());
-        products.last().ID = ptypes[i]; // i + 1; //1;
-        products.last().type = ptypes[i];
-        for (int j = 0; j < ptype2bops[products.last().type].size(); j++) {
-            // Generate the ID for the current BOM of the current product
-            //ptype2bops[products.last().type][j]->ID = products.last().ID;
-            //ptype2bops[products.last().type][j]->ID = ptype2bops[products.last().type][j]->ID << 16; // Shift by 16 bits
-            //ptype2bops[products.last().type][j]->ID += j;
+	products.append(Product());
+	products.last().ID = ptypes[i]; // i + 1; //1;
+	products.last().type = ptypes[i];
+	for (int j = 0; j < ptype2bops[products.last().type].size(); j++) {
+	    // Generate the ID for the current BOM of the current product
+	    //ptype2bops[products.last().type][j]->ID = products.last().ID;
+	    //ptype2bops[products.last().type][j]->ID = ptype2bops[products.last().type][j]->ID << 16; // Shift by 16 bits
+	    //ptype2bops[products.last().type][j]->ID += j;
 
-            // IMPORTANT!!! It is assumed that BOP ID = BOM ID
+	    // IMPORTANT!!! It is assumed that BOP ID = BOM ID
 
-            // Add the BOP to the product
-            products.last() << ptype2bops[products.last().type][j];
-        }
+	    // Add the BOP to the product
+	    products.last() << ptype2bops[products.last().type][j];
+	}
 
-        out << "Product before ranking BOPs : " << endl << products.last() << endl;
+	out << "Product before ranking BOPs : " << endl << products.last() << endl;
 
-        //products.last().bopsDecompRate(0.0);
-        //products.last().rc = &rc;
-        out << "Ranking BOPs... " << endl;
-        products.last().rankBOPs(rc);
-        out << "Done ranking BOPs." << endl;
+	//products.last().bopsDecompRate(0.0);
+	//products.last().rc = &rc;
+	out << "Ranking BOPs... " << endl;
+	products.last().rankBOPs(rc);
+	out << "Done ranking BOPs." << endl;
 
-        out << "Created product " << i + 1 << endl;
+	out << "Created product " << i + 1 << endl;
 
     }
     out << "Done creating products." << endl;
@@ -2735,7 +2729,7 @@ int main_VNS(int argc, char *argv[]) {
     out << "Creating product manager ..." << endl;
     ProductManager prodman;
     for (int i = 0; i < products.size(); i++) {
-        prodman << &products[i];
+	prodman << &products[i];
     }
     out << "Product manager created." << endl;
 
@@ -2744,14 +2738,14 @@ int main_VNS(int argc, char *argv[]) {
     QDomDocument ord_doc("orders");
     QFile ord_file(test_inst_dir + "orders.xml");
     if (!ord_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << ord_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << ord_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!ord_doc.setContent(&ord_file)) {
-        ord_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	ord_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     ord_file.close();
 
@@ -2761,8 +2755,8 @@ int main_VNS(int argc, char *argv[]) {
     QList<Order*> orders;
 
     for (int i = 0; i < ords_list.size(); i++) {
-        orders.append(new Order);
-        orders.last()->fromDOMElement(ords_list.item(i).toElement());
+	orders.append(new Order);
+	orders.last()->fromDOMElement(ords_list.item(i).toElement());
     }
     out << "Done reading the orders information." << endl;
     /* ####################  Done reading orders  ######################## */
@@ -2770,7 +2764,7 @@ int main_VNS(int argc, char *argv[]) {
     out << "Creating order manager ..." << endl;
     OrderManager ordman;
     for (int i = 0; i < orders.size(); i++) {
-        ordman << *orders[i];
+	ordman << *orders[i];
     }
     out << "Order manager created." << endl;
 
@@ -2796,157 +2790,157 @@ int main_VNS(int argc, char *argv[]) {
     // Planner scheduling strategy
     if (prefix2arg.contains("Protocol")) {
 
-        plannerOptions["VNSPLANNER_PROTOCOLFILE"] = test_inst_dir + prefix2arg["Protocol"];
+	plannerOptions["VNSPLANNER_PROTOCOLFILE"] = test_inst_dir + prefix2arg["Protocol"];
 
     } else {
 
-        Debugger::err << "VNSPLANNER_PROTOCOLFILE not defined!" << ENDL;
+	Debugger::err << "VNSPLANNER_PROTOCOLFILE not defined!" << ENDL;
 
     }
 
     // Planner initialization rule
     if (prefix2arg["PlannerInitRule"] == "RND") {
 
-        plannerOptions["VNSPLANNER_SOLINITRULE"] = "SOL_INIT_RND";
+	plannerOptions["VNSPLANNER_SOLINITRULE"] = "SOL_INIT_RND";
 
     } else if (prefix2arg["PlannerInitRule"] == "TPTRANK") {
 
-        plannerOptions["VNSPLANNER_SOLINITRULE"] = "SOL_INIT_RANK";
+	plannerOptions["VNSPLANNER_SOLINITRULE"] = "SOL_INIT_RANK";
 
     } else {
 
-        Debugger::warn << "PlannerInitRule: " << prefix2arg["PlannerInitRule"].toStdString() << ENDL;
-        Debugger::err << "Incorrect planner initialization rule set!" << ENDL;
+	Debugger::warn << "PlannerInitRule: " << prefix2arg["PlannerInitRule"].toStdString() << ENDL;
+	Debugger::err << "Incorrect planner initialization rule set!" << ENDL;
 
     }
 
     // Planner neighborhood structures
     if (prefix2arg["NS"] == "N1") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_N1";
+	plannerOptions["VNSPLANNER_NS"] = "NS_N1";
 
     } else if (prefix2arg["NS"] == "N2") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_N2";
+	plannerOptions["VNSPLANNER_NS"] = "NS_N2";
 
     } else if (prefix2arg["NS"] == "N3") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_N3";
+	plannerOptions["VNSPLANNER_NS"] = "NS_N3";
 
     } else if (prefix2arg["NS"] == "N2N1") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_N2N1";
+	plannerOptions["VNSPLANNER_NS"] = "NS_N2N1";
 
     } else if (prefix2arg["NS"] == "N2N3") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_N2N3";
+	plannerOptions["VNSPLANNER_NS"] = "NS_N2N3";
 
     } else if (prefix2arg["NS"] == "N1N3") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_N1N3";
+	plannerOptions["VNSPLANNER_NS"] = "NS_N1N3";
 
     } else if (prefix2arg["NS"] == "N3N1") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_N3N1";
+	plannerOptions["VNSPLANNER_NS"] = "NS_N3N1";
 
     } else if (prefix2arg["NS"] == "N2N3N1") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_N2N3N1";
+	plannerOptions["VNSPLANNER_NS"] = "NS_N2N3N1";
 
     } else if (prefix2arg["NS"] == "N2N1N3") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_N2N1N3";
+	plannerOptions["VNSPLANNER_NS"] = "NS_N2N1N3";
 
     } else if (prefix2arg["NS"] == "N2N1PN3") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_N2N1PN3";
+	plannerOptions["VNSPLANNER_NS"] = "NS_N2N1PN3";
 
     } else if (prefix2arg["NS"] == "PN2PN1PN3") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_PN2PN1PN3";
+	plannerOptions["VNSPLANNER_NS"] = "NS_PN2PN1PN3";
 
     } else if (prefix2arg["NS"] == "N4") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_N4";
+	plannerOptions["VNSPLANNER_NS"] = "NS_N4";
 
     } else if (prefix2arg["NS"] == "N5") {
 
-        plannerOptions["VNSPLANNER_NS"] = "NS_N5";
+	plannerOptions["VNSPLANNER_NS"] = "NS_N5";
 
     } else {
 
-        Debugger::err << "No correct general NS for the planner specified!" << ENDL;
+	Debugger::err << "No correct general NS for the planner specified!" << ENDL;
 
     }
 
     if (prefix2arg.contains("StepN1")) {
 
-        plannerOptions["VNSPLANNER_STEPN1"] = prefix2arg["StepN1"];
+	plannerOptions["VNSPLANNER_STEPN1"] = prefix2arg["StepN1"];
 
     }
     if (prefix2arg.contains("StepN2")) {
 
-        plannerOptions["VNSPLANNER_STEPN2"] = prefix2arg["StepN2"];
+	plannerOptions["VNSPLANNER_STEPN2"] = prefix2arg["StepN2"];
 
     }
     if (prefix2arg.contains("StepN3")) {
 
-        plannerOptions["VNSPLANNER_STEPN3"] = prefix2arg["StepN3"];
+	plannerOptions["VNSPLANNER_STEPN3"] = prefix2arg["StepN3"];
 
     }
 
     // Number of neighborhoods to search
     if (prefix2arg.contains("NumNeigh")) {
 
-        plannerOptions["VNSPLANNER_NUMNEIGH"] = prefix2arg["NumNeigh"];
+	plannerOptions["VNSPLANNER_NUMNEIGH"] = prefix2arg["NumNeigh"];
 
     } else {
 
-        Debugger::err << "VNSPLANNER_NUMNEIGH not defined!" << ENDL;
+	Debugger::err << "VNSPLANNER_NUMNEIGH not defined!" << ENDL;
 
     }
 
     // Max. global iterations of the planning algorithm
     if (prefix2arg.contains("GlobMaxIter")) {
 
-        plannerOptions["VNSPLANNER_GLOBMAXITER"] = prefix2arg["GlobMaxIter"];
+	plannerOptions["VNSPLANNER_GLOBMAXITER"] = prefix2arg["GlobMaxIter"];
 
     } else {
 
-        Debugger::err << "VNSPLANNER_GLOBMAXITER not defined!" << ENDL;
+	Debugger::err << "VNSPLANNER_GLOBMAXITER not defined!" << ENDL;
 
     }
 
     // Max. global iterations of the planning algorithm
     if (prefix2arg.contains("GlobMaxTimeM")) {
 
-        plannerOptions["VNSPLANNER_GLOBMAXTIMEMINUTES"] = prefix2arg["GlobMaxTimeM"];
+	plannerOptions["VNSPLANNER_GLOBMAXTIMEMINUTES"] = prefix2arg["GlobMaxTimeM"];
 
     } else {
 
-        Debugger::err << "VNSPLANNER_GLOBMAXTIMEMINUTES not defined!" << ENDL;
+	Debugger::err << "VNSPLANNER_GLOBMAXTIMEMINUTES not defined!" << ENDL;
 
     }
 
     // Planner scheduling strategy
     if (prefix2arg.contains("SchedStrategy")) {
 
-        plannerOptions["VNSPLANNER_SCHEDSTRATEGY"] = prefix2arg["SchedStrategy"];
+	plannerOptions["VNSPLANNER_SCHEDSTRATEGY"] = prefix2arg["SchedStrategy"];
 
     } else {
 
-        Debugger::err << "VNSPLANNER_SCHEDSTRATEGY not defined!" << ENDL;
+	Debugger::err << "VNSPLANNER_SCHEDSTRATEGY not defined!" << ENDL;
 
     }
 
     // Initial scheduler
     if (prefix2arg.contains("InitScheduler")) {
 
-        plannerOptions["VNSPLANNER_INITSCHEDULER"] = prefix2arg["InitScheduler"];
+	plannerOptions["VNSPLANNER_INITSCHEDULER"] = prefix2arg["InitScheduler"];
 
     } else {
 
-        Debugger::err << "VNSPLANNER_INITSCHEDULER not defined!" << ENDL;
+	Debugger::err << "VNSPLANNER_INITSCHEDULER not defined!" << ENDL;
 
     }
 
@@ -2956,11 +2950,11 @@ int main_VNS(int argc, char *argv[]) {
     // Objective to optimize
     if (!prefix2arg.contains("Objective")) {
 
-        Debugger::err << "No objective specified!!!" << ENDL;
+	Debugger::err << "No objective specified!!!" << ENDL;
 
     } else {
 
-        plannerOptions["VNSPLANNER_PRIMARY_OBJECTIVE"] = prefix2arg["Objective"];
+	plannerOptions["VNSPLANNER_PRIMARY_OBJECTIVE"] = prefix2arg["Objective"];
 
     }
 
@@ -2977,18 +2971,18 @@ int main_VNS(int argc, char *argv[]) {
     QLibrary plannerLib(plannerLibName);
 
     // The search algorithm
-    typedef Solver<PlanSched, const IPPSProblem&, const PlannerOptions&> PlannerSolverType;
-    PlannerSolverType* planner = nullptr;
-    Common::Util::DLLCallLoader<PlannerSolverType*, QLibrary&, const char*> plannerLoader;
+
+    SmartPointer<PlanSchedSolver> planner = nullptr;
+    Common::Util::DLLCallLoader<PlanSchedSolver*, QLibrary&, const char*> plannerLoader;
 
     try {
 
-        planner = plannerLoader.load(plannerLib, QString("new_" + plannerName).toStdString().data());
+	planner.setPointer(plannerLoader.load(plannerLib, QString("new_" + plannerName).toStdString().data()));
 
     } catch (...) {
 
-        out << plannerLib.fileName() << endl;
-        Debugger::err << "Failed to resolve planner algorithm!" << ENDL;
+	out << plannerLib.fileName() << endl;
+	Debugger::err << "Failed to resolve planner algorithm!" << ENDL;
 
     }
 
@@ -3006,11 +3000,11 @@ int main_VNS(int argc, char *argv[]) {
     /*
     out << "List of BOPs in p1:" << endl;
     for (int i = 0; i < p1.bops.size(); i++) {
-                                    out << p1.bops[i]->ID << endl;
+				    out << p1.bops[i]->ID << endl;
     }
     out << "List of keys in p1:" << endl;
     for (int i = 0; i < p1.bopid2idx.size(); i++) {
-                                    out << p1.bopid2idx.keys()[i] << endl;
+				    out << p1.bopid2idx.keys()[i] << endl;
     }
     getchar();
      */
@@ -3026,8 +3020,6 @@ int main_VNS(int argc, char *argv[]) {
     PlanSched ps;
 
     ps = planner->solve(ippsProblem, plannerOptions);
-
-    delete planner;
 
     out << "Planner: Finished running" << endl;
 
@@ -3057,43 +3049,43 @@ int main_GA(int argc, char *argv[]) {
 
     QHash<QString, QString> prefix2arg;
     for (int i = 1; i < arguments.size(); i++) { // The first one is the program's directory
-        out << arguments[i] << endl;
-        QStringList argssplitted = arguments[i].split(":");
-        if (argssplitted.size() < 2) {
-            Debugger::err << "Arguments not specified correctly!!!" << ENDL;
-        } else {
-            prefix2arg[argssplitted[0]] = argssplitted[1];
-        }
+	out << arguments[i] << endl;
+	QStringList argssplitted = arguments[i].split(":");
+	if (argssplitted.size() < 2) {
+	    Debugger::err << "Arguments not specified correctly!!!" << ENDL;
+	} else {
+	    prefix2arg[argssplitted[0]] = argssplitted[1];
+	}
     }
 
     if (!prefix2arg.contains("Test")) {
-        Debugger::err << "No test specified!" << ENDL;
+	Debugger::err << "No test specified!" << ENDL;
     } else {
-        test_inst_dir = prefix2arg["Test"];
+	test_inst_dir = prefix2arg["Test"];
     }
 
     QFile proto_file;
 
     if (!prefix2arg.contains("Protocol")) {
-        Debugger::err << "No protocol specified" << ENDL;
+	Debugger::err << "No protocol specified" << ENDL;
     } else {
-        proto_file.setFileName(test_inst_dir + prefix2arg["Protocol"]);
-        out << "Protocol file : " << proto_file.fileName() << endl;
+	proto_file.setFileName(test_inst_dir + prefix2arg["Protocol"]);
+	out << "Protocol file : " << proto_file.fileName() << endl;
     }
 
     if (!prefix2arg.contains("GlobMaxIter")) {
-        Debugger::err << "No number of global iterations specified!" << ENDL;
+	Debugger::err << "No number of global iterations specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("GlobMaxTimeM")) {
-        Debugger::err << "No global time limit specified!" << ENDL;
+	Debugger::err << "No global time limit specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("RandSeed")) {
-        Debugger::err << "No seed for randomization specified!" << ENDL;
+	Debugger::err << "No seed for randomization specified!" << ENDL;
     } else {
-        // Set the seed 
-        Rand::rndSeed(prefix2arg["RandSeed"].toInt());
+	// Set the seed 
+	Rand::rndSeed(prefix2arg["RandSeed"].toInt());
     }
 
     /* #######################  Reading resources  ########################## */
@@ -3101,14 +3093,14 @@ int main_GA(int argc, char *argv[]) {
     QDomDocument rc_doc("rc");
     QFile rc_file(test_inst_dir + "resources.xml");
     if (!rc_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << rc_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << rc_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!rc_doc.setContent(&rc_file)) {
-        rc_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	rc_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     rc_file.close();
 
@@ -3129,14 +3121,14 @@ int main_GA(int argc, char *argv[]) {
     QDomDocument iroutes_doc("iroutes");
     QFile routes_file(test_inst_dir + "iroutes.xml");
     if (!routes_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << routes_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << routes_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!iroutes_doc.setContent(&routes_file)) {
-        routes_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	routes_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     routes_file.close();
     out << "Done reading the routes information." << endl;
@@ -3147,23 +3139,23 @@ int main_GA(int argc, char *argv[]) {
     QDomNodeList route_list;
     int itm_type_id;
     for (int i = 0; i < item_list.size(); i++) {
-                                    itm_type_id = item_list.item(i).toElement().attribute("id").toInt();
-                                    //out << "Reading item type " << itm_type_id << endl;
-                                    route_list = item_list.item(i).toElement().elementsByTagName("route");
-                                    for (int j = 0; j < route_list.size(); j++) {
-                                                                    iroutes[itm_type_id].append(new Route());
-                                                                    iroutes[itm_type_id].last()->fromDOMElement(route_list.item(j).toElement());
-                                    }
+				    itm_type_id = item_list.item(i).toElement().attribute("id").toInt();
+				    //out << "Reading item type " << itm_type_id << endl;
+				    route_list = item_list.item(i).toElement().elementsByTagName("route");
+				    for (int j = 0; j < route_list.size(); j++) {
+								    iroutes[itm_type_id].append(new Route());
+								    iroutes[itm_type_id].last()->fromDOMElement(route_list.item(j).toElement());
+				    }
     }
      */
     ProductManager::iroutesFromDOMElement(iroutes_doc.documentElement(), itype2routes);
 
     for (QHash<int, QList<Route*> >::iterator iter = itype2routes.begin(); iter != itype2routes.end(); iter++) {
-        out << "Item type : " << iter.key() << endl;
-        cout << "Routes : " << endl;
-        for (int i = 0; i < iter.value().size(); i++) {
-            out << *iter.value()[i] << endl;
-        }
+	out << "Item type : " << iter.key() << endl;
+	cout << "Routes : " << endl;
+	for (int i = 0; i < iter.value().size(); i++) {
+	    out << *iter.value()[i] << endl;
+	}
     }
 
     /* ######################  Done reading routes  ######################### */
@@ -3176,14 +3168,14 @@ int main_GA(int argc, char *argv[]) {
     QDomDocument boms_doc("boms");
     QFile bom_file(test_inst_dir + "boms.xml");
     if (!bom_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << bom_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << bom_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!boms_doc.setContent(&bom_file)) {
-        bom_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	bom_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     bom_file.close();
     out << "Done reading the BOMs information." << endl;
@@ -3196,22 +3188,22 @@ int main_GA(int argc, char *argv[]) {
     int prod_type_id; // ID of the current product
     // For every node create the corresponding BOMs
     for (int i = 0; i < prod_list.size(); i++) {
-                                    prod_type_id = prod_list.item(i).toElement().attribute("type").toInt();
-                                    //out << "Current product type: " << prod_type_id << endl;
+				    prod_type_id = prod_list.item(i).toElement().attribute("type").toInt();
+				    //out << "Current product type: " << prod_type_id << endl;
 
-                                    // Get the list of BOMs for the current product
-                                    prod_bom_list = prod_list.item(i).toElement().elementsByTagName("bom");
+				    // Get the list of BOMs for the current product
+				    prod_bom_list = prod_list.item(i).toElement().elementsByTagName("bom");
 
-                                    // Iterate over all BOM descriptions and create the actual BOMs
-                                    for (int cb = 0; cb < prod_bom_list.size(); cb++) {
-                                                                    pboms[prod_type_id].append(new BillOfMaterials());
+				    // Iterate over all BOM descriptions and create the actual BOMs
+				    for (int cb = 0; cb < prod_bom_list.size(); cb++) {
+								    pboms[prod_type_id].append(new BillOfMaterials());
 
-                                                                    // Extract the BOM from the DOM element
-                                                                    //out << "Parsing pbom from the DOM element ..." << endl;
-                                                                    //out << prod_bom_list.item(cb).toElement() << endl;
-                                                                    pboms[prod_type_id].last()->fromDOMElement(prod_bom_list.item(cb).toElement());
-                                                                    //out << "Done parsing pbom from the DOM element." << endl;
-                                    }
+								    // Extract the BOM from the DOM element
+								    //out << "Parsing pbom from the DOM element ..." << endl;
+								    //out << prod_bom_list.item(cb).toElement() << endl;
+								    pboms[prod_type_id].last()->fromDOMElement(prod_bom_list.item(cb).toElement());
+								    //out << "Done parsing pbom from the DOM element." << endl;
+				    }
     }
      */
     //out << "ProductManager::pbomsFromDOMElement..." << endl;
@@ -3228,19 +3220,19 @@ int main_GA(int argc, char *argv[]) {
 
     // Prepare the hash with the BOPs for different product types
     for (int i = 0; i < /*prod_list*/ptype2boms.size(); i++) {
-        ptype2bops.insert(/*prod_list.item(i).toElement().attribute("type").toInt()*/ptype2boms.keys()[i], QList<BillOfProcesses*>());
+	ptype2bops.insert(/*prod_list.item(i).toElement().attribute("type").toInt()*/ptype2boms.keys()[i], QList<BillOfProcesses*>());
     }
 
     // Iterate over all product types
     double total_comb = 1.0;
     double total_bops = 0.0;
     for (QHash<int, QList<BillOfProcesses*> >::iterator ptiter = ptype2bops.begin(); ptiter != ptype2bops.end(); ptiter++) {
-        out << "BillOfProcesses::generateAll..." << endl;
-        BillOfProcesses::generateAll(ptype2boms[ptiter.key()], itype2routes, ptype2bops[ptiter.key()]);
-        out << "Finished BillOfProcesses::generateAll." << endl;
-        out << "Generated " << ptype2bops[ptiter.key()].size() << " BOPs for product " << ptiter.key() << endl;
-        total_comb *= double(ptype2bops[ptiter.key()].size());
-        total_bops += ptype2bops[ptiter.key()].size();
+	out << "BillOfProcesses::generateAll..." << endl;
+	BillOfProcesses::generateAll(ptype2boms[ptiter.key()], itype2routes, ptype2bops[ptiter.key()]);
+	out << "Finished BillOfProcesses::generateAll." << endl;
+	out << "Generated " << ptype2bops[ptiter.key()].size() << " BOPs for product " << ptiter.key() << endl;
+	total_comb *= double(ptype2bops[ptiter.key()].size());
+	total_bops += ptype2bops[ptiter.key()].size();
     }
     out << "Done generating BOPs for each product type." << endl;
     out << "Total generated BOPs : " << total_bops << endl;
@@ -3254,32 +3246,32 @@ int main_GA(int argc, char *argv[]) {
     QList<int> ptypes = ptype2boms.keys();
     for (int i = 0; i < ptypes.size(); i++) {
 
-        out << "Creating product " << i + 1 << endl;
+	out << "Creating product " << i + 1 << endl;
 
-        products.append(Product());
-        products.last().ID = i + 1; //1;
-        products.last().type = ptypes[i];
-        for (int j = 0; j < ptype2bops[products.last().type].size(); j++) {
-            // Generate the ID for the current BOM of the current product
-            //ptype2bops[products.last().type][j]->ID = products.last().ID;
-            //ptype2bops[products.last().type][j]->ID = ptype2bops[products.last().type][j]->ID << 16; // Shift by 16 bits
-            //ptype2bops[products.last().type][j]->ID += j;
+	products.append(Product());
+	products.last().ID = i + 1; //1;
+	products.last().type = ptypes[i];
+	for (int j = 0; j < ptype2bops[products.last().type].size(); j++) {
+	    // Generate the ID for the current BOM of the current product
+	    //ptype2bops[products.last().type][j]->ID = products.last().ID;
+	    //ptype2bops[products.last().type][j]->ID = ptype2bops[products.last().type][j]->ID << 16; // Shift by 16 bits
+	    //ptype2bops[products.last().type][j]->ID += j;
 
-            // IMPORTANT!!! It is assumed that BOP ID = BOM ID
+	    // IMPORTANT!!! It is assumed that BOP ID = BOM ID
 
-            // Add the BOP to the product
-            products.last() << ptype2bops[products.last().type][j];
-        }
+	    // Add the BOP to the product
+	    products.last() << ptype2bops[products.last().type][j];
+	}
 
-        out << "Product before ranking BOPs : " << endl << products.last() << endl;
+	out << "Product before ranking BOPs : " << endl << products.last() << endl;
 
-        //products.last().bopsDecompRate(0.0);
-        //products.last().rc = &rc;
-        out << "Ranking BOPs... " << endl;
-        products.last().rankBOPs(rc);
-        out << "Done ranking BOPs." << endl;
+	//products.last().bopsDecompRate(0.0);
+	//products.last().rc = &rc;
+	out << "Ranking BOPs... " << endl;
+	products.last().rankBOPs(rc);
+	out << "Done ranking BOPs." << endl;
 
-        out << "Created product " << i + 1 << endl;
+	out << "Created product " << i + 1 << endl;
 
     }
     out << "Done creating products." << endl;
@@ -3288,7 +3280,7 @@ int main_GA(int argc, char *argv[]) {
     out << "Creating product manager ..." << endl;
     ProductManager prodman;
     for (int i = 0; i < products.size(); i++) {
-        prodman << &products[i];
+	prodman << &products[i];
     }
     out << "Product manager created." << endl;
 
@@ -3297,14 +3289,14 @@ int main_GA(int argc, char *argv[]) {
     QDomDocument ord_doc("orders");
     QFile ord_file(test_inst_dir + "orders.xml");
     if (!ord_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << ord_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << ord_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!ord_doc.setContent(&ord_file)) {
-        ord_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	ord_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     ord_file.close();
 
@@ -3314,8 +3306,8 @@ int main_GA(int argc, char *argv[]) {
     QList<Order*> orders;
 
     for (int i = 0; i < ords_list.size(); i++) {
-        orders.append(new Order);
-        orders.last()->fromDOMElement(ords_list.item(i).toElement());
+	orders.append(new Order);
+	orders.last()->fromDOMElement(ords_list.item(i).toElement());
     }
     out << "Done reading the orders information." << endl;
     /* ####################  Done reading orders  ######################## */
@@ -3323,7 +3315,7 @@ int main_GA(int argc, char *argv[]) {
     out << "Creating order manager ..." << endl;
     OrderManager ordman;
     for (int i = 0; i < orders.size(); i++) {
-        ordman << *orders[i];
+	ordman << *orders[i];
     }
     out << "Order manager created." << endl;
 
@@ -3347,14 +3339,14 @@ int main_GA(int argc, char *argv[]) {
     SchedulerOptions schedOptions;
 
     if (!prefix2arg.contains("Objective")) {
-        Debugger::err << "No objective specified!!!" << ENDL;
+	Debugger::err << "No objective specified!!!" << ENDL;
     } else if (prefix2arg["Objective"] == "Cmax") {
-        schedOptions["OBJECTIVE"] = "Cmax";
+	schedOptions["OBJECTIVE"] = "Cmax";
     } else if (prefix2arg["Objective"] == "TWT") {
-        schedOptions["OBJECTIVE"] = "TWT";
+	schedOptions["OBJECTIVE"] = "TWT";
     } else {
-        out << prefix2arg["Objective"] << endl;
-        Debugger::err << "Unknown objective!!!" << ENDL;
+	out << prefix2arg["Objective"] << endl;
+	Debugger::err << "Unknown objective!!!" << ENDL;
     }
 
 
@@ -3364,21 +3356,21 @@ int main_GA(int argc, char *argv[]) {
     schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "20000";
     schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7"; // Allow ATC during the initialization (it will not be used later!!!)
     if (!prefix2arg.contains("GASolImpr")) {
-        Debugger::err << "GASolImpr not specified!!!" << ENDL;
+	Debugger::err << "GASolImpr not specified!!!" << ENDL;
     } else {
-        schedOptions["GA_IMPROVE_SOLUTION"] = prefix2arg["GASolImpr"];
+	schedOptions["GA_IMPROVE_SOLUTION"] = prefix2arg["GASolImpr"];
     }
     ScalarObjective* objective = NULL;
     if (!schedOptions.contains("OBJECTIVE")) {
-        Debugger::err << "No objective specified!!!" << ENDL;
+	Debugger::err << "No objective specified!!!" << ENDL;
     } else {
-        if (schedOptions["OBJECTIVE"] == "TWT") {
-            objective = new TWT;
-        } else if (schedOptions["OBJECTIVE"] == "Cmax") {
-            objective = new Cmax;
-        } else {
-            Debugger::err << "Invalid objective!!!" << ENDL;
-        }
+	if (schedOptions["OBJECTIVE"] == "TWT") {
+	    objective = new TWT;
+	} else if (schedOptions["OBJECTIVE"] == "Cmax") {
+	    objective = new Cmax;
+	} else {
+	    Debugger::err << "Invalid objective!!!" << ENDL;
+	}
     }
 
     // Scheduler object
@@ -3387,62 +3379,62 @@ int main_GA(int argc, char *argv[]) {
 
     if (prefix2arg["PrioScheduler"] == "CSLS") {
 
-        scheduler = new CombinedSchedulerLS;
+	scheduler = new CombinedSchedulerLS;
 
-        CombinedSchedulerLS* csls = (CombinedSchedulerLS*) scheduler;
+	CombinedSchedulerLS* csls = (CombinedSchedulerLS*) scheduler;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        sch->obj = objective->clone();
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	sch->obj = objective->clone();
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = 0;
+	sch = 0;
 
     } else if (prefix2arg["PrioScheduler"] == "RND") {
 
-        scheduler = new RNDScheduler;
+	scheduler = new RNDScheduler;
 
-        //getchar();
+	//getchar();
 
     }
 
@@ -3486,11 +3478,11 @@ int main_GA(int argc, char *argv[]) {
     /*
     out << "List of BOPs in p1:" << endl;
     for (int i = 0; i < p1.bops.size(); i++) {
-                                    out << p1.bops[i]->ID << endl;
+				    out << p1.bops[i]->ID << endl;
     }
     out << "List of keys in p1:" << endl;
     for (int i = 0; i < p1.bopid2idx.size(); i++) {
-                                    out << p1.bopid2idx.keys()[i] << endl;
+				    out << p1.bopid2idx.keys()[i] << endl;
     }
     getchar();
      */
@@ -3531,43 +3523,43 @@ int main_GA1(int argc, char *argv[]) {
 
     QHash<QString, QString> prefix2arg;
     for (int i = 1; i < arguments.size(); i++) { // The first one is the program's directory
-        out << arguments[i] << endl;
-        QStringList argssplitted = arguments[i].split(":");
-        if (argssplitted.size() < 2) {
-            Debugger::err << "Arguments not specified correctly!!!" << ENDL;
-        } else {
-            prefix2arg[argssplitted[0]] = argssplitted[1];
-        }
+	out << arguments[i] << endl;
+	QStringList argssplitted = arguments[i].split(":");
+	if (argssplitted.size() < 2) {
+	    Debugger::err << "Arguments not specified correctly!!!" << ENDL;
+	} else {
+	    prefix2arg[argssplitted[0]] = argssplitted[1];
+	}
     }
 
     if (!prefix2arg.contains("Test")) {
-        Debugger::err << "No test specified!" << ENDL;
+	Debugger::err << "No test specified!" << ENDL;
     } else {
-        test_inst_dir = prefix2arg["Test"];
+	test_inst_dir = prefix2arg["Test"];
     }
 
     QFile proto_file;
 
     if (!prefix2arg.contains("Protocol")) {
-        Debugger::err << "No protocol specified" << ENDL;
+	Debugger::err << "No protocol specified" << ENDL;
     } else {
-        proto_file.setFileName(test_inst_dir + prefix2arg["Protocol"]);
-        out << "Protocol file : " << proto_file.fileName() << endl;
+	proto_file.setFileName(test_inst_dir + prefix2arg["Protocol"]);
+	out << "Protocol file : " << proto_file.fileName() << endl;
     }
 
     if (!prefix2arg.contains("GlobMaxIter")) {
-        Debugger::err << "No number of global iterations specified!" << ENDL;
+	Debugger::err << "No number of global iterations specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("GlobMaxTimeM")) {
-        Debugger::err << "No global time limit specified!" << ENDL;
+	Debugger::err << "No global time limit specified!" << ENDL;
     }
 
     if (!prefix2arg.contains("RandSeed")) {
-        Debugger::err << "No seed for randomization specified!" << ENDL;
+	Debugger::err << "No seed for randomization specified!" << ENDL;
     } else {
-        // Set the seed 
-        Rand::rndSeed(prefix2arg["RandSeed"].toInt());
+	// Set the seed 
+	Rand::rndSeed(prefix2arg["RandSeed"].toInt());
     }
 
     /* #######################  Reading resources  ########################## */
@@ -3575,14 +3567,14 @@ int main_GA1(int argc, char *argv[]) {
     QDomDocument rc_doc("rc");
     QFile rc_file(test_inst_dir + "resources.xml");
     if (!rc_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << rc_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << rc_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!rc_doc.setContent(&rc_file)) {
-        rc_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	rc_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     rc_file.close();
 
@@ -3603,14 +3595,14 @@ int main_GA1(int argc, char *argv[]) {
     QDomDocument iroutes_doc("iroutes");
     QFile routes_file(test_inst_dir + "iroutes.xml");
     if (!routes_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << routes_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << routes_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!iroutes_doc.setContent(&routes_file)) {
-        routes_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	routes_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     routes_file.close();
     out << "Done reading the routes information." << endl;
@@ -3621,23 +3613,23 @@ int main_GA1(int argc, char *argv[]) {
     QDomNodeList route_list;
     int itm_type_id;
     for (int i = 0; i < item_list.size(); i++) {
-                                    itm_type_id = item_list.item(i).toElement().attribute("id").toInt();
-                                    //out << "Reading item type " << itm_type_id << endl;
-                                    route_list = item_list.item(i).toElement().elementsByTagName("route");
-                                    for (int j = 0; j < route_list.size(); j++) {
-                                                                    iroutes[itm_type_id].append(new Route());
-                                                                    iroutes[itm_type_id].last()->fromDOMElement(route_list.item(j).toElement());
-                                    }
+				    itm_type_id = item_list.item(i).toElement().attribute("id").toInt();
+				    //out << "Reading item type " << itm_type_id << endl;
+				    route_list = item_list.item(i).toElement().elementsByTagName("route");
+				    for (int j = 0; j < route_list.size(); j++) {
+								    iroutes[itm_type_id].append(new Route());
+								    iroutes[itm_type_id].last()->fromDOMElement(route_list.item(j).toElement());
+				    }
     }
      */
     ProductManager::iroutesFromDOMElement(iroutes_doc.documentElement(), itype2routes);
 
     for (QHash<int, QList<Route*> >::iterator iter = itype2routes.begin(); iter != itype2routes.end(); iter++) {
-        out << "Item type : " << iter.key() << endl;
-        cout << "Routes : " << endl;
-        for (int i = 0; i < iter.value().size(); i++) {
-            out << *iter.value()[i] << endl;
-        }
+	out << "Item type : " << iter.key() << endl;
+	cout << "Routes : " << endl;
+	for (int i = 0; i < iter.value().size(); i++) {
+	    out << *iter.value()[i] << endl;
+	}
     }
 
     /* ######################  Done reading routes  ######################### */
@@ -3650,14 +3642,14 @@ int main_GA1(int argc, char *argv[]) {
     QDomDocument boms_doc("boms");
     QFile bom_file(test_inst_dir + "boms.xml");
     if (!bom_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << bom_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << bom_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!boms_doc.setContent(&bom_file)) {
-        bom_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	bom_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     bom_file.close();
     out << "Done reading the BOMs information." << endl;
@@ -3670,22 +3662,22 @@ int main_GA1(int argc, char *argv[]) {
     int prod_type_id; // ID of the current product
     // For every node create the corresponding BOMs
     for (int i = 0; i < prod_list.size(); i++) {
-                                    prod_type_id = prod_list.item(i).toElement().attribute("type").toInt();
-                                    //out << "Current product type: " << prod_type_id << endl;
+				    prod_type_id = prod_list.item(i).toElement().attribute("type").toInt();
+				    //out << "Current product type: " << prod_type_id << endl;
 
-                                    // Get the list of BOMs for the current product
-                                    prod_bom_list = prod_list.item(i).toElement().elementsByTagName("bom");
+				    // Get the list of BOMs for the current product
+				    prod_bom_list = prod_list.item(i).toElement().elementsByTagName("bom");
 
-                                    // Iterate over all BOM descriptions and create the actual BOMs
-                                    for (int cb = 0; cb < prod_bom_list.size(); cb++) {
-                                                                    pboms[prod_type_id].append(new BillOfMaterials());
+				    // Iterate over all BOM descriptions and create the actual BOMs
+				    for (int cb = 0; cb < prod_bom_list.size(); cb++) {
+								    pboms[prod_type_id].append(new BillOfMaterials());
 
-                                                                    // Extract the BOM from the DOM element
-                                                                    //out << "Parsing pbom from the DOM element ..." << endl;
-                                                                    //out << prod_bom_list.item(cb).toElement() << endl;
-                                                                    pboms[prod_type_id].last()->fromDOMElement(prod_bom_list.item(cb).toElement());
-                                                                    //out << "Done parsing pbom from the DOM element." << endl;
-                                    }
+								    // Extract the BOM from the DOM element
+								    //out << "Parsing pbom from the DOM element ..." << endl;
+								    //out << prod_bom_list.item(cb).toElement() << endl;
+								    pboms[prod_type_id].last()->fromDOMElement(prod_bom_list.item(cb).toElement());
+								    //out << "Done parsing pbom from the DOM element." << endl;
+				    }
     }
      */
     //out << "ProductManager::pbomsFromDOMElement..." << endl;
@@ -3702,19 +3694,19 @@ int main_GA1(int argc, char *argv[]) {
 
     // Prepare the hash with the BOPs for different product types
     for (int i = 0; i < /*prod_list*/ptype2boms.size(); i++) {
-        ptype2bops.insert(/*prod_list.item(i).toElement().attribute("type").toInt()*/ptype2boms.keys()[i], QList<BillOfProcesses*>());
+	ptype2bops.insert(/*prod_list.item(i).toElement().attribute("type").toInt()*/ptype2boms.keys()[i], QList<BillOfProcesses*>());
     }
 
     // Iterate over all product types
     double total_comb = 1.0;
     double total_bops = 0.0;
     for (QHash<int, QList<BillOfProcesses*> >::iterator ptiter = ptype2bops.begin(); ptiter != ptype2bops.end(); ptiter++) {
-        out << "BillOfProcesses::generateAll..." << endl;
-        BillOfProcesses::generateAll(ptype2boms[ptiter.key()], itype2routes, ptype2bops[ptiter.key()]);
-        out << "Finished BillOfProcesses::generateAll." << endl;
-        out << "Generated " << ptype2bops[ptiter.key()].size() << " BOPs for product " << ptiter.key() << endl;
-        total_comb *= double(ptype2bops[ptiter.key()].size());
-        total_bops += ptype2bops[ptiter.key()].size();
+	out << "BillOfProcesses::generateAll..." << endl;
+	BillOfProcesses::generateAll(ptype2boms[ptiter.key()], itype2routes, ptype2bops[ptiter.key()]);
+	out << "Finished BillOfProcesses::generateAll." << endl;
+	out << "Generated " << ptype2bops[ptiter.key()].size() << " BOPs for product " << ptiter.key() << endl;
+	total_comb *= double(ptype2bops[ptiter.key()].size());
+	total_bops += ptype2bops[ptiter.key()].size();
     }
     out << "Done generating BOPs for each product type." << endl;
     out << "Total generated BOPs : " << total_bops << endl;
@@ -3728,32 +3720,32 @@ int main_GA1(int argc, char *argv[]) {
     QList<int> ptypes = ptype2boms.keys();
     for (int i = 0; i < ptypes.size(); i++) {
 
-        out << "Creating product " << i + 1 << endl;
+	out << "Creating product " << i + 1 << endl;
 
-        products.append(Product());
-        products.last().ID = i + 1; //1;
-        products.last().type = ptypes[i];
-        for (int j = 0; j < ptype2bops[products.last().type].size(); j++) {
-            // Generate the ID for the current BOM of the current product
-            //ptype2bops[products.last().type][j]->ID = products.last().ID;
-            //ptype2bops[products.last().type][j]->ID = ptype2bops[products.last().type][j]->ID << 16; // Shift by 16 bits
-            //ptype2bops[products.last().type][j]->ID += j;
+	products.append(Product());
+	products.last().ID = i + 1; //1;
+	products.last().type = ptypes[i];
+	for (int j = 0; j < ptype2bops[products.last().type].size(); j++) {
+	    // Generate the ID for the current BOM of the current product
+	    //ptype2bops[products.last().type][j]->ID = products.last().ID;
+	    //ptype2bops[products.last().type][j]->ID = ptype2bops[products.last().type][j]->ID << 16; // Shift by 16 bits
+	    //ptype2bops[products.last().type][j]->ID += j;
 
-            // IMPORTANT!!! It is assumed that BOP ID = BOM ID
+	    // IMPORTANT!!! It is assumed that BOP ID = BOM ID
 
-            // Add the BOP to the product
-            products.last() << ptype2bops[products.last().type][j];
-        }
+	    // Add the BOP to the product
+	    products.last() << ptype2bops[products.last().type][j];
+	}
 
-        out << "Product before ranking BOPs : " << endl << products.last() << endl;
+	out << "Product before ranking BOPs : " << endl << products.last() << endl;
 
-        //products.last().bopsDecompRate(0.0);
-        //products.last().rc = &rc;
-        out << "Ranking BOPs... " << endl;
-        products.last().rankBOPs(rc);
-        out << "Done ranking BOPs." << endl;
+	//products.last().bopsDecompRate(0.0);
+	//products.last().rc = &rc;
+	out << "Ranking BOPs... " << endl;
+	products.last().rankBOPs(rc);
+	out << "Done ranking BOPs." << endl;
 
-        out << "Created product " << i + 1 << endl;
+	out << "Created product " << i + 1 << endl;
 
     }
     out << "Done creating products." << endl;
@@ -3762,7 +3754,7 @@ int main_GA1(int argc, char *argv[]) {
     out << "Creating product manager ..." << endl;
     ProductManager prodman;
     for (int i = 0; i < products.size(); i++) {
-        prodman << &products[i];
+	prodman << &products[i];
     }
     out << "Product manager created." << endl;
 
@@ -3771,14 +3763,14 @@ int main_GA1(int argc, char *argv[]) {
     QDomDocument ord_doc("orders");
     QFile ord_file(test_inst_dir + "orders.xml");
     if (!ord_file.open(QIODevice::ReadOnly)) {
-        Debugger::err << "Failed to open file " << ord_file.fileName().toStdString() << " for reading!" << ENDL;
-        return -1;
+	Debugger::err << "Failed to open file " << ord_file.fileName().toStdString() << " for reading!" << ENDL;
+	return -1;
     }
 
     if (!ord_doc.setContent(&ord_file)) {
-        ord_file.close();
-        Debugger::err << "Failed to set document contents!" << ENDL;
-        return -1;
+	ord_file.close();
+	Debugger::err << "Failed to set document contents!" << ENDL;
+	return -1;
     }
     ord_file.close();
 
@@ -3788,8 +3780,8 @@ int main_GA1(int argc, char *argv[]) {
     QList<Order*> orders;
 
     for (int i = 0; i < ords_list.size(); i++) {
-        orders.append(new Order);
-        orders.last()->fromDOMElement(ords_list.item(i).toElement());
+	orders.append(new Order);
+	orders.last()->fromDOMElement(ords_list.item(i).toElement());
     }
     out << "Done reading the orders information." << endl;
     /* ####################  Done reading orders  ######################## */
@@ -3797,7 +3789,7 @@ int main_GA1(int argc, char *argv[]) {
     out << "Creating order manager ..." << endl;
     OrderManager ordman;
     for (int i = 0; i < orders.size(); i++) {
-        ordman << *orders[i];
+	ordman << *orders[i];
     }
     out << "Order manager created." << endl;
 
@@ -3821,14 +3813,14 @@ int main_GA1(int argc, char *argv[]) {
     SchedulerOptions schedOptions;
 
     if (!prefix2arg.contains("Objective")) {
-        Debugger::err << "No objective specified!!!" << ENDL;
+	Debugger::err << "No objective specified!!!" << ENDL;
     } else if (prefix2arg["Objective"] == "Cmax") {
-        schedOptions["OBJECTIVE"] = "Cmax";
+	schedOptions["OBJECTIVE"] = "Cmax";
     } else if (prefix2arg["Objective"] == "TWT") {
-        schedOptions["OBJECTIVE"] = "TWT";
+	schedOptions["OBJECTIVE"] = "TWT";
     } else {
-        out << prefix2arg["Objective"] << endl;
-        Debugger::err << "Unknown objective!!!" << ENDL;
+	out << prefix2arg["Objective"] << endl;
+	Debugger::err << "Unknown objective!!!" << ENDL;
     }
 
 
@@ -3838,21 +3830,21 @@ int main_GA1(int argc, char *argv[]) {
     schedOptions["PLANNER_LAST_ITER_LS_MAX_ITER"] = "20000";
     schedOptions["CS_ALLOWED_SCHEDULERS"] = "1&2&3&4&5&6&7"; // Allow ATC during the initialization (it will not be used later!!!)
     if (!prefix2arg.contains("GASolImpr")) {
-        Debugger::err << "GASolImpr not specified!!!" << ENDL;
+	Debugger::err << "GASolImpr not specified!!!" << ENDL;
     } else {
-        schedOptions["GA_IMPROVE_SOLUTION"] = prefix2arg["GASolImpr"];
+	schedOptions["GA_IMPROVE_SOLUTION"] = prefix2arg["GASolImpr"];
     }
     ScalarObjective* objective = NULL;
     if (!schedOptions.contains("OBJECTIVE")) {
-        Debugger::err << "No objective specified!!!" << ENDL;
+	Debugger::err << "No objective specified!!!" << ENDL;
     } else {
-        if (schedOptions["OBJECTIVE"] == "TWT") {
-            objective = new TWT;
-        } else if (schedOptions["OBJECTIVE"] == "Cmax") {
-            objective = new Cmax;
-        } else {
-            Debugger::err << "Invalid objective!!!" << ENDL;
-        }
+	if (schedOptions["OBJECTIVE"] == "TWT") {
+	    objective = new TWT;
+	} else if (schedOptions["OBJECTIVE"] == "Cmax") {
+	    objective = new Cmax;
+	} else {
+	    Debugger::err << "Invalid objective!!!" << ENDL;
+	}
     }
 
     // Scheduler object
@@ -3861,71 +3853,71 @@ int main_GA1(int argc, char *argv[]) {
 
     if (prefix2arg["PrioScheduler"] == "CSLS") {
 
-        scheduler = new CombinedSchedulerLS;
+	scheduler = new CombinedSchedulerLS;
 
-        CombinedSchedulerLS* csls = (CombinedSchedulerLS*) scheduler;
+	CombinedSchedulerLS* csls = (CombinedSchedulerLS*) scheduler;
 
-        Scheduler* sch = 0;
+	Scheduler* sch = 0;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 1;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 1;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WFIFOScheduler;
-        sch->ID = 2;
-        sch->obj = objective->clone();
-        ((WFIFOScheduler*) sch)->weightedFIFO(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WFIFOScheduler;
+	sch->ID = 2;
+	sch->obj = objective->clone();
+	((WFIFOScheduler*) sch)->weightedFIFO(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 3;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 3;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WEODScheduler;
-        sch->ID = 4;
-        sch->obj = objective->clone();
-        ((WEODScheduler*) sch)->weightedEOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WEODScheduler;
+	sch->ID = 4;
+	sch->obj = objective->clone();
+	((WEODScheduler*) sch)->weightedEOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 5;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(false);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 5;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(false);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new WMODScheduler;
-        sch->ID = 6;
-        sch->obj = objective->clone();
-        ((WMODScheduler*) sch)->weightedMOD(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new WMODScheduler;
+	sch->ID = 6;
+	sch->obj = objective->clone();
+	((WMODScheduler*) sch)->weightedMOD(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = new ATCANScheduler;
-        sch->ID = 7;
-        //sch->obj = objective->clone();
-        sch->setObjective(*objective);
-        ((ATCANScheduler*) sch)->considerSucc(false);
-        ((ATCANScheduler*) sch)->kappaOptim(true);
-        csls->combinedSchedulerObject() << sch;
+	sch = new ATCANScheduler;
+	sch->ID = 7;
+	//sch->obj = objective->clone();
+	sch->setObjective(*objective);
+	((ATCANScheduler*) sch)->considerSucc(false);
+	((ATCANScheduler*) sch)->kappaOptim(true);
+	csls->combinedSchedulerObject() << sch;
 
-        sch = 0;
+	sch = 0;
 
-        RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
+	RandGenMT* randGen = new RandGenMT(Rand::rndSeed()); // The random numbers generator
 
-        csls->combinedSchedulerObject().obj = objective->clone();
-        csls->localSearchObject().setObjective(objective);
+	csls->combinedSchedulerObject().obj = objective->clone();
+	csls->localSearchObject().setObjective(objective);
 
-        // Set the initial random number generator for the Ls
-        csls->localSearchObject().setRandGen(randGen);
+	// Set the initial random number generator for the Ls
+	csls->localSearchObject().setRandGen(randGen);
 
     } else if (prefix2arg["PrioScheduler"] == "RND") {
 
-        scheduler = new RNDScheduler;
+	scheduler = new RNDScheduler;
 
-        //getchar();
+	//getchar();
 
     }
 
@@ -3968,11 +3960,11 @@ int main_GA1(int argc, char *argv[]) {
     /*
     out << "List of BOPs in p1:" << endl;
     for (int i = 0; i < p1.bops.size(); i++) {
-                                    out << p1.bops[i]->ID << endl;
+				    out << p1.bops[i]->ID << endl;
     }
     out << "List of keys in p1:" << endl;
     for (int i = 0; i < p1.bopid2idx.size(); i++) {
-                                    out << p1.bopid2idx.keys()[i] << endl;
+				    out << p1.bopid2idx.keys()[i] << endl;
     }
     getchar();
      */
@@ -4010,42 +4002,42 @@ int main(int argc, char *argv[]) {
     // Parse the arguments
     QStringList arguments; // = app.arguments();
     for (int i = 0; i < argc; i++) {
-        arguments << QString(argv[i]);
+	arguments << QString(argv[i]);
     }
 
     QHash<QString, QString> prefix2arg;
     for (int i = 1; i < arguments.size(); i++) { // The first one is the program's directory
-        out << arguments[i] << endl;
-        QStringList argssplitted = arguments[i].split(":");
-        if (argssplitted.size() < 2) {
-            Debugger::err << "Arguments not specified correctly!!!" << ENDL;
-        } else {
-            prefix2arg[argssplitted[0]] = argssplitted[1];
-        }
+	out << arguments[i] << endl;
+	QStringList argssplitted = arguments[i].split(":");
+	if (argssplitted.size() < 2) {
+	    Debugger::err << "Arguments not specified correctly!!!" << ENDL;
+	} else {
+	    prefix2arg[argssplitted[0]] = argssplitted[1];
+	}
     }
 
     if (!prefix2arg.contains("Algorithm")) {
-        Debugger::err << "No solution algorithm specified!" << ENDL;
+	Debugger::err << "No solution algorithm specified!" << ENDL;
     } else {
-        if (prefix2arg["Algorithm"] == "VNS") { // Run the VNS scheduler
+	if (prefix2arg["Algorithm"] == "VNS") { // Run the VNS scheduler
 
-            return main_VNS(argc, argv);
+	    return main_VNS(argc, argv);
 
-        }
+	}
 #ifdef GA_ALG
-        else if (prefix2arg["Algorithm"] == "GA") {
+	else if (prefix2arg["Algorithm"] == "GA") {
 
-            return main_GA(argc, argv);
+	    return main_GA(argc, argv);
 
-        } else if (prefix2arg["Algorithm"] == "GA1") {
+	} else if (prefix2arg["Algorithm"] == "GA1") {
 
-            return main_GA1(argc, argv);
+	    return main_GA1(argc, argv);
 
-        }
+	}
 #endif
-        else {
-            Debugger::err << "No feasible solution algorithm specified!!!" << ENDL;
-        }
+	else {
+	    Debugger::err << "No feasible solution algorithm specified!!!" << ENDL;
+	}
     }
 
     return -1;

@@ -2,8 +2,17 @@
 <configurationDescriptor version="97">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="Common" displayName="Common" projectFiles="true">
+      <logicalFolder name="Acceptable" displayName="Acceptable" projectFiles="true">
+        <itemPath>../../../Common/Acceptable/Acceptable.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Algorithm" displayName="Algorithm" projectFiles="true">
+        <itemPath>../../../Common/Algorithm/Algorithm.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="Assignable" displayName="Assignable" projectFiles="true">
         <itemPath>../../../Common/Assignable/Assignable.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Changeable" displayName="Changeable" projectFiles="true">
+        <itemPath>../../../Common/Changeable/Changeable.h</itemPath>
       </logicalFolder>
       <logicalFolder name="Clonable" displayName="Clonable" projectFiles="true">
         <itemPath>../../../Common/Clonable/Clonable.h</itemPath>
@@ -11,12 +20,43 @@
       <logicalFolder name="Comparable" displayName="Comparable" projectFiles="true">
         <itemPath>../../../Common/Comparable/Comparable.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="Debug" displayName="Debug" projectFiles="true">
+        <logicalFolder name="dist" displayName="dist" projectFiles="true">
+          <logicalFolder name="Debug" displayName="Debug" projectFiles="true">
+            <logicalFolder name="GNU-Linux-x86"
+                           displayName="GNU-Linux-x86"
+                           projectFiles="true">
+              <itemPath>../../../Common/Debug/dist/Debug/GNU-Linux-x86/debug</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+        </logicalFolder>
+        <itemPath>../../../Common/Debug/.dep.inc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Driver" displayName="Driver" projectFiles="true">
+        <itemPath>../../../Common/Driver/Driven.h</itemPath>
+        <itemPath>../../../Common/Driver/Driver.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="Exceptions" displayName="Exceptions" projectFiles="true">
         <itemPath>../../../Common/Exceptions/Exception.h</itemPath>
         <itemPath>../../../Common/Exceptions/MsgException.h</itemPath>
       </logicalFolder>
       <logicalFolder name="Functor" displayName="Functor" projectFiles="true">
         <itemPath>../../../Common/Functor/Functor.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Include" displayName="Include" projectFiles="true">
+        <itemPath>../../../Common/Include/Acceptable</itemPath>
+        <itemPath>../../../Common/Include/Algorithm</itemPath>
+        <itemPath>../../../Common/Include/Changeable</itemPath>
+        <itemPath>../../../Common/Include/Driver</itemPath>
+        <itemPath>../../../Common/Include/Loader</itemPath>
+        <itemPath>../../../Common/Include/Parser</itemPath>
+        <itemPath>../../../Common/Include/Solver</itemPath>
+        <itemPath>../../../Common/Include/Stopable</itemPath>
+        <itemPath>../../../Common/Include/Variables</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Loader" displayName="Loader" projectFiles="true">
+        <itemPath>../../../Common/Loader/Loader.h</itemPath>
+        <itemPath>../../../Common/Loader/Loader_DLL.h</itemPath>
       </logicalFolder>
       <logicalFolder name="MathExt" displayName="MathExt" projectFiles="true">
         <itemPath>../../../Common/MathExt/MathExt.h</itemPath>
@@ -32,9 +72,16 @@
                      projectFiles="true">
         <itemPath>../../../Common/Operationable/Operationable.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="Parser" displayName="Parser" projectFiles="true">
+        <itemPath>../../../Common/Parser/Parser.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="RandExt" displayName="RandExt" projectFiles="true">
         <itemPath>../../../Common/RandExt/RandExt.cpp</itemPath>
         <itemPath>../../../Common/RandExt/RandExt.h</itemPath>
+        <itemPath>../../../Common/RandExt/RandExt_CombinedRandGen.h</itemPath>
+        <itemPath>../../../Common/RandExt/RandExt_Interfaces.h</itemPath>
+        <itemPath>../../../Common/RandExt/RandExt_LCG.h</itemPath>
+        <itemPath>../../../Common/RandExt/RandExt_MersenneTwister.h</itemPath>
       </logicalFolder>
       <logicalFolder name="Runnable" displayName="Runnable" projectFiles="true">
         <itemPath>../../../Common/Runnable/Runnable.h</itemPath>
@@ -57,73 +104,20 @@
                      projectFiles="true">
         <itemPath>../../../Common/SmartPointer/SmartPointer.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="Solvers" displayName="Solvers" projectFiles="true">
+        <itemPath>../../../Common/Solvers/Solver.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Stopable" displayName="Stopable" projectFiles="true">
+        <itemPath>../../../Common/Stopable/Stopable.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Variables" displayName="Variables" projectFiles="true">
+        <itemPath>../../../Common/Variables/Variables.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="WritableReadable"
                      displayName="WritableReadable"
                      projectFiles="true">
         <itemPath>../../../Common/WritableReadable/WritableReadable.h</itemPath>
       </logicalFolder>
-      <itemPath>../Common/BiDirScheduler.cpp</itemPath>
-      <itemPath>../Common/BiDirScheduler.h</itemPath>
-      <itemPath>../Common/BillOfMaterials.cpp</itemPath>
-      <itemPath>../Common/BillOfMaterials.h</itemPath>
-      <itemPath>../Common/BillOfProcesses.cpp</itemPath>
-      <itemPath>../Common/BillOfProcesses.h</itemPath>
-      <itemPath>../Common/CPScheduler.cpp</itemPath>
-      <itemPath>../Common/CPScheduler.h</itemPath>
-      <itemPath>../Common/Clonable.cpp</itemPath>
-      <itemPath>../Common/Clonable.h</itemPath>
-      <itemPath>../Common/DispatchScheduler.cpp</itemPath>
-      <itemPath>../Common/DispatchScheduler.h</itemPath>
-      <itemPath>../Common/Item.cpp</itemPath>
-      <itemPath>../Common/Item.h</itemPath>
-      <itemPath>../Common/IterativeAlg.cpp</itemPath>
-      <itemPath>../Common/IterativeAlg.h</itemPath>
-      <itemPath>../Common/LocalSearchPM.cpp</itemPath>
-      <itemPath>../Common/LocalSearchPM.h</itemPath>
-      <itemPath>../Common/LocalSearchSM.cpp</itemPath>
-      <itemPath>../Common/LocalSearchSM.h</itemPath>
-      <itemPath>../Common/Objective.cpp</itemPath>
-      <itemPath>../Common/Objective.h</itemPath>
-      <itemPath>../Common/OneDirScheduler.cpp</itemPath>
-      <itemPath>../Common/OneDirScheduler.h</itemPath>
-      <itemPath>../Common/Operation.cpp</itemPath>
-      <itemPath>../Common/Operation.h</itemPath>
-      <itemPath>../Common/Order.cpp</itemPath>
-      <itemPath>../Common/Order.h</itemPath>
-      <itemPath>../Common/Plan.cpp</itemPath>
-      <itemPath>../Common/Plan.h</itemPath>
-      <itemPath>../Common/Planner.cpp</itemPath>
-      <itemPath>../Common/Planner.h</itemPath>
-      <itemPath>../Common/ProcessModel.cpp</itemPath>
-      <itemPath>../Common/ProcessModel.h</itemPath>
-      <itemPath>../Common/ProcessModelManager.cpp</itemPath>
-      <itemPath>../Common/ProcessModelManager.h</itemPath>
-      <itemPath>../Common/Product.cpp</itemPath>
-      <itemPath>../Common/Product.h</itemPath>
-      <itemPath>../Common/Protocol.cpp</itemPath>
-      <itemPath>../Common/Protocol.h</itemPath>
-      <itemPath>../Common/Resources.cpp</itemPath>
-      <itemPath>../Common/Resources.h</itemPath>
-      <itemPath>../Common/Route.cpp</itemPath>
-      <itemPath>../Common/Route.h</itemPath>
-      <itemPath>../Common/SBHScheduler.cpp</itemPath>
-      <itemPath>../Common/SBHScheduler.h</itemPath>
-      <itemPath>../Common/Saveable.cpp</itemPath>
-      <itemPath>../Common/Saveable.h</itemPath>
-      <itemPath>../Common/Schedule.cpp</itemPath>
-      <itemPath>../Common/Schedule.h</itemPath>
-      <itemPath>../Common/Scheduler.cpp</itemPath>
-      <itemPath>../Common/Scheduler.h</itemPath>
-      <itemPath>../Common/TGScheduler.cpp</itemPath>
-      <itemPath>../Common/TGScheduler.h</itemPath>
-      <itemPath>../Common/TGSelection.cpp</itemPath>
-      <itemPath>../Common/TGSelection.h</itemPath>
-      <itemPath>../Common/TGVNSScheduler.cpp</itemPath>
-      <itemPath>../Common/TGVNSScheduler.h</itemPath>
-      <itemPath>../Common/TrivialScheduler.cpp</itemPath>
-      <itemPath>../Common/TrivialScheduler.h</itemPath>
-      <itemPath>../Common/VNSPlanner.cpp</itemPath>
-      <itemPath>../Common/VNSPlanner.h</itemPath>
     </logicalFolder>
     <logicalFolder name="Debug" displayName="Debug" projectFiles="true">
       <itemPath>/data/Projects/Common/Debug/DebugExt.cpp</itemPath>
@@ -171,6 +165,7 @@
   <sourceRootList>
     <Elem>../Common</Elem>
     <Elem>src</Elem>
+    <Elem>../../../Common</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -187,12 +182,15 @@
         <rccDir>$$DESTDIR/moc</rccDir>
         <uiDir>$$DESTDIR/moc</uiDir>
         <defs>
-          <Elem>OBJECTS_DIR = $$DESTDIR/obj</Elem>
+          <Elem>OBJECTS_DIR=$$DESTDIR/obj</Elem>
+          <Elem>QMAKE_CXXFLAGS += -std=c++14</Elem>
+          <Elem>AFTERBUILDDIR = ../bin/</Elem>
+          <Elem>unix:QMAKE_POST_LINK = mkdir -p $$AFTERBUILDDIR &amp;&amp;  cp -f -d $$DESTDIR/$$TARGET $$AFTERBUILDDIR</Elem>
         </defs>
       </qt>
       <compileType>
         <ccTool>
-          <standard>8</standard>
+          <standard>11</standard>
           <incDir>
             <pElem>../../../Common/Debug</pElem>
             <pElem>../../../Common/Include</pElem>
@@ -205,8 +203,39 @@
             <Elem>WDEBUG</Elem>
           </preprocessorList>
         </ccTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="/home/DrSobik/Projects/IPPS/CPPALG/Common"
+                            CT="5"
+                            CN="Release"
+                            AC="true"
+                            BL="true"
+                            WD="/home/DrSobik/Projects/IPPS/CPPALG/Common"
+                            BC="${MAKE}  -f Makefile CONF=Release"
+                            CC="${MAKE}  -f Makefile CONF=Release clean"
+                            OP="builds/Lin64bit/release/libCommon.so.1.0.0">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
+      <item path="../../../Common/Acceptable/Acceptable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/Algorithm/Algorithm.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../../Common/Assignable/Assignable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/Changeable/Changeable.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -221,6 +250,17 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../../Common/Debug/.dep.inc" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Debug/dist/Debug/GNU-Linux-x86/debug"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/Driver/Driven.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Driver/Driver.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../../Common/Exceptions/Exception.h"
             ex="false"
             tool="3"
@@ -233,15 +273,25 @@
       </item>
       <item path="../../../Common/Functor/Functor.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../../Common/Include/Acceptable" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Include/Algorithm" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../../Common/Include/Assignable" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Include/Changeable" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../Common/Include/Clonable" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../Common/Include/Comparable" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../../Common/Include/Driver" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../../Common/Include/Exceptions" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../Common/Include/Functor" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Include/Loader" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../Common/Include/MathExt" ex="false" tool="3" flavor2="0">
       </item>
@@ -253,6 +303,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="../../../Common/Include/Parser" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../Common/Include/RandExt" ex="false" tool="3" flavor2="0">
       </item>
@@ -275,7 +327,20 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../../Common/Include/Solver" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Include/Stopable" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Include/Variables" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../../Common/Include/WritableReadable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/Loader/Loader.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Loader/Loader_DLL.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -294,12 +359,34 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../../Common/Parser/Parser.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../../Common/RandExt/RandExt.cpp"
             ex="false"
             tool="1"
             flavor2="0">
       </item>
       <item path="../../../Common/RandExt/RandExt.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/RandExt/RandExt_CombinedRandGen.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/RandExt/RandExt_Interfaces.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/RandExt/RandExt_LCG.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/RandExt/RandExt_MersenneTwister.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="../../../Common/Runnable/Runnable.h"
             ex="false"
@@ -323,134 +410,22 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../../Common/WritableReadable/WritableReadable.h"
+      <item path="../../../Common/Solvers/Solver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Stopable/Stopable.h"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../Common/BiDirScheduler.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../../../Common/Variables/Variables.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="../Common/BiDirScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/BillOfMaterials.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/BillOfMaterials.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/BillOfProcesses.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/BillOfProcesses.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/CPScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/CPScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Clonable.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Clonable.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/DispatchScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/DispatchScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Item.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Item.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/IterativeAlg.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/IterativeAlg.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/LocalSearchPM.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/LocalSearchPM.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/LocalSearchSM.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/LocalSearchSM.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Objective.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Objective.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/OneDirScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/OneDirScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Operation.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Operation.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Order.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Order.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Plan.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Plan.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Planner.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Planner.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/ProcessModel.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/ProcessModel.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/ProcessModelManager.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/ProcessModelManager.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Product.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Product.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Protocol.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Protocol.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Resources.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Resources.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Route.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Route.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/SBHScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/SBHScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Saveable.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Saveable.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Schedule.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Schedule.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Scheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Scheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/TGScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/TGScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/TGSelection.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/TGSelection.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/TGVNSScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/TGVNSScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/TrivialScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/TrivialScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/VNSPlanner.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/VNSPlanner.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../Common/WritableReadable/WritableReadable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="/data/Projects/Common/Debug/DebugExt.cpp"
             ex="false"
@@ -486,10 +461,13 @@
         <buildMode>1</buildMode>
         <modules>core gui widgets network xml</modules>
         <mocDir>$$DESTDIR/moc</mocDir>
-        <rccDir>$$DESTDIR/moc</rccDir>
-        <uiDir>$$DESTDIR/moc</uiDir>
+        <rccDir>$$DESTDIR/rcc</rccDir>
+        <uiDir>$$DESTDIR/ui</uiDir>
         <defs>
-          <Elem>OBJECTS_DIR = $$DESTDIR/obj</Elem>
+          <Elem>OBJECTS_DIR=$$DESTDIR/obj</Elem>
+          <Elem>QMAKE_CXXFLAGS += -std=c++14</Elem>
+          <Elem>AFTERBUILDDIR = ../bin/</Elem>
+          <Elem>unix:QMAKE_POST_LINK = mkdir -p $$AFTERBUILDDIR &amp;&amp;  cp -f -d $$DESTDIR/$$TARGET $$AFTERBUILDDIR</Elem>
         </defs>
       </qt>
       <compileType>
@@ -498,11 +476,11 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
-          <standard>8</standard>
+          <standard>11</standard>
           <incDir>
             <pElem>../../../Common/Debug</pElem>
             <pElem>../../../Common/Include</pElem>
-            <pElem>../Common</pElem>
+            <pElem>../Common/src/Include</pElem>
           </incDir>
           <preprocessorList>
             <Elem>DEBUG</Elem>
@@ -517,8 +495,39 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="/home/DrSobik/Projects/IPPS/CPPALG/Common"
+                            CT="5"
+                            CN="Release"
+                            AC="true"
+                            BL="true"
+                            WD="/home/DrSobik/Projects/IPPS/CPPALG/Common"
+                            BC="${MAKE}  -f Makefile CONF=Release"
+                            CC="${MAKE}  -f Makefile CONF=Release clean"
+                            OP="builds/Lin64bit/release/libCommon.so.1.0.0">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
+      <item path="../../../Common/Acceptable/Acceptable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/Algorithm/Algorithm.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../../Common/Assignable/Assignable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/Changeable/Changeable.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -533,6 +542,17 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../../Common/Debug/.dep.inc" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Debug/dist/Debug/GNU-Linux-x86/debug"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/Driver/Driven.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Driver/Driver.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../../Common/Exceptions/Exception.h"
             ex="false"
             tool="3"
@@ -545,15 +565,25 @@
       </item>
       <item path="../../../Common/Functor/Functor.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../../Common/Include/Acceptable" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Include/Algorithm" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../../Common/Include/Assignable" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Include/Changeable" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../Common/Include/Clonable" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../Common/Include/Comparable" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../../Common/Include/Driver" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../../Common/Include/Exceptions" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../Common/Include/Functor" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Include/Loader" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../Common/Include/MathExt" ex="false" tool="3" flavor2="0">
       </item>
@@ -565,6 +595,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="../../../Common/Include/Parser" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../Common/Include/RandExt" ex="false" tool="3" flavor2="0">
       </item>
@@ -587,7 +619,20 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../../Common/Include/Solver" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Include/Stopable" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Include/Variables" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../../Common/Include/WritableReadable"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/Loader/Loader.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Loader/Loader_DLL.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -606,12 +651,34 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../../Common/Parser/Parser.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../../Common/RandExt/RandExt.cpp"
             ex="false"
             tool="1"
             flavor2="0">
       </item>
       <item path="../../../Common/RandExt/RandExt.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/RandExt/RandExt_CombinedRandGen.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/RandExt/RandExt_Interfaces.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/RandExt/RandExt_LCG.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../Common/RandExt/RandExt_MersenneTwister.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="../../../Common/Runnable/Runnable.h"
             ex="false"
@@ -635,134 +702,22 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../../Common/WritableReadable/WritableReadable.h"
+      <item path="../../../Common/Solvers/Solver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../Common/Stopable/Stopable.h"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../Common/BiDirScheduler.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../../../Common/Variables/Variables.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="../Common/BiDirScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/BillOfMaterials.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/BillOfMaterials.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/BillOfProcesses.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/BillOfProcesses.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/CPScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/CPScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Clonable.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Clonable.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/DispatchScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/DispatchScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Item.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Item.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/IterativeAlg.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/IterativeAlg.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/LocalSearchPM.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/LocalSearchPM.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/LocalSearchSM.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/LocalSearchSM.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Objective.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Objective.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/OneDirScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/OneDirScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Operation.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Operation.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Order.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Order.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Plan.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Plan.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Planner.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Planner.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/ProcessModel.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/ProcessModel.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/ProcessModelManager.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/ProcessModelManager.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Product.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Product.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Protocol.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Protocol.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Resources.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Resources.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Route.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Route.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/SBHScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/SBHScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Saveable.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Saveable.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Schedule.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Schedule.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/Scheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/Scheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/TGScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/TGScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/TGSelection.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/TGSelection.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/TGVNSScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/TGVNSScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/TrivialScheduler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/TrivialScheduler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../Common/VNSPlanner.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../Common/VNSPlanner.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../Common/WritableReadable/WritableReadable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="/data/Projects/Common/Debug/DebugExt.cpp"
             ex="false"

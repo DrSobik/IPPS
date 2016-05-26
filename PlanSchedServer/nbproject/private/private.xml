@@ -6,18 +6,14 @@
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/data/Projects/IPPS/CPPALG/Common/LocalSearchPM.h</file>
-            <file>file:/data/Projects/IPPS/CPPALG/Common/LocalSearchPM.cpp</file>
-            <file>file:/data/Projects/Common/MathExt.h</file>
-            <file>file:/data/Projects/Common/MathExt.cpp</file>
-            <file>file:/data/Projects/IPPS/CPPALG/PlanSchedServer/PlanSchedServer.h</file>
-            <file>file:/data/Projects/IPPS/CPPALG/PlanSchedServer/PlanSchedServer.cpp</file>
-            <file>file:/data/Projects/IPPS/CPPALG/Common/Operation.h</file>
-            <file>file:/data/Projects/IPPS/CPPALG/Common/Operation.cpp</file>
-            <file>file:/data/Projects/IPPS/CPPALG/Common/Item.h</file>
-            <file>file:/data/Projects/IPPS/CPPALG/Common/Item.cpp</file>
-        </group>
         <group name="Common"/>
+        <group>
+            <file>file:/data/Projects/IPPS/CPPALG/Common/src/Planner/Planner.cpp</file>
+            <file>file:/data/Projects/IPPS/CPPALG/Common/src/IPPSDefinitions/IPPSDefinitions.h</file>
+            <file>file:/data/Projects/IPPS/CPPALG/Common/src/Planner/Planner.h</file>
+            <file>file:/data/Projects/IPPS/CPPALG/PlanSchedServer/src/main.cpp</file>
+            <file>file:/data/Projects/IPPS/CPPALG/PlanSchedServer/src/PlanSchedServer/PlanSchedServer.cpp</file>
+            <file>file:/data/Projects/IPPS/CPPALG/PlanSchedServer/src/PlanSchedServer/PlanSchedServer.h</file>
+        </group>
     </open-files>
 </project-private>

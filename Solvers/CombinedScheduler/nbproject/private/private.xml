@@ -10,9 +10,6 @@
             <file>file:/data/Projects/IPPS/CPPALG/Solvers/CombinedScheduler/src/CombinedScheduler/CombinedScheduler.h</file>
             <file>file:/data/Projects/IPPS/CPPALG/Solvers/CombinedScheduler/src/CombinedScheduler/CombinedScheduler.cpp</file>
         </group>
-        <group>
-            <file>file:/data/Projects/IPPS/CPPALG/Solvers/CombinedScheduler/src/CombinedScheduler/CombinedScheduler.h</file>
-            <file>file:/data/Projects/IPPS/CPPALG/Solvers/CombinedScheduler/src/CombinedScheduler/CombinedScheduler.cpp</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

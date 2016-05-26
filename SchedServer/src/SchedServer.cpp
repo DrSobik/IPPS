@@ -4,7 +4,7 @@ SchedServer::SchedServer(){
     connect(this, SIGNAL(newConnection()), this, SLOT(incomingConnection()));
 }
 
-SchedServer::SchedServer(const SchedServer&){
+SchedServer::SchedServer(const SchedServer&) : QTcpServer(nullptr){
 
 }
 

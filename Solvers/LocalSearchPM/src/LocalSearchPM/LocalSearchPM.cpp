@@ -308,7 +308,7 @@ void LocalSearchPM::parse(const SchedulerOptions& options) {
             }
 
             // LS_INIT_SCHEDULER
-            settingsRE.setPattern("LS_INIT_SCHEDULER=([^\\(]+\\(.*\\)@[^@^\\(^\\)]+);*");
+            settingsRE.setPattern("LS_INIT_SCHEDULER=([^\\(]+\\(.*\\)@[^@\\(\\),;]+);?");
             match = settingsRE.match(allSettingsStr);
             out << "LocalSearchPM::parse : Parsed: LS_INIT_SCHEDULER:" << match.captured(1) << endl;
             //getchar();

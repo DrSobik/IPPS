@@ -12,6 +12,7 @@
             <sourceRootList>
                 <sourceRootElem>../Common</sourceRootElem>
                 <sourceRootElem>src</sourceRootElem>
+                <sourceRootElem>../../../Common</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
