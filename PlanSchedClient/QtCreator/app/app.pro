@@ -19,13 +19,13 @@ TEMPLATE = app
 release{
     OBJECTS_DIR = release/obj
     MOC_DIR = release/moc
-    DESTDIR = release/
+    DESTDIR = release
 }
 
 debug{
     OBJECTS_DIR = debug/obj
     MOC_DIR = debug/moc
-    DESTDIR = debug/
+    DESTDIR = debug
 }
 
 SOURCES += \
@@ -42,3 +42,6 @@ INCLUDEPATH += \
                ../../src/PlanSchedClientDefinitions \
                ../../src/PlanSchedClient\
                ../../src/PlanSchedClientDLLInterface
+
+win32:AFTERBUILDDIR=..\\..\\..\\..\\bin\\$$TARGET
+win32:QMAKE_POST_LINK=(IF NOT EXIST $$AFTERBUILDDIR mkdir $$AFTERBUILDDIR) & copy $$DESTDIR\\*.exe $$AFTERBUILDDIR /Y
