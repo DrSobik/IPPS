@@ -68,7 +68,7 @@ private:
 };
 
 class PriorityScheduler : public Scheduler {//LSScheduler {
-    Q_OBJECT
+//    Q_OBJECT
 protected:
     QList<ListDigraph::Node> topolOrdering; // Topological ordering of the graph
 

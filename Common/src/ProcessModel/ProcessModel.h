@@ -44,7 +44,13 @@
 
 using namespace lemon;
 
-class ProcessModel {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE ProcessModel {
 public:
     ListDigraph graph;
 
@@ -172,7 +178,7 @@ public:
     QMap<ListDigraph::Node, QMap<ListDigraph::Node, double> > longestPathsLen();
 
     /** Write the process model to the stream. */
-    friend QTextStream& operator<<(QTextStream &out, ProcessModel&pm);
+    DLL_EXPORT_INTEFACE friend QTextStream& operator<<(QTextStream &out, ProcessModel&pm);
 
 private:
 

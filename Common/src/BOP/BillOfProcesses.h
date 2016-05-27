@@ -56,7 +56,13 @@
 using namespace lemon;
 using namespace Common;
 
-class BillOfProcesses {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE BillOfProcesses {
 private:
 
 	ListDigraph _graph;

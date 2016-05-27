@@ -19,8 +19,14 @@
 #include "Plan"
 #include "Schedule"
 
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
 /** Combination the some process plan and the corresponding schedule. */
-class PlanSched : public Saveable {
+class DLL_EXPORT_INTEFACE PlanSched : public Saveable {
 protected:
 
 public:

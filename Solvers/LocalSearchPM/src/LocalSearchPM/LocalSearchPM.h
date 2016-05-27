@@ -52,7 +52,7 @@ using namespace Common::SmartPointers;
 //typedef Solver<Schedule, const SchedulingProblem&, const SchedulerOptions&> SchedSolver;
 
 class LocalSearchPM : public IterativeAlg, public SchedSolver {
-    Q_OBJECT
+//    Q_OBJECT
 private:
     //GeneralRandGen* randGen; // Random number generator for the algorithm
     SmartPointer<Common::Interfaces::RandGen<Math::uint32>> intRNG; // RNG for integers (uint32)
@@ -812,7 +812,7 @@ public:
 
 /** Scheduler that is empowered by the local search technique. Runs only the local search. */
 class LSScheduler : public Scheduler {
-    Q_OBJECT
+//    Q_OBJECT
 public:
     LocalSearchPMCP ls;
 

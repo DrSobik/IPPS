@@ -2,8 +2,9 @@
 #include "SchedClient.h"
 
 #include <QCoreApplication>
+#include <QtCore>
+
 #include <iostream>
-#include <qt5/QtCore/qglobal.h>
 
 
 SchedClient::SchedClient() : QObject(0), socket(this) {

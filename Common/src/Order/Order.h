@@ -44,7 +44,13 @@
 
 using namespace Common;
 
-class Order {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE Order {
 public:
 
 	int ID;
@@ -87,11 +93,11 @@ public:
 
 	//virtual void clearItems();
 
-	friend QTextStream& operator<<(QTextStream& out, Order& order);
+    DLL_EXPORT_INTEFACE friend QTextStream& operator<<(QTextStream& out, Order& order);
 
-	friend QXmlStreamWriter& operator<<(QXmlStreamWriter& composer, Order& order);
+    DLL_EXPORT_INTEFACE friend QXmlStreamWriter& operator<<(QXmlStreamWriter& composer, Order& order);
 
-	friend QXmlStreamReader& operator>>(QXmlStreamReader& reader, Order& order);
+    DLL_EXPORT_INTEFACE friend QXmlStreamReader& operator>>(QXmlStreamReader& reader, Order& order);
 
 private:
 
@@ -113,7 +119,7 @@ private:
  *						-	list of order indices of the specified types.
  * 
  */
-class OrderManager {
+class DLL_EXPORT_INTEFACE OrderManager {
 public:
 
 	QHash<int, int> operID2Idx; // Indices of the operations

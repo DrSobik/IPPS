@@ -22,7 +22,7 @@ IterativeAlg::IterativeAlg() {
 	_maxtimems = Math::MAX_INTUNI;
 }
 
-IterativeAlg::IterativeAlg(IterativeAlg& orig) : QObject(0) {
+IterativeAlg::IterativeAlg(IterativeAlg& orig) /*: QObject(0)*/ {
 	_maxiter = orig._maxiter;
 	_maxiterdeclined = orig._maxiterdeclined;
 	_maxtimems = orig._maxtimems;

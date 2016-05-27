@@ -50,7 +50,13 @@
 #include <QHash>
 #include <QTextStream>
 
-class Product {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE Product {
 private:
     double _bopsdecomprate;
 
@@ -111,7 +117,7 @@ public:
 
     /** Output of the product to the text stream. */
     //friend QTextStream& operator<<(QTextStream& out, Product &prod);
-	friend QTextStream& operator<<(QTextStream& out, const Product &prod);
+    DLL_EXPORT_INTEFACE friend QTextStream& operator<<(QTextStream& out, const Product &prod);
 
 private:
 
@@ -132,7 +138,7 @@ private:
  * 
  */
 
-class ProductManager {
+class DLL_EXPORT_INTEFACE ProductManager {
 public:
 
     QList<Product*> products;

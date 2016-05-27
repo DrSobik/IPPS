@@ -8,7 +8,7 @@
 #ifndef PLANSCHEDSERVER_H
 #define PLANSCHEDSERVER_H
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QThread>

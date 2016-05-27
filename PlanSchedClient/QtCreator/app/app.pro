@@ -10,7 +10,8 @@ QT       += network xml
 QT       -= gui
 
 CONFIG   += console
-CONFIG   -= app_bundle
+CONFIG   += release
+CONFIG -= debug_and_release app_bundle debug
 
 TARGET = PlanSchedClient
 

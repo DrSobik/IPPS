@@ -11,7 +11,7 @@
  * Created on April 8, 2016, 12:12 AM
  */
 
-#include <QApplication>
+#include <QCoreApplication>
 
 #include "LocalSearchPM/LocalSearchPM.h"
 
@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 	// initialize resources, if needed
 	// Q_INIT_RESOURCE(resfile);
 
-	QApplication app(argc, argv);
+        QCoreApplication app(argc, argv);
 
 	// create and show your widgets here
 

@@ -152,7 +152,7 @@ using namespace Common::SmartPointers;
 
 /** VNSPlannerStrategy defines the behavior of the VNSPlanner */
 class VNSPlannerStrategy : public PlannerStrategy {
-    Q_OBJECT
+//    Q_OBJECT
 private:
 
     QVector<QPair<double, double> > plannerProgressIntervals; // Percentages of the algorithm's progress
@@ -213,7 +213,7 @@ public:
 };
 
 class VNSPlanner : public Planner, public PlanSchedSolver {
-    Q_OBJECT
+//    Q_OBJECT
 private:
 
     bool acceptedWorse; // Defines whether worse solutions must be accepted
@@ -417,16 +417,16 @@ public:
 
     /**************************************************************************/
 
-signals:
-    void sigInitSched();
+//signals:
+//    void sigInitSched();
 
     //    void sigAssessPlan(const int&);
     //    void sigPlanAssessFinished(const int&);
     //    void sigAllPlansAssessed();
 
-    void sigCompletelyFinished();
+//    void sigCompletelyFinished();
 
-public slots:
+//public slots:
 
     void slotInitSched();
     void slotInitSchedFinished();

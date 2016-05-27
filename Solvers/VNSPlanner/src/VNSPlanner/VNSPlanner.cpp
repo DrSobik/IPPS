@@ -2228,7 +2228,7 @@ void VNSPlanner::slotFinished() {
 
     QTextStream out(stdout);
     out << "Emitting sigCompletelyFinished() ... " << endl;
-    emit sigCompletelyFinished();
+//    emit sigCompletelyFinished();
     out << "Done emitting sigCompletelyFinished() " << endl;
 
     Debugger::info << "VNSPlanner::slotFinished : Finished!" << ENDL;

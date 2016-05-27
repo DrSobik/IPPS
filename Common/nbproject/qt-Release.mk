@@ -75,7 +75,6 @@ SOURCES       = ../../../Common/Debug/DebugExt.cpp \
 		src/SchedulingProblem/SchedulingProblem.cpp \
 		src/TGSelection/TGSelection.cpp \
 		src/newmain.cpp builds/Lin64bit/release/moc/moc_IterativeAlg.cpp \
-		builds/Lin64bit/release/moc/moc_Planner.cpp \
 		builds/Lin64bit/release/moc/moc_Scheduler.cpp
 OBJECTS       = builds/Lin64bit/release/obj/DebugExt.o \
 		builds/Lin64bit/release/obj/RandExt.o \
@@ -105,7 +104,6 @@ OBJECTS       = builds/Lin64bit/release/obj/DebugExt.o \
 		builds/Lin64bit/release/obj/TGSelection.o \
 		builds/Lin64bit/release/obj/newmain.o \
 		builds/Lin64bit/release/obj/moc_IterativeAlg.o \
-		builds/Lin64bit/release/obj/moc_Planner.o \
 		builds/Lin64bit/release/obj/moc_Scheduler.o
 DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
@@ -199,7 +197,6 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		../../../Common/Exceptions/Exception.h \
 		../../../Common/Exceptions/MsgException.h \
 		../../../Common/Functor/Functor.h \
-		../../../Common/Include/Algorithm \
 		../../../Common/Include/Assignable \
 		../../../Common/Include/Clonable \
 		../../../Common/Include/Comparable \
@@ -557,7 +554,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../../Common/Acceptable/Acceptable.h ../../../Common/Algorithm/Algorithm.h ../../../Common/Assignable/Assignable.h ../../../Common/Clonable/Clonable.h ../../../Common/Comparable/Comparable.h ../../../Common/Debug/DebugExt.h ../../../Common/Driver/Driven.h ../../../Common/Driver/Driver.h ../../../Common/Exceptions/Exception.h ../../../Common/Exceptions/MsgException.h ../../../Common/Functor/Functor.h ../../../Common/Include/Algorithm ../../../Common/Include/Assignable ../../../Common/Include/Clonable ../../../Common/Include/Comparable ../../../Common/Include/Driver ../../../Common/Include/Exceptions ../../../Common/Include/Functor ../../../Common/Include/MathExt ../../../Common/Include/Messages ../../../Common/Include/Object ../../../Common/Include/Operationable ../../../Common/Include/RandExt ../../../Common/Include/Runnable ../../../Common/Include/SavableRestorable ../../../Common/Include/SenderReceiver ../../../Common/Include/Signals ../../../Common/Include/SmartPointer ../../../Common/Include/Solver ../../../Common/Include/Stopable ../../../Common/Include/WritableReadable ../../../Common/MathExt/MathExt.h ../../../Common/Messages/Messages.h ../../../Common/Object/Object.h ../../../Common/Operationable/Operationable.h ../../../Common/Parser/Parser.h ../../../Common/RandExt/RandExt.h ../../../Common/RandExt/RandExt_CombinedRandGen.h ../../../Common/RandExt/RandExt_Interfaces.h ../../../Common/RandExt/RandExt_LCG.h ../../../Common/RandExt/RandExt_MersenneTwister.h ../../../Common/Runnable/Runnable.h ../../../Common/SavableRestorable/SavableRestorable.h ../../../Common/SenderReceiver/SenderReceiver.h ../../../Common/Signals/Signal.h ../../../Common/SmartPointer/SmartPointer.h ../../../Common/Solvers/Solver.h ../../../Common/Stopable/Stopable.h ../../../Common/Variables/Variables.h ../../../Common/WritableReadable/WritableReadable.h src/BOM/BillOfMaterials.h src/BOP/BillOfProcesses.h src/DLLExportInterface/DLLExportInterface.h src/FlowFactor/FlowFactor.h src/IPPSDefinitions/IPPSDefinitions.h src/IPPSProblem/IPPSProblem.h src/Include/BillOfMaterials src/Include/BillOfProcesses src/Include/FlowFactor src/Include/IPPSDefinitions src/Include/IPPSProblem src/Include/Item src/Include/IterativeAlg src/Include/Objective src/Include/Operation src/Include/Order src/Include/Plan src/Include/PlanSched src/Include/Planner src/Include/ProcessModel src/Include/ProcessModelManager src/Include/Product src/Include/Protocol src/Include/Resources src/Include/Route src/Include/Saveable src/Include/Schedule src/Include/Scheduler src/Include/SchedulingProblem src/Include/TGSelection src/Item/Item.h src/IterativeAlg/IterativeAlg.h src/Objective/Objective.h src/Operation/Operation.h src/Order/Order.h src/Plan/Plan.h src/PlanSched/PlanSched.h src/Planner/Planner.h src/ProcessModel/ProcessModel.h src/ProcessModelManager/ProcessModelManager.h src/Product/Product.h src/Protocol/Protocol.h src/Resources/Resources.h src/Route/Route.h src/Saveable/Saveable.h src/Schedule/Schedule.h src/Scheduler/Scheduler.h src/SchedulingProblem/SchedulingProblem.h src/TGSelection/TGSelection.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../../Common/Acceptable/Acceptable.h ../../../Common/Algorithm/Algorithm.h ../../../Common/Assignable/Assignable.h ../../../Common/Clonable/Clonable.h ../../../Common/Comparable/Comparable.h ../../../Common/Debug/DebugExt.h ../../../Common/Driver/Driven.h ../../../Common/Driver/Driver.h ../../../Common/Exceptions/Exception.h ../../../Common/Exceptions/MsgException.h ../../../Common/Functor/Functor.h ../../../Common/Include/Assignable ../../../Common/Include/Clonable ../../../Common/Include/Comparable ../../../Common/Include/Driver ../../../Common/Include/Exceptions ../../../Common/Include/Functor ../../../Common/Include/MathExt ../../../Common/Include/Messages ../../../Common/Include/Object ../../../Common/Include/Operationable ../../../Common/Include/RandExt ../../../Common/Include/Runnable ../../../Common/Include/SavableRestorable ../../../Common/Include/SenderReceiver ../../../Common/Include/Signals ../../../Common/Include/SmartPointer ../../../Common/Include/Solver ../../../Common/Include/Stopable ../../../Common/Include/WritableReadable ../../../Common/MathExt/MathExt.h ../../../Common/Messages/Messages.h ../../../Common/Object/Object.h ../../../Common/Operationable/Operationable.h ../../../Common/Parser/Parser.h ../../../Common/RandExt/RandExt.h ../../../Common/RandExt/RandExt_CombinedRandGen.h ../../../Common/RandExt/RandExt_Interfaces.h ../../../Common/RandExt/RandExt_LCG.h ../../../Common/RandExt/RandExt_MersenneTwister.h ../../../Common/Runnable/Runnable.h ../../../Common/SavableRestorable/SavableRestorable.h ../../../Common/SenderReceiver/SenderReceiver.h ../../../Common/Signals/Signal.h ../../../Common/SmartPointer/SmartPointer.h ../../../Common/Solvers/Solver.h ../../../Common/Stopable/Stopable.h ../../../Common/Variables/Variables.h ../../../Common/WritableReadable/WritableReadable.h src/BOM/BillOfMaterials.h src/BOP/BillOfProcesses.h src/DLLExportInterface/DLLExportInterface.h src/FlowFactor/FlowFactor.h src/IPPSDefinitions/IPPSDefinitions.h src/IPPSProblem/IPPSProblem.h src/Include/BillOfMaterials src/Include/BillOfProcesses src/Include/FlowFactor src/Include/IPPSDefinitions src/Include/IPPSProblem src/Include/Item src/Include/IterativeAlg src/Include/Objective src/Include/Operation src/Include/Order src/Include/Plan src/Include/PlanSched src/Include/Planner src/Include/ProcessModel src/Include/ProcessModelManager src/Include/Product src/Include/Protocol src/Include/Resources src/Include/Route src/Include/Saveable src/Include/Schedule src/Include/Scheduler src/Include/SchedulingProblem src/Include/TGSelection src/Item/Item.h src/IterativeAlg/IterativeAlg.h src/Objective/Objective.h src/Operation/Operation.h src/Order/Order.h src/Plan/Plan.h src/PlanSched/PlanSched.h src/Planner/Planner.h src/ProcessModel/ProcessModel.h src/ProcessModelManager/ProcessModelManager.h src/Product/Product.h src/Protocol/Protocol.h src/Resources/Resources.h src/Route/Route.h src/Saveable/Saveable.h src/Schedule/Schedule.h src/Scheduler/Scheduler.h src/SchedulingProblem/SchedulingProblem.h src/TGSelection/TGSelection.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Common/Debug/DebugExt.cpp ../../../Common/RandExt/RandExt.cpp src/BOM/BillOfMaterials.cpp src/BOP/BillOfProcesses.cpp src/DLLExportInterface/DLLExportInterface.cpp src/FlowFactor/FlowFactor.cpp src/IPPSProblem/IPPSProblem.cpp src/Item/Item.cpp src/IterativeAlg/IterativeAlg.cpp src/Objective/Objective.cpp src/Operation/Operation.cpp src/Order/Order.cpp src/Plan/Plan.cpp src/PlanSched/PlanSched.cpp src/Planner/Planner.cpp src/ProcessModel/ProcessModel.cpp src/ProcessModelManager/ProcessModelManager.cpp src/Product/Product.cpp src/Protocol/Protocol.cpp src/Resources/Resources.cpp src/Route/Route.cpp src/Saveable/Saveable.cpp src/Schedule/Schedule.cpp src/Scheduler/Scheduler.cpp src/SchedulingProblem/SchedulingProblem.cpp src/TGSelection/TGSelection.cpp src/newmain.cpp $(DISTDIR)/
 
 
@@ -582,9 +579,9 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: builds/Lin64bit/release/moc/moc_IterativeAlg.cpp builds/Lin64bit/release/moc/moc_Planner.cpp builds/Lin64bit/release/moc/moc_Scheduler.cpp
+compiler_moc_header_make_all: builds/Lin64bit/release/moc/moc_IterativeAlg.cpp builds/Lin64bit/release/moc/moc_Scheduler.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) builds/Lin64bit/release/moc/moc_IterativeAlg.cpp builds/Lin64bit/release/moc/moc_Planner.cpp builds/Lin64bit/release/moc/moc_Scheduler.cpp
+	-$(DEL_FILE) builds/Lin64bit/release/moc/moc_IterativeAlg.cpp builds/Lin64bit/release/moc/moc_Scheduler.cpp
 builds/Lin64bit/release/moc/moc_IterativeAlg.cpp: ../../../Common/Include/MathExt \
 		../../../Common/MathExt/MathExt.h \
 		../../../Common/Include/Exceptions \
@@ -601,98 +598,6 @@ builds/Lin64bit/release/moc/moc_IterativeAlg.cpp: ../../../Common/Include/MathEx
 		../../../Common/Debug/DebugExt.h \
 		src/IterativeAlg/IterativeAlg.h
 	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/data/Projects/IPPS/CPPALG/Common/nbproject -I/data/Projects/Common/Include -I/data/Projects/Common/Debug -I/data/Projects/IPPS/CPPALG/Common/nbproject/src/Include -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtXml -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/4.8 -I/usr/include/c++/4.8/x86_64-suse-linux -I/usr/include/c++/4.8/backward -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include src/IterativeAlg/IterativeAlg.h -o builds/Lin64bit/release/moc/moc_IterativeAlg.cpp
-
-builds/Lin64bit/release/moc/moc_Planner.cpp: src/Include/IterativeAlg \
-		src/IterativeAlg/IterativeAlg.h \
-		../../../Common/Include/MathExt \
-		../../../Common/MathExt/MathExt.h \
-		../../../Common/Include/Exceptions \
-		../../../Common/Exceptions/Exception.h \
-		../../../Common/Include/Object \
-		../../../Common/Object/Object.h \
-		../../../Common/Exceptions/MsgException.h \
-		../../../Common/Include/WritableReadable \
-		../../../Common/WritableReadable/WritableReadable.h \
-		../../../Common/Include/Messages \
-		../../../Common/Messages/Messages.h \
-		../../../Common/Include/Operationable \
-		../../../Common/Operationable/Operationable.h \
-		../../../Common/Debug/DebugExt.h \
-		src/Include/IPPSDefinitions \
-		src/IPPSDefinitions/IPPSDefinitions.h \
-		../../../Common/Include/Solver \
-		../../../Common/Solvers/Solver.h \
-		../../../Common/Include/Parser \
-		../../../Common/Parser/Parser.h \
-		../../../Common/Include/Clonable \
-		../../../Common/Clonable/Clonable.h \
-		../../../Common/Include/Variables \
-		../../../Common/Variables/Variables.h \
-		../../../Common/Include/Changeable \
-		../../../Common/Changeable/Changeable.h \
-		../../../Common/Include/Functor \
-		../../../Common/Functor/Functor.h \
-		../../../Common/Include/Assignable \
-		../../../Common/Assignable/Assignable.h \
-		../../../Common/Include/Acceptable \
-		../../../Common/Acceptable/Acceptable.h \
-		src/Include/SchedulingProblem \
-		src/SchedulingProblem/SchedulingProblem.h \
-		src/Include/ProcessModel \
-		src/ProcessModel/ProcessModel.h \
-		src/Include/Operation \
-		src/Operation/Operation.h \
-		src/Include/Resources \
-		src/Resources/Resources.h \
-		../../../Common/Include/RandExt \
-		../../../Common/RandExt/RandExt.h \
-		../../../Common/RandExt/RandExt_MersenneTwister.h \
-		../../../Common/Include/Driver \
-		../../../Common/Driver/Driver.h \
-		../../../Common/Driver/Driven.h \
-		../../../Common/RandExt/RandExt_Interfaces.h \
-		../../../Common/RandExt/RandExt_LCG.h \
-		../../../Common/RandExt/RandExt_CombinedRandGen.h \
-		src/Include/Objective \
-		src/Objective/Objective.h \
-		src/Include/TGSelection \
-		src/TGSelection/TGSelection.h \
-		src/Include/Schedule \
-		src/Schedule/Schedule.h \
-		src/Include/Plan \
-		src/Plan/Plan.h \
-		src/Include/Saveable \
-		src/Saveable/Saveable.h \
-		src/Include/PlanSched \
-		src/PlanSched/PlanSched.h \
-		src/Include/IPPSProblem \
-		src/IPPSProblem/IPPSProblem.h \
-		../../../Common/Include/SmartPointer \
-		../../../Common/SmartPointer/SmartPointer.h \
-		../../../Common/Include/Comparable \
-		../../../Common/Comparable/Comparable.h \
-		src/Include/ProcessModelManager \
-		src/ProcessModelManager/ProcessModelManager.h \
-		src/Include/Product \
-		src/Product/Product.h \
-		src/Include/BillOfProcesses \
-		src/BOP/BillOfProcesses.h \
-		src/Include/BillOfMaterials \
-		src/BOM/BillOfMaterials.h \
-		src/Include/Route \
-		src/Route/Route.h \
-		src/Include/Order \
-		src/Order/Order.h \
-		src/Include/Item \
-		src/Item/Item.h \
-		src/Include/Scheduler \
-		src/Scheduler/Scheduler.h \
-		src/Include/FlowFactor \
-		src/FlowFactor/FlowFactor.h \
-		src/Include/Protocol \
-		src/Protocol/Protocol.h \
-		src/Planner/Planner.h
-	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/data/Projects/IPPS/CPPALG/Common/nbproject -I/data/Projects/Common/Include -I/data/Projects/Common/Debug -I/data/Projects/IPPS/CPPALG/Common/nbproject/src/Include -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtXml -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/4.8 -I/usr/include/c++/4.8/x86_64-suse-linux -I/usr/include/c++/4.8/backward -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include src/Planner/Planner.h -o builds/Lin64bit/release/moc/moc_Planner.cpp
 
 builds/Lin64bit/release/moc/moc_Scheduler.cpp: ../../../Common/Debug/DebugExt.h \
 		src/Include/IPPSDefinitions \
@@ -1666,9 +1571,6 @@ builds/Lin64bit/release/obj/newmain.o: src/newmain.cpp
 
 builds/Lin64bit/release/obj/moc_IterativeAlg.o: builds/Lin64bit/release/moc/moc_IterativeAlg.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/moc_IterativeAlg.o builds/Lin64bit/release/moc/moc_IterativeAlg.cpp
-
-builds/Lin64bit/release/obj/moc_Planner.o: builds/Lin64bit/release/moc/moc_Planner.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/moc_Planner.o builds/Lin64bit/release/moc/moc_Planner.cpp
 
 builds/Lin64bit/release/obj/moc_Scheduler.o: builds/Lin64bit/release/moc/moc_Scheduler.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/moc_Scheduler.o builds/Lin64bit/release/moc/moc_Scheduler.cpp

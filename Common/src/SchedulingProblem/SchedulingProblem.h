@@ -22,7 +22,13 @@
 
 using namespace Common::Interfaces;
 
-class SchedulingProblem : public AssignableFrom<SchedulingProblem> {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE SchedulingProblem : public AssignableFrom<SchedulingProblem> {
 private:
 
 public:

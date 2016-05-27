@@ -43,8 +43,14 @@
 
 using namespace Common;
 
-class IterativeAlg : public QObject {
-	Q_OBJECT
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE IterativeAlg /*: public QObject*/ {
+    //Q_OBJECT
 protected:
     Math::intUNI _maxiter;
     Math::intUNI _curiter;
@@ -219,7 +225,7 @@ public:
 };
 
 /** Event-driven iterative algorithm */
-class EventIterativeAlg : public IterativeAlg {
+class EventIterativeAlg : public QObject, public IterativeAlg {
     Q_OBJECT
 
 public:

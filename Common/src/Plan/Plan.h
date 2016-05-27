@@ -13,7 +13,13 @@
 
 #include "Saveable"
 
-class Plan : public Saveable {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE Plan : public Saveable {
 protected:
     QHash<int, int> savedProdID2BOMID;
     QHash<int, QHash<int, int> > savedProdID2ItemID2RouteIdx;
@@ -41,7 +47,7 @@ public:
     virtual void saveActions();
     virtual void restoreActions();
 
-	friend QTextStream& operator<<(QTextStream& out, Plan& plan);
+    DLL_EXPORT_INTEFACE friend QTextStream& operator<<(QTextStream& out, Plan& plan);
 	
 };
 

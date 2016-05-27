@@ -26,6 +26,8 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
+//#include "DLLExportInterface"
+
 #include "Operation"
 #include "MathExt"
 #include "RandExt"
@@ -54,7 +56,13 @@ using namespace Common;
  *						new operations.
  */
 
-class Machine {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE Machine {
 protected:
 	double topt; // Total clean processing time of all operations that have ever been scheduled on the machine
 
@@ -88,7 +96,7 @@ public:
 
 	/** Friend operator that checks whether machines are the same. Comparison
 	 *  is based on the unique IDs of the machines. */
-	friend bool operator==(const Machine& machine1, const Machine& machine2) {
+    DLL_EXPORT_INTEFACE friend bool operator==(const Machine& machine1, const Machine& machine2) {
 		return machine1.ID == machine2.ID;
 	}
 
@@ -96,9 +104,9 @@ public:
 	void fromDOMElement(const QDomElement &melem);
 
 	/** Write information about the current state of the machine. */
-	friend QTextStream& operator<<(QTextStream &out, Machine &m);
-	friend QXmlStreamReader& operator>>(QXmlStreamReader& reader, Machine& m);
-	friend QXmlStreamWriter& operator<<(QXmlStreamWriter& composer, Machine& m);
+    DLL_EXPORT_INTEFACE friend QTextStream& operator<<(QTextStream &out, Machine &m);
+    DLL_EXPORT_INTEFACE friend QXmlStreamReader& operator>>(QXmlStreamReader& reader, Machine& m);
+    DLL_EXPORT_INTEFACE friend QXmlStreamWriter& operator<<(QXmlStreamWriter& composer, Machine& m);
 
 	/* ---------------------------------------------------------------------- */
 
@@ -157,7 +165,7 @@ private:
  *													
  */
 
-class ToolGroup {
+class DLL_EXPORT_INTEFACE ToolGroup {
 public:
 
 	int ID;
@@ -295,7 +303,7 @@ private:
  *						index of the tool group based on its type.
  */
 
-class Resources {
+class DLL_EXPORT_INTEFACE Resources {
 public:
 	int ID;
 
@@ -378,7 +386,7 @@ public:
 	/** Extract the resources from the DOM Element. */
 	virtual void fromDOMElement(const QDomElement &rcelem);
 
-	friend QTextStream& operator<<(QTextStream &out, Resources &rc);
+    DLL_EXPORT_INTEFACE friend QTextStream& operator<<(QTextStream &out, Resources &rc);
 	
 	/* ---------------------------------------------------------------------- */
 

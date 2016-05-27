@@ -66,7 +66,13 @@
 
 using namespace Common;
 
-class Operation {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE Operation {
 public:
 	int ID;
 	int OID;
@@ -178,13 +184,13 @@ public:
 	/** Write information about the operation. */
 	virtual void write(QTextStream &out);
 
-	friend QTextStream& operator<<(QTextStream &out, Operation o) {
+    DLL_EXPORT_INTEFACE friend QTextStream& operator<<(QTextStream &out, Operation o) {
 		o.write(out);
 		return out;
 	}
 
-	friend QXmlStreamWriter& operator<<(QXmlStreamWriter& composer, Operation& o);
-	friend QXmlStreamReader& operator>>(QXmlStreamReader& reader, Operation& o);
+    DLL_EXPORT_INTEFACE friend QXmlStreamWriter& operator<<(QXmlStreamWriter& composer, Operation& o);
+    DLL_EXPORT_INTEFACE friend QXmlStreamReader& operator>>(QXmlStreamReader& reader, Operation& o);
 
 
 	/* ---------------------------------------------------------------------- */

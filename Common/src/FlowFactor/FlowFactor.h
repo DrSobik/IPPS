@@ -23,7 +23,13 @@
 using namespace Common;
 using namespace Common::Interfaces;
 
-class FlowFactor : public Functor<double, ProcessModel> {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE FlowFactor : public Functor<double, ProcessModel> {
 private:
     
 protected:

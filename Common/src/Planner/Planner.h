@@ -62,9 +62,15 @@
 
 using namespace Common;
 
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
 /** A class which describes how a planning algorithm(agent should behave) */
-class PlannerStrategy : public QObject {
-    Q_OBJECT
+class DLL_EXPORT_INTEFACE PlannerStrategy /*: public QObject*/ {
+//    Q_OBJECT
 private:
     QString strategyString; // A string which describes the current strategy
 
@@ -88,14 +94,14 @@ protected:
 
     virtual bool parseStrategy(const QString& strStrategy);
 
-signals:
+//signals:
 
-    void sigStrategySchanged(const bool&); // Emitted every time a strategy of the planner changes
+//    void sigStrategySchanged(const bool&); // Emitted every time a strategy of the planner changes
 
 };
 
-class Planner : public /*Event*/IterativeAlg {
-    Q_OBJECT
+class DLL_EXPORT_INTEFACE Planner : public /*Event*/IterativeAlg {
+//    Q_OBJECT
 protected:
     ProcessModelManager *pmm;
 

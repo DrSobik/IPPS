@@ -28,7 +28,13 @@
 
 using namespace Common;
 
-class Schedule {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE Schedule {
 private:
 	/*
 	double _prevObj;
@@ -71,9 +77,9 @@ public:
 
 	//virtual Schedule& operator<<(ScalarObjective* obj);
 	
-	friend QTextStream& operator<<(QTextStream& out, Schedule& sched);
+    DLL_EXPORT_INTEFACE friend QTextStream& operator<<(QTextStream& out, Schedule& sched);
 
-	friend QXmlStreamWriter& operator<<(QXmlStreamWriter& composer, Schedule& sched);
+    DLL_EXPORT_INTEFACE friend QXmlStreamWriter& operator<<(QXmlStreamWriter& composer, Schedule& sched);
 
 private:
 

@@ -8,11 +8,19 @@
 #ifndef SAVEABLE_H
 #define	SAVEABLE_H
 
+#include <QtGlobal>
+
 #include "DebugExt.h"
 
 using namespace Common;
 
-class Saveable {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE Saveable {
 protected:
     bool saved;
 

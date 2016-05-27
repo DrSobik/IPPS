@@ -22,9 +22,15 @@
 #include "Route"
 #include "Operation"
 
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
 class Order;
 
-class Item {
+class DLL_EXPORT_INTEFACE Item {
 public:
 	int ID; // ID of the item
 	int type; // Type of the item
@@ -63,14 +69,14 @@ public:
 
 	/** Friend operator that checks whether the operations are the same. 
 	 * Comparison is based on the unique IDs of the operations. */
-	friend bool operator==(const Item& i1, const Item& i2) {
+    DLL_EXPORT_INTEFACE friend bool operator==(const Item& i1, const Item& i2) {
 		return i1.ID == i2.ID;
 	}
 
-	friend QTextStream& operator<<(QTextStream& out, Item& item);
+    DLL_EXPORT_INTEFACE friend QTextStream& operator<<(QTextStream& out, Item& item);
 	
-	friend QXmlStreamWriter& operator<<(QXmlStreamWriter& composer, Item& item);
-	friend QXmlStreamReader& operator>>(QXmlStreamReader& reader, Item& item);
+    DLL_EXPORT_INTEFACE friend QXmlStreamWriter& operator<<(QXmlStreamWriter& composer, Item& item);
+    DLL_EXPORT_INTEFACE friend QXmlStreamReader& operator>>(QXmlStreamReader& reader, Item& item);
 	
 private:
 

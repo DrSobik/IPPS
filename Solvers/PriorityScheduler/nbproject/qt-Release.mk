@@ -52,13 +52,12 @@ SOURCES       = ../../../../Common/Debug/DebugExt.cpp \
 		../../../../Common/RandExt/RandExt.cpp \
 		src/DLLExportInterface/DLLExportInterface.cpp \
 		src/PriorityScheduler/PriorityScheduler.cpp \
-		src/newmain.cpp builds/Lin64bit/release/moc/moc_PriorityScheduler.cpp
+		src/newmain.cpp 
 OBJECTS       = builds/Lin64bit/release/obj/DebugExt.o \
 		builds/Lin64bit/release/obj/RandExt.o \
 		builds/Lin64bit/release/obj/DLLExportInterface.o \
 		builds/Lin64bit/release/obj/PriorityScheduler.o \
-		builds/Lin64bit/release/obj/newmain.o \
-		builds/Lin64bit/release/obj/moc_PriorityScheduler.o
+		builds/Lin64bit/release/obj/newmain.o
 DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
 		/usr/lib64/qt5/mkspecs/common/linux.conf \
@@ -150,7 +149,6 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		../../../../Common/Exceptions/Exception.h \
 		../../../../Common/Exceptions/MsgException.h \
 		../../../../Common/Functor/Functor.h \
-		../../../../Common/Include/Algorithm \
 		../../../../Common/Include/Assignable \
 		../../../../Common/Include/Clonable \
 		../../../../Common/Include/Comparable \
@@ -439,7 +437,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../../../Common/Algorithm/Algorithm.h ../../../../Common/Assignable/Assignable.h ../../../../Common/Clonable/Clonable.h ../../../../Common/Comparable/Comparable.h ../../../../Common/Debug/DebugExt.h ../../../../Common/Driver/Driven.h ../../../../Common/Driver/Driver.h ../../../../Common/Exceptions/Exception.h ../../../../Common/Exceptions/MsgException.h ../../../../Common/Functor/Functor.h ../../../../Common/Include/Algorithm ../../../../Common/Include/Assignable ../../../../Common/Include/Clonable ../../../../Common/Include/Comparable ../../../../Common/Include/Driver ../../../../Common/Include/Exceptions ../../../../Common/Include/Functor ../../../../Common/Include/MathExt ../../../../Common/Include/Messages ../../../../Common/Include/Object ../../../../Common/Include/Operationable ../../../../Common/Include/RandExt ../../../../Common/Include/Runnable ../../../../Common/Include/SavableRestorable ../../../../Common/Include/SenderReceiver ../../../../Common/Include/Signals ../../../../Common/Include/SmartPointer ../../../../Common/Include/Solver ../../../../Common/Include/Stopable ../../../../Common/Include/WritableReadable ../../../../Common/MathExt/MathExt.h ../../../../Common/Messages/Messages.h ../../../../Common/Object/Object.h ../../../../Common/Operationable/Operationable.h ../../../../Common/RandExt/RandExt.h ../../../../Common/RandExt/RandExt_CombinedRandGen.h ../../../../Common/RandExt/RandExt_Interfaces.h ../../../../Common/RandExt/RandExt_LCG.h ../../../../Common/RandExt/RandExt_MersenneTwister.h ../../../../Common/Runnable/Runnable.h ../../../../Common/SavableRestorable/SavableRestorable.h ../../../../Common/SenderReceiver/SenderReceiver.h ../../../../Common/Signals/Signal.h ../../../../Common/SmartPointer/SmartPointer.h ../../../../Common/Solvers/Solver.h ../../../../Common/Stopable/Stopable.h ../../../../Common/WritableReadable/WritableReadable.h src/DLLExportInterface/DLLExportInterface.h src/PriorityScheduler/PriorityScheduler.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../../../Common/Algorithm/Algorithm.h ../../../../Common/Assignable/Assignable.h ../../../../Common/Clonable/Clonable.h ../../../../Common/Comparable/Comparable.h ../../../../Common/Debug/DebugExt.h ../../../../Common/Driver/Driven.h ../../../../Common/Driver/Driver.h ../../../../Common/Exceptions/Exception.h ../../../../Common/Exceptions/MsgException.h ../../../../Common/Functor/Functor.h ../../../../Common/Include/Assignable ../../../../Common/Include/Clonable ../../../../Common/Include/Comparable ../../../../Common/Include/Driver ../../../../Common/Include/Exceptions ../../../../Common/Include/Functor ../../../../Common/Include/MathExt ../../../../Common/Include/Messages ../../../../Common/Include/Object ../../../../Common/Include/Operationable ../../../../Common/Include/RandExt ../../../../Common/Include/Runnable ../../../../Common/Include/SavableRestorable ../../../../Common/Include/SenderReceiver ../../../../Common/Include/Signals ../../../../Common/Include/SmartPointer ../../../../Common/Include/Solver ../../../../Common/Include/Stopable ../../../../Common/Include/WritableReadable ../../../../Common/MathExt/MathExt.h ../../../../Common/Messages/Messages.h ../../../../Common/Object/Object.h ../../../../Common/Operationable/Operationable.h ../../../../Common/RandExt/RandExt.h ../../../../Common/RandExt/RandExt_CombinedRandGen.h ../../../../Common/RandExt/RandExt_Interfaces.h ../../../../Common/RandExt/RandExt_LCG.h ../../../../Common/RandExt/RandExt_MersenneTwister.h ../../../../Common/Runnable/Runnable.h ../../../../Common/SavableRestorable/SavableRestorable.h ../../../../Common/SenderReceiver/SenderReceiver.h ../../../../Common/Signals/Signal.h ../../../../Common/SmartPointer/SmartPointer.h ../../../../Common/Solvers/Solver.h ../../../../Common/Stopable/Stopable.h ../../../../Common/WritableReadable/WritableReadable.h src/DLLExportInterface/DLLExportInterface.h src/PriorityScheduler/PriorityScheduler.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../Common/Debug/DebugExt.cpp ../../../../Common/RandExt/RandExt.cpp src/DLLExportInterface/DLLExportInterface.cpp src/PriorityScheduler/PriorityScheduler.cpp src/newmain.cpp $(DISTDIR)/
 
 
@@ -464,43 +462,8 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: builds/Lin64bit/release/moc/moc_PriorityScheduler.cpp
+compiler_moc_header_make_all:
 compiler_moc_header_clean:
-	-$(DEL_FILE) builds/Lin64bit/release/moc/moc_PriorityScheduler.cpp
-builds/Lin64bit/release/moc/moc_PriorityScheduler.cpp: ../../../../Common/Include/Clonable \
-		../../../../Common/Clonable/Clonable.h \
-		../../../../Common/Include/Object \
-		../../../../Common/Object/Object.h \
-		../../../../Common/Include/Solver \
-		../../../../Common/Solvers/Solver.h \
-		../../../../Common/Include/Operationable \
-		../../../../Common/Operationable/Operationable.h \
-		../../../../Common/Include/Loader \
-		../../../../Common/Loader/Loader.h \
-		../../../../Common/Loader/Loader_DLL.h \
-		../../../../Common/Include/Exceptions \
-		../../../../Common/Exceptions/Exception.h \
-		../../../../Common/Exceptions/MsgException.h \
-		../../../../Common/Include/WritableReadable \
-		../../../../Common/WritableReadable/WritableReadable.h \
-		../../../../Common/Include/Messages \
-		../../../../Common/Messages/Messages.h \
-		../../../../Common/Include/SmartPointer \
-		../../../../Common/SmartPointer/SmartPointer.h \
-		../../../../Common/Include/Comparable \
-		../../../../Common/Comparable/Comparable.h \
-		../../../../Common/Include/MathExt \
-		../../../../Common/MathExt/MathExt.h \
-		../../Common/src/IPPSDefinitions \
-		../../Common/src/Scheduler \
-		../../Common/src/Resources \
-		../../Common/src/ProcessModel \
-		../../Common/src/Schedule \
-		../../Common/src/Objective \
-		../../Common/src/FlowFactor \
-		src/PriorityScheduler/PriorityScheduler.h
-	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/data/Projects/IPPS/CPPALG/Solvers/PriorityScheduler/nbproject -I/data/Projects/IPPS/Common/Include -I/data/Projects/IPPS/Common/Debug -I/data/Projects/IPPS/CPPALG/Solvers/Common/src -I/data/Projects/IPPS/CPPALG/Solvers/Common/src/Include -I/data/Projects/IPPS/CPPALG/Solvers/PriorityScheduler/nbproject/src -I/usr/include/qt5 -I/usr/include/qt5/QtOpenGL -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtXml -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/4.8 -I/usr/include/c++/4.8/x86_64-suse-linux -I/usr/include/c++/4.8/backward -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include src/PriorityScheduler/PriorityScheduler.h -o builds/Lin64bit/release/moc/moc_PriorityScheduler.cpp
-
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_uic_make_all:
@@ -511,7 +474,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_header_clean 
+compiler_clean: 
 
 ####### Compile
 
@@ -643,9 +606,6 @@ builds/Lin64bit/release/obj/newmain.o: src/newmain.cpp src/PriorityScheduler/Pri
 		../../Common/src/Objective \
 		../../Common/src/FlowFactor
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/newmain.o src/newmain.cpp
-
-builds/Lin64bit/release/obj/moc_PriorityScheduler.o: builds/Lin64bit/release/moc/moc_PriorityScheduler.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o builds/Lin64bit/release/obj/moc_PriorityScheduler.o builds/Lin64bit/release/moc/moc_PriorityScheduler.cpp
 
 ####### Install
 

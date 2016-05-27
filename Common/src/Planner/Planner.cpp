@@ -13,7 +13,7 @@ PlannerStrategy::PlannerStrategy() : strategyString("") {
 
 }
 
-PlannerStrategy::PlannerStrategy(const PlannerStrategy& other) : QObject(0) {
+PlannerStrategy::PlannerStrategy(const PlannerStrategy& other)/* : QObject(0)*/ {
 
 	*this = other;
 
@@ -30,7 +30,7 @@ bool PlannerStrategy::setStrategy(const QString& strStrategy) {
 	bool parsed = parseStrategy(strategyString);
 
 	// Notify that the strategy has changed
-	emit sigStrategySchanged(parsed);
+//	emit sigStrategySchanged(parsed);
 
 	return parsed;
 }

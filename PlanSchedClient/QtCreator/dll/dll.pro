@@ -13,7 +13,9 @@ TARGET = PlanSchedClient
 
 TEMPLATE = lib
 
+CONFIG -= debug_and_release app_bundle debug
 CONFIG -= staticlib
+CONFIG += release
 CONFIG += dll
 
 release{

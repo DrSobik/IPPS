@@ -18,7 +18,13 @@
 
 #include "TGSelection"
 
-class ScalarObjective {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE ScalarObjective {
 protected:
 
 	ScalarObjective() {

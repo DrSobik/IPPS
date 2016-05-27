@@ -49,7 +49,13 @@
 using namespace lemon;
 using namespace Common;
 
-class BillOfMaterials {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE BillOfMaterials {
 public:
 
 	int ID;
@@ -77,9 +83,9 @@ public:
 	/** Create the graph of the BOM based on the given DOM element. */
 	virtual void fromDOMElement(const QDomElement& domel);
 		
-	friend QTextStream& operator<<(QTextStream& out, BillOfMaterials& bm);
-	friend QXmlStreamReader& operator>>(QXmlStreamReader& reader, BillOfMaterials& bm);
-	friend QXmlStreamWriter& operator<<(QXmlStreamWriter& writer, BillOfMaterials& bm);
+    DLL_EXPORT_INTEFACE friend QTextStream& operator<<(QTextStream& out, BillOfMaterials& bm);
+    DLL_EXPORT_INTEFACE friend QXmlStreamReader& operator>>(QXmlStreamReader& reader, BillOfMaterials& bm);
+    DLL_EXPORT_INTEFACE friend QXmlStreamWriter& operator<<(QXmlStreamWriter& writer, BillOfMaterials& bm);
 	
 	/** Define part IDs for each part in this BOM. */
 	virtual void setItemIDs();

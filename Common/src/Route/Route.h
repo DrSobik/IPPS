@@ -36,7 +36,13 @@
 using namespace lemon;
 using namespace Common;
 
-class Route {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE Route {
 public:
 
 	int ID;
@@ -54,9 +60,9 @@ public:
 	/** Extract the route from the given DOM element. */
 	virtual void fromDOMElement(const QDomElement& domel);
 	
-	friend QTextStream& operator<<(QTextStream& out, Route& route);
-	friend QXmlStreamReader& operator>>(QXmlStreamReader& reader, Route& route);
-	friend QXmlStreamWriter& operator<<(QXmlStreamWriter& composer, Route& route);
+    DLL_EXPORT_INTEFACE friend QTextStream& operator<<(QTextStream& out, Route& route);
+    DLL_EXPORT_INTEFACE friend QXmlStreamReader& operator>>(QXmlStreamReader& reader, Route& route);
+    DLL_EXPORT_INTEFACE friend QXmlStreamWriter& operator<<(QXmlStreamWriter& composer, Route& route);
 
 private:
 

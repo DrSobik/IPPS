@@ -29,6 +29,12 @@
 using namespace Common;
 using namespace Common::Interfaces;
 
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
 /******************************************************************************/
 class Setting : public Variable<QString> {
 private:
@@ -203,7 +209,7 @@ typedef Settings SchedulerOptions;
 typedef Settings PlannerOptions;
 
 /* SchedSolver */
-class SchedSolver : public Solver<Schedule, const SchedulingProblem&, const SchedulerOptions&>, public Solver<Schedule, const SchedulingProblem&>, public Parser<void, const SchedulerOptions&>, ClonableTo<SchedSolver> {
+class DLL_EXPORT_INTEFACE SchedSolver : public Solver<Schedule, const SchedulingProblem&, const SchedulerOptions&>, public Solver<Schedule, const SchedulingProblem&>, public Parser<void, const SchedulerOptions&>, ClonableTo<SchedSolver> {
 private:
 
     SchedSolver(const SchedSolver&) : Solver<Schedule, const SchedulingProblem&, const SchedulerOptions&>(), Solver<Schedule, const SchedulingProblem&>(), Parser(), ClonableTo() {
@@ -252,7 +258,7 @@ public:
 };
 
 /* PlanSchedSolver */
-class PlanSchedSolver : public Solver<PlanSched, const IPPSProblem&, const PlannerOptions&>, public Solver<PlanSched, const IPPSProblem&>, public Parser<void, const PlannerOptions&>, ClonableTo<PlanSchedSolver> {
+class DLL_EXPORT_INTEFACE PlanSchedSolver : public Solver<PlanSched, const IPPSProblem&, const PlannerOptions&>, public Solver<PlanSched, const IPPSProblem&>, public Parser<void, const PlannerOptions&>, ClonableTo<PlanSchedSolver> {
 private:
 
     PlanSchedSolver(const PlanSchedSolver&) : Solver<PlanSched, const IPPSProblem&, const PlannerOptions&>(), Solver<PlanSched, const IPPSProblem&>(), Parser(), ClonableTo() {

@@ -11,13 +11,13 @@
  * Created on April 9, 2016, 1:54 PM
  */
 
-#include <QApplication>
+#include <QCoreApplication>
 
 int main(int argc, char *argv[]) {
 	// initialize resources, if needed
 	// Q_INIT_RESOURCE(resfile);
 
-	QApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
 
 	// create and show your widgets here
 

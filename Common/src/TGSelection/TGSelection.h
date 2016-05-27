@@ -18,7 +18,13 @@
 
 using namespace lemon;
 
-class TGSelection {
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
+class DLL_EXPORT_INTEFACE TGSelection {
 public:
     int tgID; // ID of the tool group
     double localobj; // Value of the local objective corresponding to the selection
