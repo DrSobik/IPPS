@@ -56,7 +56,7 @@ void Protocol::save() {
 	}
 	
 	// Set/create path where the protocol file should be stored
-    QString curFilePath = qApp->applicationDirPath() + "/" + file->fileName();
+    QString curFilePath = file->fileName();
 	QDir curDir = QFileInfo(curFilePath).absoluteDir();
 	if (!curDir.exists()){
 	    curDir.mkpath(curDir.path());

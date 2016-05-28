@@ -181,6 +181,16 @@ schedStrategy[13]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLAN
 schedStrategy[14]="PLANNER{[0%-50%):(PLANNER_BEST_PLAN=false),[50%-55%):(PLANNER_BEST_PLAN=true),[55%-80%):(PLANNER_BEST_PLAN=false),[80%-85%):(PLANNER_BEST_PLAN=true),[85%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6;LS_MAX_ITER=20),[90%-100%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=2000),[100%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
         
 # set the name of the protocol
+# the right DLL search path
+if [[ "$curPlatform" == "linux" ]]; then
+  
+  protoFileDir=".";
+  
+elif [[ "$curPlatform" == "windows" ]]; then
+  
+  protoFileDir="c:/Users/sobeyko/Projects/IPPS/CPPALG/PlanSchedServer/";
+
+fi
 protoFileName="Protocols/proto_${objective/\@/AT}_GlobIter_${globIter}_NS_${ns}_NumNeigh_${numNeigh}_Init_${planningInitRule}_SchedStrategy_${schedStrategyIdx}_Run_ALL"
 protoFile="${protoFileName}.xml";
 echo $protoFile;
