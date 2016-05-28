@@ -188,11 +188,12 @@ if [[ "$curPlatform" == "linux" ]]; then
   
 elif [[ "$curPlatform" == "windows" ]]; then
   
-  protoFileDir= ""; # "c:/Users/sobeyko/Projects/IPPS/CPPALG/bin/PlanSchedServer";
+  protoFileDir= "c:/Users/sobeyko/Projects/IPPS/CPPALG/bin/PlanSchedServer";
 
 fi
 protoFileName="Protocols/proto_${objective/\@/AT}_GlobIter_${globIter}_NS_${ns}_NumNeigh_${numNeigh}_Init_${planningInitRule}_SchedStrategy_${schedStrategyIdx}_Run_ALL"
-protoFile="${protoFileDir}/${protoFileName}.xml";
+protoFile="${protoFileName}.xml";
+#protoFile="${protoFileDir}/${protoFileName}.xml";
 echo $protoFile;
 
 # run the prograFm
