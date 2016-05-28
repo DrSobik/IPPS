@@ -11,6 +11,8 @@
 #include "DebugExt.h"
 
 #include <QFile>
+#include <QFileInfo>
+#include <QDir>
 
 using namespace Common;
 

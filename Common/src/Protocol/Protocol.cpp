@@ -9,6 +9,7 @@
 #include <QtCore/qfile.h>
 #include <QtCore/qtextstream.h>
 #include <QtCore/qdatetime.h>
+#include <QtCore/qcoreapplication.h>
 
 #include "Protocol.h"
 
@@ -54,6 +55,13 @@ void Protocol::save() {
 		return;
 	}
 	
+	// Set/create path where the protocol file should be stored
+	QString curFilePath = QCoreApplication::applicationDirPath() + "/" + file->fileName();
+	QDir curDir = QFileInfo(curFilePath).absoluteDir();
+	if (!curDir.exists()){
+	    curDir.mkpath(curDir.path());
+	}
+		
 	if (!file->open(QIODevice::WriteOnly)) {
 		Debugger::err << "Protocol::save : Failed to open file " << file->fileName().toStdString() << " for writing!" << ENDL;
 		return;
