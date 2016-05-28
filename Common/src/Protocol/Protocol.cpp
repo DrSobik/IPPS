@@ -63,7 +63,7 @@ void Protocol::save() {
 	}
 		
 	if (!file->open(QIODevice::WriteOnly)) {
-		Debugger::err << "Protocol::save : Failed to open file " << file->fileName().toStdString() << " for writing!" << ENDL;
+        Debugger::err << "Protocol::save : Failed to open path " << curDir.path().toStdString() << " and file " << file->fileName().toStdString() << " for writing!" << ENDL;
 		return;
 	}else{
 		//Debugger::info << "Protocol::save : Opened file " << file->fileName().toStdString() << " for writing!" << ENDL;
