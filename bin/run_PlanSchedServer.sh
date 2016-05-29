@@ -184,7 +184,7 @@ schedStrategy[14]="PLANNER{[0%-50%):(PLANNER_BEST_PLAN=false),[50%-55%):(PLANNER
 # the right DLL search path
 if [[ "$curPlatform" == "linux" ]]; then
   
-  protoFileDir=".";
+  protoFileDir="PlanSchedServer/";
   
 elif [[ "$curPlatform" == "windows" ]]; then
   
