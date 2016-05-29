@@ -647,6 +647,8 @@ void PlanSchedServer::createProducts() {
 	//products.last().bopsDecompRate(0.0);
 	//products.last().rc = &rc;
 	products.last().rankBOPs(rc);
+	
+	out << "Created product: " << products.last() << endl;
     }
     out << "Done creating products." << endl;
     /* ##############  Done creating products  ############################## */

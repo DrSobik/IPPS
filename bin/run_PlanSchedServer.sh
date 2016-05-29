@@ -233,5 +233,6 @@ initSchedulerSetting="LocalSearchPM(LS_PRIMARY_OBJECTIVE=TWT@Common;LS_CRIT_NODE
 planSchedSolver="VNSPlanner(VNSPLANNER_PROTOCOLFILE=${protoFile};VNSPLANNER_SOLINITRULE=${planningInitRule};VNSPLANNER_NS=${ns};VNSPLANNER_STEPN1=${stepN1};VNSPLANNER_STEPN2=${stepN2};VNSPLANNER_STEPN3=${stepN3};VNSPLANNER_NUMNEIGH=${numNeigh};VNSPLANNER_GLOBMAXITER=${globIter};VNSPLANNER_GLOBMAXTIMEMINUTES=${globMaxTimeM};VNSPLANNER_SCHEDSTRATEGY=${schedStrategy[${schedStrategyIdx}]};VNSPLANNER_INITSCHEDULER=${initSchedulerSetting};VNSPLANNER_PRIMARY_OBJECTIVE=${objective})@VNSPlanner";
 
 $executable "PlanSchedSolver:${planSchedSolver}" "RandSeed:${randseed}" "Host:localhost" "Port:5555" ;
+#$executable "PlanSchedSolver:${planSchedSolver}" "RandSeed:${randseed}" "Host:192.168.1.100" "Port:5555" ;
     
 echo "Finished!";
