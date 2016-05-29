@@ -630,7 +630,7 @@ void PlanSchedServer::createProducts() {
     QList<int> ptypes = ptype2Boms.keys();
     for (int i = 0; i < ptypes.size(); i++) {
 	products.append(Product());
-	products.last().ID = i + 1; //1;
+	products.last().ID = ptypes[i]; //i + 1; //1;
 	products.last().type = ptypes[i];
 	for (int j = 0; j < ptype2Bops[products.last().type].size(); j++) {
 	    // Generate the ID for the current BOM of the current product
