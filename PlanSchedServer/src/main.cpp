@@ -40,6 +40,7 @@ int main(int argc, char *argv[]) {
 	}
     }
 
+    // PLANSCHEDSERVER_RANDSEED
     if (!prefix2arg.contains("RandSeed")) {
 
 	Debugger::err << "No seed for randomization specified!" << ENDL;
@@ -50,6 +51,7 @@ int main(int argc, char *argv[]) {
 
     }
 
+    // PLANSCHEDSERVER_SOLVER
     if (!prefix2arg.contains("PlanSchedSolver")) {
 
 	Debugger::err << "No PlanSchedSolver specified!" << ENDL;
@@ -60,29 +62,31 @@ int main(int argc, char *argv[]) {
 
     }
 
-    // Parse the settings
-    server.parse(settings);
+    // PLANSCHEDSERVER_HOST
+    if (!prefix2arg.contains("Host")) {
 
-    out << "Starting server ... " << endl;
-
-    QHostAddress hostAddress = QHostAddress::LocalHost;
-    qint32 hostPort = 5555;
-
-    //hostAddress.setAddress("132.176.74.60"); // IP of LABOR 1
-    //host.setAddress("132.176.74.101"); // IP of this computer at the university (static)
-    //host.setAddress("192.168.1.101"); // Local IP at home
-    //hostAddress.setAddress("192.168.1.100"); // Local IP at home
-
-    if (server.listen(hostAddress, hostPort)) {
-
-	out << "Started " << server.objectName() << endl;
+	Debugger::err << "No Host specified!" << ENDL;
 
     } else {
 
-	out << "Failed to start the server!" << endl;
-	app.exit();
+	settings["PLANSCHEDSERVER_HOST"] = prefix2arg["Host"];
 
     }
+    
+    // PLANSCHEDSERVER_HOST
+    if (!prefix2arg.contains("Port")) {
+
+	Debugger::err << "No Port specified!" << ENDL;
+
+    } else {
+
+	settings["PLANSCHEDSERVER_PORT"] = prefix2arg["Port"];
+
+    }
+    
+    // Parse the settings (will also parse host and port + try to start listening)
+    server.parse(settings);
+
 
     return app.exec();
 

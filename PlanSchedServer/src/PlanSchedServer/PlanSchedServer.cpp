@@ -1975,6 +1975,49 @@ void PlanSchedServer::parse(const Settings& settings) {
 	throw ErrMsgException<>(std::string("PlanSchedServer::parse : PLANSCHEDSERVER_RANDSEED not specified!"));
     }
 
+    // Parse the Host and Port seed
+    if (this->settings.container().contains("PLANSCHEDSERVER_HOST") && this->settings.container().contains("PLANSCHEDSERVER_PORT")) {
+
+	if (this->settings["PLANSCHEDSERVER_HOST"].changed() || this->settings["PLANSCHEDSERVER_PORT"].changed()) {
+
+	    // Start the server 
+	    QHostAddress hostAddress;
+	    qint32 hostPort;
+
+	    // Host
+	    if (this->settings["PLANSCHEDSERVER_HOST"].get().toLower() == "localhost") {
+		hostAddress = QHostAddress::LocalHost;
+	    } else {
+		hostAddress.setAddress(this->settings["PLANSCHEDSERVER_HOST"].get());
+	    }
+
+	    // Port
+	    hostPort = (qint32) this->settings["PLANSCHEDSERVER_PORT"].get().toInt();
+
+	    //hostAddress.setAddress("132.176.74.60"); // IP of LABOR 1
+	    //host.setAddress("132.176.74.101"); // IP of this computer at the university (static)
+	    //host.setAddress("192.168.1.101"); // Local IP at home
+	    //hostAddress.setAddress("192.168.1.100"); // Local IP at home
+
+	    out << "PlanSchedServer::parse : Trying to listen at " << hostAddress.toString() << ":" << hostPort << " ..." << endl;
+
+	    if (this->listen(hostAddress, hostPort)) {
+
+		out << "PlanSchedServer::parse : Started " << this->objectName() << endl;
+
+	    } else {
+
+		out << "PlanSchedServer::parse : Failed to start the server!" << endl;
+		QCoreApplication::exit();
+
+	    }
+
+	}
+
+    } else {
+	throw ErrMsgException<>(std::string("PlanSchedServer::parse : PLANSCHEDSERVER_HOST or PLANSCHEDSERVER_PORT not specified!"));
+    }
+
     this->settings.setChanged(false);
 
     out << "PlanSchedServer::parse : Done parsing settings." << endl;
