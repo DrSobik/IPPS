@@ -606,11 +606,15 @@ void VNSPlanner::assessActions() {
     // Run (start running) the SchedSolvers
     for (int i = 0; i < newPlans.size(); i++) {
 
+	out << "VNSPlanner::assessActions : Formulating the IPPS problem..." << endl;
 	// For the current plan, formulate the corresponding scheduling problem
 	curSPs << formulateSchedulingProblem(newPlans[i]);
+	out << "VNSPlanner::assessActions : Done formulating the IPPS problem." << endl;
 
+	out << "VNSPlanner::assessActions : Starting the scheduler..." << i << endl;
 	// Run the corresponding SchedSolver
 	curSchedsFuture << QFuture<Schedule>(QtConcurrent::run(schedSolvers[i].getPointer(), &SchedSolver::solve, curSPs[i]));
+	out << "VNSPlanner::assessActions : Done starting the scheduler." << i << endl;
 
     }
     out << "VNSPlanner::assessActions : Done running the schedulers." << endl;
