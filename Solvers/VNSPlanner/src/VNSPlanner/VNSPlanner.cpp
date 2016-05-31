@@ -602,6 +602,7 @@ void VNSPlanner::assessActions() {
 	//getchar();
     }
 
+    out << "VNSPlanner::assessActions : Running the schedulers..." << endl;
     // Run (start running) the SchedSolvers
     for (int i = 0; i < newPlans.size(); i++) {
 
@@ -612,6 +613,7 @@ void VNSPlanner::assessActions() {
 	curSchedsFuture << QFuture<Schedule>(QtConcurrent::run(schedSolvers[i].getPointer(), &SchedSolver::solve, curSPs[i]));
 
     }
+    out << "VNSPlanner::assessActions : Done running the schedulers." << endl;
 
     // Collect the resulting schedules;
     newScheds.clear();
