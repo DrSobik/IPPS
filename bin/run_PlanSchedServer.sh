@@ -154,8 +154,7 @@ SS6ATCSchedulerStr="ATCANScheduler(ATCANScheduler_ID=8;ATCANScheduler_PRIMARY_OB
 SS6LSInitScheduler="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7&8;CS_SCHEDULERS=[${SS6RNDSchedulerStr};${SS6FIFOSchedulerSrt};${SS6WFIFOSchedulerSrt};${SS6EODSchedulerStr};${SS6WEODSchedulerStr};${SS6MODSchedulerStr};${SS6WMODSchedulerStr};${SS6ATCSchedulerStr}])@CombinedScheduler";
 #SS6LSInitScheduler="${SS6RNDSchedulerStr}";
 SS6LS="LocalSearchPM(LS_PRIMARY_OBJECTIVE=TWT@Common;LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;LS_MAX_ITER=20000;LS_BEST_POS_TO_MOVE=false;LS_INIT_SCHEDULER=${SS6LSInitScheduler})@LocalSearchPM";
-#schedStrategy[6]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:${SS6LS}}";
-schedStrategy[6]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:${SS6FIFOSchedulerSrt}}";
+schedStrategy[6]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:${SS6LS}}";
   
 # [0%-50%):SDR, [50%-100%]:CS
 schedStrategy[7]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-50%):CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6),[50%-100%]:CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7)}";

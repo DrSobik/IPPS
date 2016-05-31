@@ -401,7 +401,7 @@ void VNSPlanner::init() {
     // Set the current plan and the schedule as the best
     bestPlan = curPlan;
 
-    //schedSolvers.clear();
+    //schedSolvers.clear(); // Causes the algorithm to crash when ran again: schedSolvers are not recreated
 
     //  #########  Scheduling problem  #####################################
 
