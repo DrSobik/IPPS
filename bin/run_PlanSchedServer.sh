@@ -70,7 +70,7 @@ elif [[ "$curPlatform" == "windows" ]]; then
 fi
 
 # run time limits
-globIter=100;
+globIter=10;
 globMaxTimeM=60;
 
 # randomizing
