@@ -1675,6 +1675,7 @@ void PlanSchedServer::constructPartsAndOrders(ProcessModel& pm) {
     QHash<int, int> partID2PartType;
     QHash<int, QList<Operation*> > unitID2Operations;
     QHash<int, QSet<int> > unitID2PartIDs;
+    QHash<int, QSet<int> > unitID2BOMIDs;
 
 
     Operation* curOp = NULL;
@@ -1704,15 +1705,28 @@ void PlanSchedServer::constructPartsAndOrders(ProcessModel& pm) {
 
 	    unitID2PartIDs[curOp->orderID()].insert(curOp->itemID());
 
+	    unitID2BOMIDs[curOp->orderID()].insert(curOp->bomID());
 	}
     }
 
+    // Some checks
+    for (QHash<int, QSet<int> >::iterator iter = unitID2BOMIDs.begin() ; iter != unitID2BOMIDs.end() ; ++iter){
+	if (iter.value().size() > 1){
+	    throw ErrMsgException<>("PlanSchedServer::constructPartsAndOrders : too many BOMs!");
+	}else if (iter.value().size() < 1){
+	    throw ErrMsgException<>("PlanSchedServer::constructPartsAndOrders : no BOMs!");
+	}
+    }
+    
     //out << "Done collecting data. " << endl;
 
     // Based on the collected data creates items of the units
     for (QHash<int, QSet<int> >::iterator iter1 = unitID2PartIDs.begin(); iter1 != unitID2PartIDs.end(); iter1++) {
 	int curUnitID = iter1.key();
 
+	// Set the right BOMs
+	ordman.orderByID(curUnitID).BID = unitID2BOMIDs[curUnitID].toList().first(); // There should be only one!
+	
 	// Delete information about the items in the current order
 	ordman.orderByID(curUnitID).itemIDs.clear();
 	ordman.orderByID(curUnitID).itemIDPrececences.clear();
