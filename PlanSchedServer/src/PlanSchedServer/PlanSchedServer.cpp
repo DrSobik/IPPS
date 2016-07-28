@@ -1495,7 +1495,11 @@ void PlanSchedServer::incomingConnection() {
 
 	// Check correctness of the input PM
 	bool pmCorrect = true;
+<<<<<<< HEAD
+	if (countNodes(pmm.pm.graph) == 2) { // Only head and tail
+=======
 	if (pmm.pm.opID2Node().size() == 2) { // Only head and tail
+>>>>>>> master
 
 	    out << "PlanSchedServer::incomingConnection : No operations provided -> performing no actions (clearing)!" << ENDL;
 
