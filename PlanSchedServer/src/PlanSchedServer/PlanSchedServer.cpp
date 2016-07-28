@@ -647,7 +647,7 @@ void PlanSchedServer::createProducts() {
 	//products.last().bopsDecompRate(0.0);
 	//products.last().rc = &rc;
 	products.last().rankBOPs(rc);
-	
+
 	out << "Created product: " << products.last() << endl;
     }
     out << "Done creating products." << endl;
@@ -1493,78 +1493,95 @@ void PlanSchedServer::incomingConnection() {
 	// Prepare everything for planning and scheduling
 	prepareForPlanningAndScheduling();
 
-	// Perform planning and scheduling ...
-	PlanSched ps;
-	//    solver.run();
-	ps = solver->solve(ippsProblem);
+	// Check correctness of the input PM
+	bool pmCorrect = true;
+	if (pmm.pm.opID2Node().size() == 2) { // Only head and tail
 
-	/******************************************************************************************************************/
+	    out << "PlanSchedServer::incomingConnection : No operations provided -> performing no actions (clearing)!" << ENDL;
 
-	/*****************************************  Collect the schedule  *************************************************/
+	    pmCorrect = false;
+	}
 
-	//    Plan plan = solver.getBestPlan();
-	//    Schedule sched = solver.getBestSchedule();
-	Plan plan = ps.plan;
-	Schedule sched = ps.schedule;
+	if (pmCorrect) {
 
-	// Set the proper product types and BOM IDs for operations of the incomplete products
-	ProcessModel schedPM = sched.pm;
-	for (ListDigraph::NodeIt nit(schedPM.graph); nit != INVALID; ++nit) {
-	    if (nit != schedPM.head && nit != schedPM.tail && origOrdID2OrigOrdType.contains(schedPM.ops[nit]->orderID())) { // This operation belongs to a fake incomplete product -> set the correct one
-		schedPM.ops[nit]->orderType(origOrdID2OrigOrdType[schedPM.ops[nit]->orderID()]);
-		schedPM.ops[nit]->bomID(origOrdID2OrigOrdBOM[schedPM.ops[nit]->orderID()]);
+	    // Perform planning and scheduling ...
+	    PlanSched ps;
+	    //    solver.run();
+	    ps = solver->solve(ippsProblem);
+
+	    /******************************************************************************************************************/
+
+	    /*****************************************  Collect the schedule  *************************************************/
+
+	    //    Plan plan = solver.getBestPlan();
+	    //    Schedule sched = solver.getBestSchedule();
+	    Plan plan = ps.plan;
+	    Schedule sched = ps.schedule;
+
+	    // Set the proper product types and BOM IDs for operations of the incomplete products
+	    ProcessModel schedPM = sched.pm;
+	    for (ListDigraph::NodeIt nit(schedPM.graph); nit != INVALID; ++nit) {
+		if (nit != schedPM.head && nit != schedPM.tail && origOrdID2OrigOrdType.contains(schedPM.ops[nit]->orderID())) { // This operation belongs to a fake incomplete product -> set the correct one
+		    schedPM.ops[nit]->orderType(origOrdID2OrigOrdType[schedPM.ops[nit]->orderID()]);
+		    schedPM.ops[nit]->bomID(origOrdID2OrigOrdBOM[schedPM.ops[nit]->orderID()]);
+		}
 	    }
+
+	    TWT twt;
+	    sched.fromPM(schedPM, twt);
+
+	    out << "PlanSchedServer::computationFinished : Best plan is " << endl << plan << endl;
+
+	    out << "PlanSchedServer::computationFinished : Best schedule is " << endl << sched << endl;
+
+	    out << "PlanSchedServer::computationFinished : Best PM is " << endl << sched.pm << endl;
+
+	    // Reconstruct parts and orders based on the best schedule
+	    out << "Constructing parts and orders ... " << endl;
+	    constructPartsAndOrders(sched.pm);
+	    out << "Done constructing parts and orders." << endl;
+
+	    QXmlStreamWriter composer(&outMessage);
+
+	    composer.setAutoFormatting(true);
+
+	    composer.writeStartDocument();
+
+	    composer.writeStartElement("solution");
+
+	    // Write the parts
+	    composer.writeStartElement("parts");
+
+	    for (int i = 0; i < ordman.items.size(); i++) {
+		Item& curItem = (Item&) ordman.items[i];
+
+		composer << curItem;
+	    }
+
+	    composer.writeEndElement(); // parts
+
+	    // Write the orders/units
+	    composer.writeStartElement("units");
+
+	    for (int i = 0; i < ordman.orders.size(); i++) {
+		composer << ordman.orders[i];
+	    }
+
+	    composer.writeEndElement(); // units	
+
+	    // Write the schedule
+	    composer << sched;
+
+	    composer.writeEndElement(); // solution
+
+	    composer.writeEndDocument();
+	    /******************************************************************************************************************/
+	    
+	} else {
+	    
+	    outMessage = "<no actions performed>";
+	    
 	}
-
-	TWT twt;
-	sched.fromPM(schedPM, twt);
-
-	out << "PlanSchedServer::computationFinished : Best plan is " << endl << plan << endl;
-
-	out << "PlanSchedServer::computationFinished : Best schedule is " << endl << sched << endl;
-
-	out << "PlanSchedServer::computationFinished : Best PM is " << endl << sched.pm << endl;
-
-	// Reconstruct parts and orders based on the best schedule
-	out << "Constructing parts and orders ... " << endl;
-	constructPartsAndOrders(sched.pm);
-	out << "Done constructing parts and orders." << endl;
-
-	QXmlStreamWriter composer(&outMessage);
-
-	composer.setAutoFormatting(true);
-
-	composer.writeStartDocument();
-
-	composer.writeStartElement("solution");
-
-	// Write the parts
-	composer.writeStartElement("parts");
-
-	for (int i = 0; i < ordman.items.size(); i++) {
-	    Item& curItem = (Item&) ordman.items[i];
-
-	    composer << curItem;
-	}
-
-	composer.writeEndElement(); // parts
-
-	// Write the orders/units
-	composer.writeStartElement("units");
-
-	for (int i = 0; i < ordman.orders.size(); i++) {
-	    composer << ordman.orders[i];
-	}
-
-	composer.writeEndElement(); // units	
-
-	// Write the schedule
-	composer << sched;
-
-	composer.writeEndElement(); // solution
-
-	composer.writeEndDocument();
-	/******************************************************************************************************************/
 
     } else { // Do not perform planning and scheduling (useful for testing)
 
@@ -1710,14 +1727,14 @@ void PlanSchedServer::constructPartsAndOrders(ProcessModel& pm) {
     }
 
     // Some checks
-    for (QHash<int, QSet<int> >::iterator iter = unitID2BOMIDs.begin() ; iter != unitID2BOMIDs.end() ; ++iter){
-	if (iter.value().size() > 1){
+    for (QHash<int, QSet<int> >::iterator iter = unitID2BOMIDs.begin(); iter != unitID2BOMIDs.end(); ++iter) {
+	if (iter.value().size() > 1) {
 	    throw ErrMsgException<>("PlanSchedServer::constructPartsAndOrders : too many BOMs!");
-	}else if (iter.value().size() < 1){
+	} else if (iter.value().size() < 1) {
 	    throw ErrMsgException<>("PlanSchedServer::constructPartsAndOrders : no BOMs!");
 	}
     }
-    
+
     //out << "Done collecting data. " << endl;
 
     // Based on the collected data creates items of the units
@@ -1726,7 +1743,7 @@ void PlanSchedServer::constructPartsAndOrders(ProcessModel& pm) {
 
 	// Set the right BOMs
 	ordman.orderByID(curUnitID).BID = unitID2BOMIDs[curUnitID].toList().first(); // There should be only one!
-	
+
 	// Delete information about the items in the current order
 	ordman.orderByID(curUnitID).itemIDs.clear();
 	ordman.orderByID(curUnitID).itemIDPrececences.clear();
