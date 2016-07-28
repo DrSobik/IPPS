@@ -1487,23 +1487,22 @@ void PlanSchedServer::incomingConnection() {
 	// Create PMM
 	createPMM();
 
-	// Create incomplete products based on the started orders
-	createIncompleteProducts();
-
-	// Prepare everything for planning and scheduling
-	prepareForPlanningAndScheduling();
-
 	// Check correctness of the input PM
 	bool pmCorrect = true;
-
 	if (countNodes(pmm.pm.graph) == 2) { // Only head and tail
 
-	    out << "PlanSchedServer::incomingConnection : No operations provided -> performing no actions!" << ENDL;
+	    out << "PlanSchedServer::incomingConnection : No operations provided -> performing no actions!" << endl;
 
-	    out << pmm.pm << endl;
+	    //out << pmm.pm << endl;
 	    
 	    pmCorrect = false;
 	}
+	
+	// Create incomplete products based on the started orders
+	createIncompleteProducts();
+
+	// Prepare everything for planning and scheduling (pmm.pm is not used by the solvers (old stuff))
+	prepareForPlanningAndScheduling();
 
 	if (pmCorrect) {
 
