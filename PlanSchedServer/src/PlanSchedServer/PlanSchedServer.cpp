@@ -1498,8 +1498,10 @@ void PlanSchedServer::incomingConnection() {
 
 	if (countNodes(pmm.pm.graph) == 2) { // Only head and tail
 
-	    out << "PlanSchedServer::incomingConnection : No operations provided -> performing no actions (clearing)!" << ENDL;
+	    out << "PlanSchedServer::incomingConnection : No operations provided -> performing no actions!" << ENDL;
 
+	    out << pmm.pm << endl;
+	    
 	    pmCorrect = false;
 	}
 
