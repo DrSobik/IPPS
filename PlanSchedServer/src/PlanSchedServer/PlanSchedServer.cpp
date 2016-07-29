@@ -1489,14 +1489,14 @@ void PlanSchedServer::incomingConnection() {
 
 	// Check correctness of the input PM
 	bool pmCorrect = true;
-	if (pmm.ordman->operations.size() == 0) { // Only head and tail
+	//if (pmm.ordman->operations.size() == 0) { // Only head and tail
 
-	    out << "PlanSchedServer::incomingConnection : No operations provided -> performing no actions!" << endl;
+	//    out << "PlanSchedServer::incomingConnection : No operations provided -> performing no actions!" << endl;
 
 	    //out << pmm.pm << endl;
 	    
-	    pmCorrect = false;
-	}
+	//    pmCorrect = false;
+	//}
 	
 	// Create incomplete products based on the started orders
 	createIncompleteProducts();
