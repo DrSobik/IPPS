@@ -774,11 +774,12 @@ QHash<int, BillOfMaterials > createIncompleteBOMs(OrderManager& ordMan) {
 	    curBOM.graph.addArc(curNode, curBOM.tail);
 	}
 
+	out << "Complete BOM : " << endl << curBOM << endl;
+	
+	// IMPORTANT!!! Replace items which have already started with "incomplete parts"
 
-	// IMPORTANT!!! Exclude the items which have already started
-
-	QList<ListDigraph::Node> nodesRem;
-	// Find the nodes which have to be removed
+	QList<ListDigraph::Node> nodesReplace;
+	// Find the nodes which have to be replaced
 	for (ListDigraph::NodeIt nit(curBOM.graph); nit != INVALID; ++nit) {
 
 	    if (nit == curBOM.head || nit == curBOM.tail) continue;
@@ -786,12 +787,12 @@ QHash<int, BillOfMaterials > createIncompleteBOMs(OrderManager& ordMan) {
 	    int curItemID = curBOM.itemID[nit];
 	    Item& curItem = (Item&) ordMan.itemByID(curItemID);
 
-	    if (curItem.curStepIdx >= 0) { // This item should be removed
-		nodesRem.append(nit);
+	    if (curItem.curStepIdx >= 0) { // This item should be replaced
+		nodesReplace.append(nit);
 	    }
 	}
 
-	out << "Complete BOM : " << endl << curBOM << endl;
+	
 
 	// Remove the collected nodes
 	for (int j = 0; j < nodesRem.size(); j++) {
