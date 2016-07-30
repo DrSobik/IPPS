@@ -687,7 +687,7 @@ void PlanSchedServer::createPMM() {
     out << "PlanSchedServer::createPMM : Nodes in the updated process model: " << countNodes(pmm.pm.graph) << endl;
 }
 
-QHash<int, BillOfMaterials > createIncompleteBOMs(OrderManager& ordMan) {
+QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
     // Consists of the parts within the orders
 
@@ -695,8 +695,8 @@ QHash<int, BillOfMaterials > createIncompleteBOMs(OrderManager& ordMan) {
 
     QHash<int, BillOfMaterials > ordID2Bom;
 
-    for (int i = 0; i < ordMan.orders.size(); i++) {
-	Order& curOrder = (Order&) ordMan.orders[i];
+    for (int i = 0; i < ordman.orders.size(); i++) {
+	Order& curOrder = (Order&) ordman.orders[i];
 
 	// Check whether this order is for part replanning only
 	if (curOrder.action != Order::OA_PLAN_PARTS_SCHED) continue;
@@ -711,7 +711,7 @@ QHash<int, BillOfMaterials > createIncompleteBOMs(OrderManager& ordMan) {
 	// Iterate over the items of the order
 	for (int j = 0; j < curOrder.itemIDs.size(); j++) {
 	    int curItemID = curOrder.itemIDs[j];
-	    Item& curItem = (Item&) ordMan.itemByID(curItemID);
+	    Item& curItem = (Item&) ordman.itemByID(curItemID);
 
 	    // BUG!!! This condition leads to a situation where not all arcs are added to the BOM!!! Solution: create a complete BOM and then exclude the started items
 	    //if (curItem.curStepIdx < 0) { // This item has not been started -> add it to the incomplete BOM
@@ -775,7 +775,7 @@ QHash<int, BillOfMaterials > createIncompleteBOMs(OrderManager& ordMan) {
 	}
 
 	out << "Complete BOM : " << endl << curBOM << endl;
-	
+
 	// IMPORTANT!!! Replace items which have already started with "incomplete parts"
 
 	QList<ListDigraph::Node> nodesReplace;
@@ -785,87 +785,71 @@ QHash<int, BillOfMaterials > createIncompleteBOMs(OrderManager& ordMan) {
 	    if (nit == curBOM.head || nit == curBOM.tail) continue;
 
 	    int curItemID = curBOM.itemID[nit];
-	    Item& curItem = (Item&) ordMan.itemByID(curItemID);
+	    Item& curItem = (Item&) ordman.itemByID(curItemID);
 
 	    if (curItem.curStepIdx >= 0) { // This item should be replaced
 		nodesReplace.append(nit);
 	    }
 	}
 
-	
+	// Replace the started items
+	for (int j = 0; j < nodesReplace.size(); ++j) {
 
-	// Remove the collected nodes
-	for (int j = 0; j < nodesRem.size(); j++) {
-	    ListDigraph::Node curNode = nodesRem[j];
-	    QList<ListDigraph::Node> curInNodes; // Incoming nodes for the current node
-	    QList<ListDigraph::Node> curOutNodes; // Outgoing nodes
-	    QList<ListDigraph::Arc> curInArcs; // Incoming arcs for the current node
-	    QList<ListDigraph::Arc> curOutArcs; // Outgoing arcs
+	    ListDigraph::Node curNode = nodesReplace[j];
 
-	    // Collect the incoming nodes
-	    for (ListDigraph::InArcIt iait(curBOM.graph, curNode); iait != INVALID; ++iait) {
-		ListDigraph::Node curInNode = curBOM.graph.source(iait);
+	    int curItemID = curBOM.itemID[curNode];
+	    Item& curItem = (Item&) ordman.itemByID(curItemID);
 
-		//if (curInNode != curBOM.head) {
-		curInNodes.append(curInNode);
-		curInArcs.append(iait);
-		//}
-	    }
+	    Item newItem;
 
-	    // Collect the outgoing nodes
-	    for (ListDigraph::OutArcIt oait(curBOM.graph, curNode); oait != INVALID; ++oait) {
-		ListDigraph::Node curOutNode = curBOM.graph.target(oait);
+	    // Create a new incomplete item
+	    newItem = curItem;
+	    newItem.type = curItem.ID;
+	    newItem.routeID = curItem.ID;
+	    newItem.operIDs = curItem.operIDs.mid(curItem.curStepIdx, curItem.operIDs.size() - curItem.curStepIdx);
 
-		//if (curOutNode != curBOM.tail) {
-		curOutNodes.append(curOutNode);
-		curOutArcs.append(oait);
-		//}
-	    }
+	    // Add this new item to ordman
+	    ordman.incompleteItems.append(newItem);
+	    ordman.incompleteItemID2Idx[newItem.ID] = ordman.incompleteItems.size() - 1;
+	    
+	    // Create a new incomplete route for this item
+	    Route newRoute;
+	    newRoute.ID = newItem.ID;
+	    for (int curOperIdx = 0; curOperIdx < newItem.operIDs.size(); ++curOperIdx) {
 
-	    // Delete all incoming arcs
-	    for (int k = 0; k < curInArcs.size(); k++) {
-		ListDigraph::Arc curArc = curInArcs[k];
-		curBOM.graph.erase(curArc);
-	    }
+		if (curOperIdx == 0 && !newItem.curStepFinished) { // This step is not finished and can not be scheduled on other machines
+		    
+		    Operation& curOper = ordman.operByID(newItem.operIDs[curOperIdx]);
+		    Operation newOper = curOper;
+		    
+		    newOper.ID = curOper.ID;
+		    newOper.type = newOper.ID;
+		    
+		    // Dedicate only one machine to this operation
+		    Machine& curMach = rc(newOper.toolID, newOper.machID);
+		    curMach.type2speed[newOper.type] = curMach.type2speed[curOper.type];
+		    
+		    //ordman << newOper;
+		    ordman.incompleteOperations.append(newOper);
+		    ordman.incompleteOperID2Idx[newOper.ID] = ordman.incompleteOperations.size() - 1;
+		    
+		    newRoute.otypeIDs.append(newOper.type);
+		    
+		} else {
 
-	    // Delete all outgoing arcs
-	    for (int k = 0; k < curOutArcs.size(); k++) {
-		ListDigraph::Arc curArc = curOutArcs[k];
-		curBOM.graph.erase(curArc);
-	    }
-
-	    // For each outgoing node connect it with each incoming one only if such arc does not exist already
-	    for (int k = 0; k < curOutNodes.size(); k++) {
-		ListDigraph::Node curOutNode = curOutNodes[k];
-
-		for (int m = 0; m < curInNodes.size(); m++) {
-		    ListDigraph::Node curInNode = curInNodes[m];
-
-		    bool arcExists = false;
-
-		    // Check whether such arc already exists
-		    for (ListDigraph::OutArcIt oait(curBOM.graph, curInNode); oait != INVALID; ++oait) {
-			if (curBOM.graph.target(oait) == curOutNode) { // Such arc already exists
-			    arcExists = true;
-			    break;
-			}
-		    }
-
-		    if (!arcExists) curBOM.graph.addArc(curInNode, curOutNode);
+		    newRoute.otypeIDs.append(ordman.operByID(newItem.operIDs[curOperIdx]).type);
+		
 		}
 
 	    }
 
-	    out << "Erasing item : " << curBOM.itemID[curNode] << endl;
+	    itype2Routes[newItem.type].append(new Route(newRoute));
 
-	    // Remove the node
-	    curBOM.graph.erase(curNode);
-
-	} // Removing correctly the collected nodes
-
-	//out << "Generated incomplete BOM" << endl;
-	//out << curBOM << endl;
-	//getchar();
+	    // The actual node replacement
+	    curBOM.itemID[curNode] = newItem.ID;
+	    curBOM.itypeID[curNode] = newItem.type;
+	    
+	}
 
 	ordID2Bom.insert(curOrder.ID, curBOM);
 
@@ -881,7 +865,7 @@ void PlanSchedServer::createIncompleteProducts() {
     QTextStream out(stdout);
 
     QHash<int, BillOfMaterials> icplProdType2IcplBom;
-    QHash<int, BillOfMaterials> ordID2IcplBoms = createIncompleteBOMs(ordman);
+    QHash<int, BillOfMaterials> ordID2IcplBoms = createIncompleteBOMs();
 
     for (QHash<int, BillOfMaterials>::iterator iter = ordID2IcplBoms.begin(); iter != ordID2IcplBoms.end(); iter++) {
 	int curOrdID = iter.key();
@@ -1494,11 +1478,11 @@ void PlanSchedServer::incomingConnection() {
 
 	//    out << "PlanSchedServer::incomingConnection : No operations provided -> performing no actions!" << endl;
 
-	    //out << pmm.pm << endl;
-	    
+	//out << pmm.pm << endl;
+
 	//    pmCorrect = false;
 	//}
-	
+
 	// Create incomplete products based on the started orders
 	createIncompleteProducts();
 
@@ -1579,11 +1563,11 @@ void PlanSchedServer::incomingConnection() {
 
 	    composer.writeEndDocument();
 	    /******************************************************************************************************************/
-	    
+
 	} else {
-	    
+
 	    outMessage = "<no actions performed>";
-	    
+
 	}
 
     } else { // Do not perform planning and scheduling (useful for testing)

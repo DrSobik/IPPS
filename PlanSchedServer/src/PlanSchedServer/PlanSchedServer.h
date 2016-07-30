@@ -113,6 +113,8 @@ public:
     /** Create the process model manager. */
     void createPMM();
 
+    QHash<int, BillOfMaterials > createIncompleteBOMs();
+    
     void createIncompleteProducts(); // Creates incomplete products for orders which are already being processed
 
     void prepareForPlanningAndScheduling();

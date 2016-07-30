@@ -275,15 +275,19 @@ QXmlStreamReader& operator>>(QXmlStreamReader& reader, Order& order) {
 
 void OrderManager::init() {
 	operations.clear();
+	incompleteOperations.clear();
 	operIDPrecedences.clear();
 	operIDPrecedencesConj.clear();
 	items.clear();
+	incompleteItems.clear();
 	orders.clear();
 	ordid2idx.clear();
 	type2idcs.clear();
 
 	operID2Idx.clear();
+	incompleteOperID2Idx.clear();
 	itemID2Idx.clear();
+	incompleteItemID2Idx.clear();
 }
 
 void OrderManager::clear() {
@@ -291,6 +295,7 @@ void OrderManager::clear() {
 
 	out << "OrderManager::clear : clearing operations" << endl;
 	operations.clear();
+	incompleteOperations.clear();
 	operIDPrecedences.clear();
 	operIDPrecedencesConj.clear();
 	out << "OrderManager::clear : done clearing operations" << endl;
@@ -302,6 +307,7 @@ void OrderManager::clear() {
 	}
 	//getchar();
 	items.clear();
+	incompleteItems.clear();
 	out << "OrderManager::clear : done clearing items" << endl;
 
 	out << "OrderManager::clear : clearing orders" << endl;
@@ -312,7 +318,9 @@ void OrderManager::clear() {
 	ordid2idx.clear();
 
 	operID2Idx.clear();
+	incompleteOperID2Idx.clear();
 	itemID2Idx.clear();
+	incompleteItemID2Idx.clear();
 }
 
 QList<Order*> OrderManager::ordersByType(const int type) {

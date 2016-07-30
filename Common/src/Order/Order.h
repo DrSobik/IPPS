@@ -124,12 +124,19 @@ public:
 
 	QHash<int, int> operID2Idx; // Indices of the operations
 	QList<Operation> operations; // Operations which have been generated
+	
+	QHash<int, int> incompleteOperID2Idx; // Indices of the incomplete operations
+	QList<Operation> incompleteOperations; // Operations which have been generated
+		
 	QList<QPair<int, int> > operIDPrecedences; // Precedence constraints between the operations in the actual schedule
 	QList<bool> operIDPrecedencesConj; // Indicates whether the corresponding precedence constraint is a technological one
 
 	QHash<int, int> itemID2Idx; // Item indices
 	QList<Item> items; // All items which have been generated
 
+	QHash<int, int> incompleteItemID2Idx; // Incomplete item indices
+	QList<Item> incompleteItems; // All items which have been generated
+	
 	QList<Order> orders;
 	QHash<int, int> ordid2idx;
 	QHash<int, QList<int> > type2idcs;
@@ -206,6 +213,16 @@ public:
 		return items[itemID2Idx[iID]];
 	}
 
+	Item& incompleteItemByID(const int& iID) {
+		#ifdef DEBUG
+		if (!incompleteItemID2Idx.contains(iID)){
+			Debugger::err << "OrdMan::incompleteItemByID : Incomplete item with ID " << iID << " not found!" << ENDL;
+		}
+		#endif
+		
+		return incompleteItems[incompleteItemID2Idx[iID]];
+	}
+	
 	Operation& operByID(const int& operID) {
 		#ifdef DEBUG
 		if (!operID2Idx.contains(operID)){
@@ -216,6 +233,15 @@ public:
 		return operations[operID2Idx[operID]];
 	}
 
+	Operation& incompleteOperByID(const int& operID) {
+		#ifdef DEBUG
+		if (!incompleteOperID2Idx.contains(operID)){
+			Debugger::err << "OrdMan::incompleteOperByID : Incomplete operation with ID " << operID << " not found!" << ENDL;
+		}
+		#endif
+
+		return incompleteOperations[incompleteOperID2Idx[operID]];
+	}
 };
 
 #endif	/* ORDER_H */
