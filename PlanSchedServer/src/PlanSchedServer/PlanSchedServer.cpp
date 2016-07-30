@@ -829,6 +829,9 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 		    Machine& curMach = rc(newOper.toolID, newOper.machID);
 		    curMach.type2speed[newOper.type] = curMach.type2speed[curOper.type];
 		    
+		    rc(newOper.toolID).types.insert(newOper.type);
+		    rc.type2idcs[newOper.type].append(rc.type2idcs[curOper.type]);
+		    
 		    //ordman << newOper;
 		    ordman.incompleteOperations.append(newOper);
 		    ordman.incompleteOperID2Idx[newOper.ID] = ordman.incompleteOperations.size() - 1;
