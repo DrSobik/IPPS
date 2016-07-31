@@ -687,6 +687,9 @@ void PlanSchedServer::createPMM() {
     out << "PlanSchedServer::createPMM : Nodes in the updated process model: " << countNodes(pmm.pm.graph) << endl;
 }
 
+QList<Item> origItems; // Used for preserving original items when creating incomplete items
+QList<Operation>origOperations; // Used for preserving original items when creating incomplete items
+
 QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
     // Consists of the parts within the orders
@@ -774,7 +777,7 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 	    curBOM.graph.addArc(curNode, curBOM.tail);
 	}
 
-	out << "Complete BOM : " << endl << curBOM << endl;
+	out << "PlanSchedServer::createIncompleteBOMs : Complete BOM : " << endl << curBOM << endl;
 
 	// IMPORTANT!!! Replace items which have already started with "incomplete parts"
 
@@ -793,6 +796,8 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 	}
 
 	// Replace the started items
+	origItems.clear();
+	origOperations.clear();
 	for (int j = 0; j < nodesReplace.size(); ++j) {
 
 	    ListDigraph::Node curNode = nodesReplace[j];
@@ -808,9 +813,13 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 	    newItem.routeID = curItem.ID;
 	    newItem.operIDs = curItem.operIDs.mid(curItem.curStepIdx, curItem.operIDs.size() - curItem.curStepIdx);
 
+	    out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete item: " << endl << newItem << endl; 
+	    
 	    // Add this new item to ordman
-	    ordman.incompleteItems.append(newItem);
-	    ordman.incompleteItemID2Idx[newItem.ID] = ordman.incompleteItems.size() - 1;
+	    origItems.append(curItem); // Preserve the original item
+	    ordman.items[ordman.items.indexOf(curItem)] = newItem; // Replace the original item in the ordman
+	    //ordman.incompleteItems.append(newItem);
+	    //ordman.incompleteItemID2Idx[newItem.ID] = ordman.incompleteItems.size() - 1;
 	    
 	    // Create a new incomplete route for this item
 	    Route newRoute;
@@ -825,6 +834,8 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 		    newOper.ID = curOper.ID;
 		    newOper.type = newOper.ID;
 		    
+		    out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete operation: " << endl << newOper << endl;
+		    
 		    // Dedicate only one machine to this operation
 		    Machine& curMach = rc(newOper.toolID, newOper.machID);
 		    curMach.type2speed[newOper.type] = curMach.type2speed[curOper.type];
@@ -832,9 +843,13 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 		    rc(newOper.toolID).types.insert(newOper.type);
 		    rc.type2idcs[newOper.type].append(rc.type2idcs[curOper.type]);
 		    
+		    out << "PlanSchedServer::createIncompleteBOMs : Updated resources for the new operation: " << endl << rc << endl;
+		    
 		    //ordman << newOper;
-		    ordman.incompleteOperations.append(newOper);
-		    ordman.incompleteOperID2Idx[newOper.ID] = ordman.incompleteOperations.size() - 1;
+		    origOperations.append(curOper);
+		    ordman.operations[ordman.operations.indexOf(curOper)] = newOper;
+		    //ordman.incompleteOperations.append(newOper);
+		    //ordman.incompleteOperID2Idx[newOper.ID] = ordman.incompleteOperations.size() - 1;
 		    
 		    newRoute.otypeIDs.append(newOper.type);
 		    
@@ -846,6 +861,8 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
 	    }
 
+	    out << "PlanSchedServer::createIncompleteBOMs : New incomplete route for the incomplete item: " << endl << newRoute << endl;
+	    
 	    itype2Routes[newItem.type].append(new Route(newRoute));
 
 	    // The actual node replacement
@@ -854,6 +871,8 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 	    
 	}
 
+	out << "PlanSchedServer::createIncompleteBOMs : Created incomplete BOM: " << endl << curBOM << endl;
+	
 	ordID2Bom.insert(curOrder.ID, curBOM);
 
 	//out << "Saved it" << endl;
@@ -874,7 +893,7 @@ void PlanSchedServer::createIncompleteProducts() {
 	int curOrdID = iter.key();
 	BillOfMaterials curBOM = iter.value();
 
-	out << "Incomplete BOM : " << endl << curBOM << endl;
+	out << "PlanSchedServer::createIncompleteProducts : Incomplete BOM : " << endl << curBOM << endl;
 
 	int curProdID = curBOM.ID;
 
@@ -915,7 +934,7 @@ void PlanSchedServer::createIncompleteProducts() {
 	//products.last().rc = &rc;
 	products.last().rankBOPs(rc);
 
-	out << "Incomplete product : " << endl << products.last() << endl;
+	out << "PlanSchedServer::createIncompleteProducts : Incomplete product : " << endl << products.last() << endl;
 	//getchar();
 
 	// Add the incomplete product to the prodman
