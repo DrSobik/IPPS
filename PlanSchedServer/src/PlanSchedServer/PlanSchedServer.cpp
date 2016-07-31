@@ -709,7 +709,7 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 	curBOM.init();
 
 	//curBOM.ID = curOrder.type; // This would generate a unique ID for the BOM in view of other orders and products
-	curBOM.ID = (curOrder.ID << 16) + curOrder.type; // This would generate a unique ID for the BOM in view of other orders and products
+	curBOM.ID = ((curOrder.ID << 16) + curOrder.type); // This would generate a unique ID for the BOM in view of other orders and products
 	QHash<int, ListDigraph::Node> itemID2Node;
 
 	// Iterate over the items of the order
