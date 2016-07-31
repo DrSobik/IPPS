@@ -708,7 +708,8 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
 	curBOM.init();
 
-	curBOM.ID = curOrder.type; // This would generate a unique ID for the BOM in view of other orders and products
+	//curBOM.ID = curOrder.type; // This would generate a unique ID for the BOM in view of other orders and products
+	curBOM.ID = (curOrder.ID << 16) + curOrder.type; // This would generate a unique ID for the BOM in view of other orders and products
 	QHash<int, ListDigraph::Node> itemID2Node;
 
 	// Iterate over the items of the order
@@ -835,6 +836,7 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 		newOper.RID = newRoute.ID;
 		newOper.IID = newItem.ID;
 		newOper.IT = newItem.type;
+		newOper.OT = curBOM.ID;
 
 		out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete operation: " << endl << newOper << endl;
 
