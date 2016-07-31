@@ -813,66 +813,70 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 	    newItem.routeID = curItem.ID;
 	    newItem.operIDs = curItem.operIDs.mid(curItem.curStepIdx, curItem.operIDs.size() - curItem.curStepIdx);
 
-	    out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete item: " << endl << newItem << endl; 
-	    
+	    out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete item: " << endl << newItem << endl;
+
 	    // Add this new item to ordman
 	    origItems.append(curItem); // Preserve the original item
 	    ordman.items[ordman.items.indexOf(curItem)] = newItem; // Replace the original item in the ordman
 	    //ordman.incompleteItems.append(newItem);
 	    //ordman.incompleteItemID2Idx[newItem.ID] = ordman.incompleteItems.size() - 1;
-	    
+
 	    // Create a new incomplete route for this item
 	    Route newRoute;
 	    newRoute.ID = newItem.ID;
 	    for (int curOperIdx = 0; curOperIdx < newItem.operIDs.size(); ++curOperIdx) {
 
+		Operation& curOper = ordman.operByID(newItem.operIDs[curOperIdx]);
+		Operation newOper = curOper;
+
+		newOper.ID = curOper.ID;
+		//newOper.type = newOper.ID;
+		newOper.BID = curBOM.ID;
+		newOper.RID = newRoute.ID;
+		newOper.IID = newItem.ID;
+		newOper.IT = newItem.type;
+
+		out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete operation: " << endl << newOper << endl;
+
 		if (curOperIdx == 0 && !newItem.curStepFinished) { // This step is not finished and can not be scheduled on other machines
-		    
-		    Operation& curOper = ordman.operByID(newItem.operIDs[curOperIdx]);
-		    Operation newOper = curOper;
-		    
-		    newOper.ID = curOper.ID;
+
+		    // New type for this operation
 		    newOper.type = newOper.ID;
-		    
-		    out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete operation: " << endl << newOper << endl;
 		    
 		    // Dedicate only one machine to this operation
 		    Machine& curMach = rc(newOper.toolID, newOper.machID);
 		    curMach.type2speed[newOper.type] = curMach.type2speed[curOper.type];
-		    
+
 		    rc(newOper.toolID).types.insert(newOper.type);
 		    rc.type2idcs[newOper.type].append(rc.type2idcs[curOper.type]);
-		    
-		    out << "PlanSchedServer::createIncompleteBOMs : Updated resources for the new operation: " << endl << rc << endl;
-		    
-		    //ordman << newOper;
-		    origOperations.append(curOper);
-		    ordman.operations[ordman.operations.indexOf(curOper)] = newOper;
-		    //ordman.incompleteOperations.append(newOper);
-		    //ordman.incompleteOperID2Idx[newOper.ID] = ordman.incompleteOperations.size() - 1;
-		    
-		    newRoute.otypeIDs.append(newOper.type);
-		    
-		} else {
 
-		    newRoute.otypeIDs.append(ordman.operByID(newItem.operIDs[curOperIdx]).type);
-		
+		    out << "PlanSchedServer::createIncompleteBOMs : Updated resources for the new operation: " << endl << rc << endl;	    
+
 		}
+
+		newRoute.otypeIDs.append(newOper.type);
+		
+		//ordman << newOper;
+		origOperations.append(curOper);
+		ordman.operations[ordman.operations.indexOf(curOper)] = newOper;
+		//ordman.incompleteOperations.append(newOper);
+		//ordman.incompleteOperID2Idx[newOper.ID] = ordman.incompleteOperations.size() - 1;
 
 	    }
 
+
 	    out << "PlanSchedServer::createIncompleteBOMs : New incomplete route for the incomplete item: " << endl << newRoute << endl;
-	    
+
 	    itype2Routes[newItem.type].append(new Route(newRoute));
 
 	    // The actual node replacement
 	    curBOM.itemID[curNode] = newItem.ID;
 	    curBOM.itypeID[curNode] = newItem.type;
-	    
+
 	}
 
 	out << "PlanSchedServer::createIncompleteBOMs : Created incomplete BOM: " << endl << curBOM << endl;
-	
+
 	ordID2Bom.insert(curOrder.ID, curBOM);
 
 	//out << "Saved it" << endl;
