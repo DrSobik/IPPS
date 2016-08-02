@@ -1816,10 +1816,11 @@ void PlanSchedServer::constructPartsAndOrders(ProcessModel& pm) {
 		curItem.curStepIdx = ordman.itemByID(curPartID).curStepIdx;
 		curItem.curStepFinished = ordman.itemByID(curPartID).curStepFinished;
 		curItem.action = ordman.itemByID(curPartID).action;
-
+		
 		// Prepend dummy operation IDs
 		for (int i = 0; i < curItem.curStepIdx + 1; i++) {
-		    curItem.operIDs.prepend(-1);
+		    //curItem.operIDs.prepend(-1);
+		    curItem.operIDs[i] = -1;
 		}
 
 		//out << "Replacing " << ordman.itemByID(curPartID) << " with " << curItem << endl;
