@@ -901,7 +901,7 @@ void ProcessModelManager::insertOrdSubgraph(const Product& prod, Order& ord, Pro
 	QMap<int, QList < Operation*>> startedItemID2Opers;
 	for (int i = 0; i < topSort.size(); ++i) {
 	    ListDigraph::Node& curNode = topSort[i];
-	    if (apm.ops[curNode]->itemID() > 0 && ordman->itemByID(apm.ops[curNode]->itemID()).curStepIdx >= 0) {
+	    if (apm.ops[curNode]->itemID() > 0 && ordman->itemByID(apm.ops[curNode]->itemID()).curStepIdx >= 0 && !ordman->itemByID(apm.ops[curNode]->itemID()).curStepFinished) {
 		startedItemID2Opers[apm.ops[curNode]->itemID()] << apm.ops[curNode];
 	    }
 	}
