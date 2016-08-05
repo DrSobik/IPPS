@@ -828,6 +828,8 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 	    newRoute.ID = newItem.ID;
 	    for (int curOperIdx = 0; curOperIdx < newItem.operIDs.size(); ++curOperIdx) {
 
+		if (curOperIdx == 0 && newItem.curStepFinished) continue; // No deed to add this operation since it's already finished
+
 		Operation& curOper = ordman.operByID(newItem.operIDs[curOperIdx]);
 		Operation newOper = curOper;
 
@@ -1816,7 +1818,7 @@ void PlanSchedServer::constructPartsAndOrders(ProcessModel& pm) {
 		curItem.curStepIdx = ordman.itemByID(curPartID).curStepIdx;
 		curItem.curStepFinished = ordman.itemByID(curPartID).curStepFinished;
 		curItem.action = ordman.itemByID(curPartID).action;
-		
+
 		// Prepend dummy operation IDs
 		for (int i = 0; i < curItem.curStepIdx + 1; i++) {
 		    //curItem.operIDs.prepend(-1);
