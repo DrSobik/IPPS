@@ -7,6 +7,10 @@
 
 #include "PlanSchedServer.h"
 
+QHash<int, Item> origItemID2origItem; // Used for preserving original items when creating incomplete items
+QHash<int, Operation> origOperationID2origOperation; // Used for preserving original items when creating incomplete items
+QHash<int, Operation> origStartedOperationID2origStartedOperation; // Used for preserving original operations when creating incomplete items
+
 PlanSchedServer::PlanSchedServer() : socket(NULL)/*, scheduler(NULL)*/ {
     connect(this, SIGNAL(newConnection()), this, SLOT(incomingConnection()));
 
@@ -116,6 +120,10 @@ void PlanSchedServer::clear() {
 
     origOrdID2OrigOrdType.clear();
     origOrdID2OrigOrdBOM.clear();
+
+    origItemID2origItem.clear();
+    origOperationID2origOperation.clear();
+    origStartedOperationID2origStartedOperation.clear();
 
     out << "Everything is clear." << endl;
 
@@ -687,9 +695,6 @@ void PlanSchedServer::createPMM() {
     out << "PlanSchedServer::createPMM : Nodes in the updated process model: " << countNodes(pmm.pm.graph) << endl;
 }
 
-QHash<int, Item> origItemID2origItem; // Used for preserving original items when creating incomplete items
-QHash<int, Operation> origOperationID2origOperation; // Used for preserving original items when creating incomplete items
-
 QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
     // Consists of the parts within the orders
@@ -697,6 +702,10 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
     QTextStream out(stdout);
 
     QHash<int, BillOfMaterials > ordID2Bom;
+
+    origItemID2origItem.clear();
+    origOperationID2origOperation.clear();
+    origStartedOperationID2origStartedOperation.clear();
 
     for (int i = 0; i < ordman.orders.size(); i++) {
 	Order& curOrder = (Order&) ordman.orders[i];
@@ -798,8 +807,6 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 	}
 
 	// Replace the started items
-	origItemID2origItem.clear();
-	origOperationID2origOperation.clear();
 	for (int j = 0; j < nodesReplace.size(); ++j) {
 
 	    ListDigraph::Node curNode = nodesReplace[j];
@@ -814,6 +821,7 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 	    newItem.type = curItem.ID;
 	    newItem.routeID = curItem.ID;
 	    newItem.operIDs = curItem.operIDs.mid(curItem.curStepIdx, curItem.operIDs.size() - curItem.curStepIdx);
+	    newItem.curStepIdx = 0; // Since we've removed some of the operations
 
 	    out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete item: " << endl << newItem << endl;
 
@@ -850,11 +858,22 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
 		    // Dedicate only one machine to this operation
 		    Machine& curMach = rc(newOper.toolID, newOper.machID);
-		    curMach.type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
+		    //newMach.type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
+
+		    // Create a dedicated machine
+		    Machine* newMach = new Machine(curMach);
+		    newMach->ID = newOper.ID;
+		    newMach->type2speed.clear();
+		    newMach->operations.clear();
+		    newMach->type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
+		    rc(newOper.toolID) << newMach;
+		    newMach = nullptr;
 
 		    rc(newOper.toolID).types.insert(newOper.type);
 		    rc.type2idcs[newOper.type].append(rc.type2idcs[curOper.type]);
 
+		    origStartedOperationID2origStartedOperation[curOper.ID] = curOper;
+		    
 		    out << "PlanSchedServer::createIncompleteBOMs : Updated resources for the new operation: " << endl << rc << endl;
 
 		}
@@ -1546,6 +1565,10 @@ void PlanSchedServer::incomingConnection() {
 	    }
 	}
 
+	for (QHash<int, Operation>::iterator iter = origOperationID2origOperation.begin(); iter != origOperationID2origOperation.end(); ++iter) {
+	    out << iter.key() << ": " << iter.value() << endl;
+	}
+	//getchar();
 	// Set proper operation types, item types, and itemIDs
 	for (ListDigraph::NodeIt nit(schedPM.graph); nit != INVALID; ++nit) {
 	    if (nit != schedPM.head && nit != schedPM.tail && origOperationID2origOperation.contains(schedPM.ops[nit]->ID)) { // This operation belongs to a fake incomplete product -> set the correct one
@@ -1553,6 +1576,12 @@ void PlanSchedServer::incomingConnection() {
 		schedPM.ops[nit]->itemType(origOperationID2origOperation[schedPM.ops[nit]->ID].itemType());
 		schedPM.ops[nit]->itemID(origOperationID2origOperation[schedPM.ops[nit]->ID].itemID());
 		schedPM.ops[nit]->routeID(origOperationID2origOperation[schedPM.ops[nit]->ID].routeID());
+		
+		// Restore the original machine for the started operation
+		if (origStartedOperationID2origStartedOperation.contains(schedPM.ops[nit]->ID)){
+		    schedPM.ops[nit]->machID = origStartedOperationID2origStartedOperation[schedPM.ops[nit]->ID].machID;
+		}
+		
 	    }
 	}
 
@@ -1560,6 +1589,16 @@ void PlanSchedServer::incomingConnection() {
 	for (int i = 0; i < ordman.items.size(); ++i) {
 	    if (origItemID2origItem.contains(ordman.items[i].ID)) {
 		ordman.items[i] = origItemID2origItem[ordman.items[i].ID];
+
+		out << endl << "PlanSchedServer::computationFinished : Restoring item..." << endl;
+		for (QHash<int, Item>::iterator iter = origItemID2origItem.begin(); iter != origItemID2origItem.end(); ++iter) {
+		    Item& curItem = iter.value();
+		    out << iter.key() << ": " << iter.value() << endl;
+		    for (int i = 0; i < curItem.operIDs.size(); ++i) {
+			out << "Oper ID: " << curItem.operIDs[i] << endl;
+		    }
+		}
+
 	    }
 	}
 
@@ -1632,6 +1671,8 @@ void PlanSchedServer::incomingConnection() {
     for (uint i = 0; i < sizeof (quint64); i++) {
 	outMessage.prepend(((uchar*) & messageSize)[i]);
     }
+
+    out << "Sending message:" << endl << outMessage << endl;
 
     // Send the message
     socket->write(outMessage);
@@ -1742,6 +1783,7 @@ void PlanSchedServer::constructPartsAndOrders(ProcessModel& pm) {
 	} else {
 	    curOp = pm.ops[curNode];
 
+
 	    partID2Operations[curOp->itemID()].append(curOp);
 
 	    partID2RouteID[curOp->itemID()] = curOp->routeID();
@@ -1820,9 +1862,16 @@ void PlanSchedServer::constructPartsAndOrders(ProcessModel& pm) {
 		curItem.action = ordman.itemByID(curPartID).action;
 
 		// Prepend dummy operation IDs
-		for (int i = 0; i < curItem.curStepIdx + 1; i++) {
-		    //curItem.operIDs.prepend(-1);
-		    curItem.operIDs[i] = -1;
+		if (curItem.curStepIdx >= 0) {
+		    int j = 0;
+		    if (curItem.curStepFinished) j = 1; // Since we have one extra operation which has been started
+		    for (int i = 0; i < curItem.curStepIdx + j; i++) {
+			curItem.operIDs.prepend(-1);
+			//curItem.operIDs[i] = -1;
+		    }
+
+		    // Set the last started operation as -1, regardless whether it has been finished or not
+		    curItem.operIDs[curItem.curStepIdx] = -1;
 		}
 
 		//out << "Replacing " << ordman.itemByID(curPartID) << " with " << curItem << endl;

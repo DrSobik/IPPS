@@ -884,7 +884,7 @@ void ProcessModelManager::insertOrdSubgraph(const Product& prod, Order& ord, Pro
 	    nextOperCtr++;
 	}
 
-	out << "ProcessModelManager::insertOrdSubgraph : After creating real operations:" << endl << apm << endl;
+	//out << "ProcessModelManager::insertOrdSubgraph : After creating real operations:" << endl << apm << endl;
 
 	// Connect the head of the global PM with the head of the local one. The same for the tails
 	curarc = apm.graph.addArc(apm.head, pmlhead);
@@ -892,7 +892,7 @@ void ProcessModelManager::insertOrdSubgraph(const Product& prod, Order& ord, Pro
 	curarc = apm.graph.addArc(pmltail, apm.tail);
 	apm.conjunctive[curarc] = true;
 
-	out << "ProcessModelManager::insertOrdSubgraph : After integrating into to global PM:" << endl << apm << endl;
+	//out << "ProcessModelManager::insertOrdSubgraph : After integrating into to global PM:" << endl << apm << endl;
 
 	lpmg.clear();
 
@@ -901,23 +901,110 @@ void ProcessModelManager::insertOrdSubgraph(const Product& prod, Order& ord, Pro
 	QMap<int, QList < Operation*>> startedItemID2Opers;
 	for (int i = 0; i < topSort.size(); ++i) {
 	    ListDigraph::Node& curNode = topSort[i];
-	    if (apm.ops[curNode]->itemID() > 0 && ordman->itemByID(apm.ops[curNode]->itemID()).curStepIdx >= 0 && !ordman->itemByID(apm.ops[curNode]->itemID()).curStepFinished) {
-		startedItemID2Opers[apm.ops[curNode]->itemID()] << apm.ops[curNode];
+
+	    if (apm.ops[curNode]->orderID() == ord.ID && apm.ops[curNode]->itemID() > 0) {
+
+		Item& curItem = ordman->itemByID(apm.ops[curNode]->itemID());
+		Operation* curOp = apm.ops[curNode];
+
+		//		out << "ProcessModelManager::insertOrdSubgraph : Considering operation: " << *curOp << endl;
+		//		out << "ProcessModelManager::insertOrdSubgraph : Considering item: " << curItem << " : " << endl;
+		//		for (int i = 0; i < curItem.operIDs.size(); ++i) {
+		//		    out << "ProcessModelManager::insertOrdSubgraph : Opers of the item: " << curItem.operIDs[i] << endl << endl;
+		//		}
+
+		// WARNING!!! The operation IDs are not the same as the original ones!!!
+		if (curItem.curStepIdx >= 0 /*&& (!curItem.curStepFinished || (curItem.curStepFinished && ))*/) {
+
+		    startedItemID2Opers[curOp->itemID()] << curOp;
+
+		    //		    out << "ProcessModelManager::insertOrdSubgraph : Started operation: " << *curOp << endl << endl;
+
+		}
+
 	    }
 	}
 
+	// IMPORTANT!!! curOpers does not contain the finished operations (not added to the PM) -> do not renew
 	for (QMap<int, QList < Operation*>>::iterator iter = startedItemID2Opers.begin(); iter != startedItemID2Opers.end(); ++iter) {
 	    int curItemID = iter.key();
 	    Item& curItem = ordman->itemByID(curItemID);
 	    QList<Operation*>& curOpers = iter.value();
 
 	    for (int i = 0; i < curOpers.size(); ++i) {
-		curOpers[i]->ID = ordman->operByID(curItem.operIDs[i]).ID;
+
+		curOpers[i]->ID = ((!curItem.curStepFinished) ? ordman->operByID(curItem.operIDs[i]).ID : ordman->operByID(curItem.operIDs[i + 1]).ID);
+
 	    }
 	}
 
+
+
+	/*
+
+	// IMPORTANT!!! A started operation can also be scheduled on the underlying machines at any time point and sequence. This is not desired!
+	QList<ListDigraph::Node> startedOpNodes; // Starting nodes of all already inserted orders
+	for (ListDigraph::OutArcIt pmAit(apm.graph, apm.head); pmAit != INVALID; ++pmAit) {
+	    for (ListDigraph::OutArcIt ordAit(apm.graph, apm.graph.target(pmAit)); ordAit != INVALID; ++ordAit) {
+
+		ListDigraph::Node curNode = apm.graph.target(ordAit);
+		Item& curItem = ordman->itemByID(apm.ops[curNode]->itemID());
+
+		if (curItem.curStepIdx >= 0 && !curItem.curStepFinished) startedOpNodes.append(curNode);
+
+	    }
+	}
+
+	QList<QPair < ListDigraph::Node, ListDigraph::Node>> existingArcs;
+	for (ListDigraph::OutArcIt ait(apm.graph, pmlhead); ait != INVALID; ++ait) {
+	    ListDigraph::Node curNode = apm.graph.target(ait);
+	    QList<ListDigraph::Node> curStartNodeList;
+	    QList<ListDigraph::Node> curTopSort;
+
+	    curStartNodeList.append(curNode);
+	    curTopSort = apm.topolSortReachableFrom(curStartNodeList);
+
+	    // Remove the already started nodes from consideration
+	    for (int i = 0; i < startedOpNodes.size(); ++i) {
+		curTopSort.removeAll(startedOpNodes[i]);
+	    }
+
+	    for (int i = 0; i < startedOpNodes.size(); ++i) {
+
+		Operation& curStartedOper = *apm.ops[startedOpNodes[i]];
+
+		for (int j = 0; j < curTopSort.size(); ++j) {
+		    Operation& curTopSortOper = *apm.ops[curTopSort[j]];
+
+		    if (curStartedOper.toolID == curTopSortOper.toolID) { // Insert a conjunctive arc
+
+			if (!existingArcs.contains(QPair< ListDigraph::Node, ListDigraph::Node>(startedOpNodes[i], curTopSort[j]))) {
+
+			    ListDigraph::Arc curArc = apm.graph.addArc(startedOpNodes[i], curTopSort[j]);
+			    apm.conjunctive[curArc] = true;
+			    apm.p[curArc] = 0.0;//0.000000001;
+
+			    existingArcs.append(QPair< ListDigraph::Node, ListDigraph::Node>(startedOpNodes[i], curTopSort[j]));
+
+			}
+
+			break;
+		    }
+
+		}
+
+	    }
+
+	}
+
+	*/
+
+
+
 	out << "ProcessModelManager::insertOrdSubgraph : After modifying the operation IDs:" << endl << apm << endl;
-	
+
+	//	getchar();
+
 	/*
 	out << "ProcessModelManager::insertOrdSubgraph : apm before adding started items : " << endl << apm << endl;
 
