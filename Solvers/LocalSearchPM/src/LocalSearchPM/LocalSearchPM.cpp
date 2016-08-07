@@ -3855,11 +3855,6 @@ bool LocalSearchPM::debugCheckPMCorrectness(const QString& location) {
     }
 
     // Check whether operations have correct tool groups assigned
-
-
-    totalChecksElapsedMS += totalChecksTimer.elapsed();
-
-    out << "LocalSearchPM::debugCheckPMCorrectness : Done checking correctness in < " + location + " > . " << endl;
     for (ListDigraph::NodeIt nit(pm->graph); nit != INVALID; ++nit) {
 	Operation& curOp = *pm->ops[nit];
 	if (curOp.toolID > 0 && !((*rc)(curOp.toolID)).types.contains(curOp.type)) {
@@ -3868,6 +3863,11 @@ bool LocalSearchPM::debugCheckPMCorrectness(const QString& location) {
 	    Debugger::err << "LocalSearchPM::debugCheckPMCorrectness : Assigned operation to wrong TG!" << ENDL;
 	}
     }
+
+    totalChecksElapsedMS += totalChecksTimer.elapsed();
+
+    out << "LocalSearchPM::debugCheckPMCorrectness : Done checking correctness in < " + location + " > . " << endl;
+
 
     return true;
 }

@@ -577,6 +577,85 @@ void PlanSchedServer::readOperationsAndPartsAndOrders(const QByteArray& message)
 
 		    } // OA_PLAN_PARTS_SCHED
 
+		    // Check whether this order will get a new product
+		    if (curOrder.action == Order::OA_SCHED) { // This order will get a new incomplete product type
+			// Preserve some original data
+			origOrdID2OrigOrdType[curOrder.ID] = curOrder.type;
+			origOrdID2OrigOrdBOM[curOrder.ID] = curOrder.BID;
+
+			curOrder.type = (curOrder.ID << 16);
+		    }
+
+		    // For all items of this order which have started and performing their last operation, set the initial release time of the succeeding items
+		    if (curOrder.action == Order::OA_SCHED) {
+
+			// Initialization
+			for (int i = 0; i < curOrder.itemIDs.size(); i++) {
+			    int curItemID = curOrder.itemIDs[i];
+			    Item& curItem = ordman.itemByID(curItemID);
+
+			    if (curItem.curStepIdx == curItem.operIDs.size() - 1) { // Last operation of the item
+
+				QList<int> succItemIDs;
+
+				// Find the successors of the current item
+				for (int j = 0; j < curOrder.itemIDPrececences.size(); j++) {
+				    QPair<int, int> curPrec = curOrder.itemIDPrececences[j];
+
+				    if (curPrec.first == curItemID) { // Add a successor
+					succItemIDs.append(curPrec.second);
+				    }
+
+				}
+
+				// Iterate over all successors and set maximal release time
+				for (int j = 0; j < succItemIDs.size(); j++) {
+				    int curSuccItemID = succItemIDs[j];
+				    Item& curSuccItem = ordman.itemByID(curSuccItemID);
+
+				    curSuccItem.releaseTime = 0.0; // For initialization only
+				}
+
+
+			    } // Last operation
+
+			}
+
+			for (int i = 0; i < curOrder.itemIDs.size(); i++) {
+			    int curItemID = curOrder.itemIDs[i];
+			    Item& curItem = ordman.itemByID(curItemID);
+
+			    if (curItem.curStepIdx == curItem.operIDs.size() - 1) { // Last operation of the item
+
+				QList<int> succItemIDs;
+
+				// Find the successors of the current item
+				for (int j = 0; j < curOrder.itemIDPrececences.size(); j++) {
+				    QPair<int, int> curPrec = curOrder.itemIDPrececences[j];
+
+				    if (curPrec.first == curItemID) { // Add a successor
+					succItemIDs.append(curPrec.second);
+				    }
+
+				}
+
+				// Iterate over all successors and set maximal release time
+				for (int j = 0; j < succItemIDs.size(); j++) {
+				    int curSuccItemID = succItemIDs[j];
+				    Item& curSuccItem = ordman.itemByID(curSuccItemID);
+
+				    curSuccItem.releaseTime = Math::max(curSuccItem.releaseTime, curItem.releaseTime); // curItem.release time shows actually the finish time of the last operation
+				}
+
+
+				out << "Finish time of " << curItem.ID << " is " << curItem.releaseTime << endl;
+
+			    } // Last operation
+
+			}
+
+		    } // OA_SCHED
+
 		    ordman << curOrder;
 
 		    //out << "Read order : " << curOrder << endl;
@@ -711,7 +790,7 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 	Order& curOrder = (Order&) ordman.orders[i];
 
 	// Check whether this order is for part replanning only
-	if (curOrder.action != Order::OA_PLAN_PARTS_SCHED) continue;
+	if (curOrder.action == Order::OA_PLAN_SCHED) continue;
 
 	BillOfMaterials curBOM;
 
@@ -792,110 +871,219 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
 	// IMPORTANT!!! Replace items which have already started with "incomplete parts"
 
-	QList<ListDigraph::Node> nodesReplace;
-	// Find the nodes which have to be replaced
-	for (ListDigraph::NodeIt nit(curBOM.graph); nit != INVALID; ++nit) {
+	if (curOrder.action == Order::OA_PLAN_PARTS_SCHED) {
 
-	    if (nit == curBOM.head || nit == curBOM.tail) continue;
+	    QList<ListDigraph::Node> nodesReplace;
+	    // Find the nodes which have to be replaced
+	    for (ListDigraph::NodeIt nit(curBOM.graph); nit != INVALID; ++nit) {
 
-	    int curItemID = curBOM.itemID[nit];
-	    Item& curItem = (Item&) ordman.itemByID(curItemID);
+		if (nit == curBOM.head || nit == curBOM.tail) continue;
 
-	    if (curItem.curStepIdx >= 0) { // This item should be replaced
-		nodesReplace.append(nit);
+		int curItemID = curBOM.itemID[nit];
+		Item& curItem = (Item&) ordman.itemByID(curItemID);
+
+		if (curItem.curStepIdx >= 0) { // This item should be replaced
+		    nodesReplace.append(nit);
+		}
 	    }
-	}
 
-	// Replace the started items
-	for (int j = 0; j < nodesReplace.size(); ++j) {
+	    // Replace the started items
+	    for (int j = 0; j < nodesReplace.size(); ++j) {
 
-	    ListDigraph::Node curNode = nodesReplace[j];
+		ListDigraph::Node curNode = nodesReplace[j];
 
-	    int curItemID = curBOM.itemID[curNode];
-	    Item& curItem = (Item&) ordman.itemByID(curItemID);
+		int curItemID = curBOM.itemID[curNode];
+		Item& curItem = (Item&) ordman.itemByID(curItemID);
 
-	    Item newItem;
+		Item newItem;
 
-	    // Create a new incomplete item
-	    newItem = curItem;
-	    newItem.type = curItem.ID;
-	    newItem.routeID = curItem.ID;
-	    newItem.operIDs = curItem.operIDs.mid(curItem.curStepIdx, curItem.operIDs.size() - curItem.curStepIdx);
-	    newItem.curStepIdx = 0; // Since we've removed some of the operations
+		// Create a new incomplete item
+		newItem = curItem;
+		newItem.type = curItem.ID;
+		newItem.routeID = curItem.ID;
+		newItem.operIDs = curItem.operIDs.mid(curItem.curStepIdx, curItem.operIDs.size() - curItem.curStepIdx);
+		newItem.curStepIdx = 0; // Since we've removed some of the operations
 
-	    out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete item: " << endl << newItem << endl;
+		out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete item: " << endl << newItem << endl;
 
-	    // Add this new item to ordman
-	    origItemID2origItem[curItem.ID] = curItem; // Preserve the original item
-	    ordman.items[ordman.items.indexOf(curItem)] = newItem; // Replace the original item in the ordman
-	    //ordman.incompleteItems.append(newItem);
-	    //ordman.incompleteItemID2Idx[newItem.ID] = ordman.incompleteItems.size() - 1;
+		// Add this new item to ordman
+		origItemID2origItem[curItem.ID] = curItem; // Preserve the original item
+		ordman.items[ordman.items.indexOf(curItem)] = newItem; // Replace the original item in the ordman
+		//ordman.incompleteItems.append(newItem);
+		//ordman.incompleteItemID2Idx[newItem.ID] = ordman.incompleteItems.size() - 1;
 
-	    // Create a new incomplete route for this item
-	    Route newRoute;
-	    newRoute.ID = newItem.ID;
-	    for (int curOperIdx = 0; curOperIdx < newItem.operIDs.size(); ++curOperIdx) {
+		// Create a new incomplete route for this item
+		Route newRoute;
+		newRoute.ID = newItem.ID;
+		for (int curOperIdx = 0; curOperIdx < newItem.operIDs.size(); ++curOperIdx) {
 
-		if (curOperIdx == 0 && newItem.curStepFinished) continue; // No deed to add this operation since it's already finished
+		    if (curOperIdx == 0 && newItem.curStepFinished) continue; // No deed to add this operation since it's already finished
 
-		Operation& curOper = ordman.operByID(newItem.operIDs[curOperIdx]);
-		Operation newOper = curOper;
+		    Operation& curOper = ordman.operByID(newItem.operIDs[curOperIdx]);
+		    Operation newOper = curOper;
 
-		newOper.ID = curOper.ID;
-		//newOper.type = newOper.ID;
-		newOper.BID = curBOM.ID;
-		newOper.RID = newRoute.ID;
-		newOper.IID = newItem.ID;
-		newOper.IT = newItem.type;
-		newOper.OT = curBOM.ID;
+		    newOper.ID = curOper.ID;
+		    //newOper.type = newOper.ID;
+		    newOper.BID = curBOM.ID;
+		    newOper.RID = newRoute.ID;
+		    newOper.IID = newItem.ID;
+		    newOper.IT = newItem.type;
+		    newOper.OT = curBOM.ID;
 
-		out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete operation: " << endl << newOper << endl;
+		    out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete operation: " << endl << newOper << endl;
 
-		if (curOperIdx == 0 && !newItem.curStepFinished) { // This step is not finished and can not be scheduled on other machines
+		    if (curOperIdx == 0 && !newItem.curStepFinished) { // This step is not finished and can not be scheduled on other machines
 
-		    // New type for this operation
-		    newOper.type = newOper.ID;
+			// New type for this operation
+			newOper.type = newOper.ID;
 
-		    // Dedicate only one machine to this operation
-		    Machine& curMach = rc(newOper.toolID, newOper.machID);
-		    //newMach.type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
+			// Dedicate only one machine to this operation
+			Machine& curMach = rc(newOper.toolID, newOper.machID);
+			//newMach.type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
 
-		    // Create a dedicated machine
-		    Machine* newMach = new Machine(curMach);
-		    newMach->ID = newOper.ID;
-		    newMach->type2speed.clear();
-		    newMach->operations.clear();
-		    newMach->type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
-		    rc(newOper.toolID) << newMach;
-		    newMach = nullptr;
+			// Create a dedicated machine
+			Machine* newMach = new Machine(curMach);
+			newMach->ID = newOper.ID;
+			newMach->type2speed.clear();
+			newMach->operations.clear();
+			newMach->type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
+			rc(newOper.toolID) << newMach;
+			newMach = nullptr;
 
-		    rc(newOper.toolID).types.insert(newOper.type);
-		    rc.type2idcs[newOper.type].append(rc.type2idcs[curOper.type]);
+			rc(newOper.toolID).types.insert(newOper.type);
+			rc.type2idcs[newOper.type].append(rc.type2idcs[curOper.type]);
 
-		    origStartedOperationID2origStartedOperation[curOper.ID] = curOper;
-		    
-		    out << "PlanSchedServer::createIncompleteBOMs : Updated resources for the new operation: " << endl << rc << endl;
+			origStartedOperationID2origStartedOperation[curOper.ID] = curOper;
+
+			out << "PlanSchedServer::createIncompleteBOMs : Updated resources for the new operation: " << endl << rc << endl;
+
+		    }
+
+		    newRoute.otypeIDs.append(newOper.type);
+
+		    //ordman << newOper;
+		    origOperationID2origOperation[curOper.ID] = curOper;
+		    ordman.operations[ordman.operations.indexOf(curOper)] = newOper;
+		    //ordman.incompleteOperations.append(newOper);
+		    //ordman.incompleteOperID2Idx[newOper.ID] = ordman.incompleteOperations.size() - 1;
 
 		}
 
-		newRoute.otypeIDs.append(newOper.type);
 
-		//ordman << newOper;
-		origOperationID2origOperation[curOper.ID] = curOper;
-		ordman.operations[ordman.operations.indexOf(curOper)] = newOper;
-		//ordman.incompleteOperations.append(newOper);
-		//ordman.incompleteOperID2Idx[newOper.ID] = ordman.incompleteOperations.size() - 1;
+		out << "PlanSchedServer::createIncompleteBOMs : New incomplete route for the incomplete item: " << endl << newRoute << endl;
+
+		itype2Routes[newItem.type].append(new Route(newRoute));
+
+		// The actual node replacement
+		curBOM.itemID[curNode] = newItem.ID;
+		curBOM.itypeID[curNode] = newItem.type;
 
 	    }
 
+	} else if (curOrder.action == Order::OA_SCHED) {
 
-	    out << "PlanSchedServer::createIncompleteBOMs : New incomplete route for the incomplete item: " << endl << newRoute << endl;
+	    QList<ListDigraph::Node> nodesReplace;
+	    // Find the nodes which have to be replaced
+	    for (ListDigraph::NodeIt nit(curBOM.graph); nit != INVALID; ++nit) {
 
-	    itype2Routes[newItem.type].append(new Route(newRoute));
+		if (nit == curBOM.head || nit == curBOM.tail) continue;
 
-	    // The actual node replacement
-	    curBOM.itemID[curNode] = newItem.ID;
-	    curBOM.itypeID[curNode] = newItem.type;
+		nodesReplace.append(nit); // All nodes will be replaced if only scheduling needs to be done
+
+	    }
+
+	    // Replace the started items
+	    for (int j = 0; j < nodesReplace.size(); ++j) {
+
+		ListDigraph::Node curNode = nodesReplace[j];
+
+		int curItemID = curBOM.itemID[curNode];
+		Item& curItem = (Item&) ordman.itemByID(curItemID);
+
+		Item newItem;
+
+		// Create a new incomplete item
+		newItem = curItem;
+		newItem.type = curItem.ID;
+		newItem.routeID = curItem.ID;
+		newItem.operIDs = curItem.operIDs.mid(Math::max(curItem.curStepIdx, 0), curItem.operIDs.size() - Math::max(curItem.curStepIdx, 0));
+		newItem.curStepIdx = (curItem.curStepIdx == -1) ? -1 : 0; // Since we've removed some of the operations
+
+		out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete item for scheduling only: " << endl << newItem << endl;
+
+		// Add this new item to ordman
+		origItemID2origItem[curItem.ID] = curItem; // Preserve the original item
+		ordman.items[ordman.items.indexOf(curItem)] = newItem; // Replace the original item in the ordman
+		//ordman.incompleteItems.append(newItem);
+		//ordman.incompleteItemID2Idx[newItem.ID] = ordman.incompleteItems.size() - 1;
+
+		// Create a new incomplete route for this item
+		Route newRoute;
+		newRoute.ID = newItem.ID;
+		for (int curOperIdx = 0; curOperIdx < newItem.operIDs.size(); ++curOperIdx) {
+
+		    if (curOperIdx == 0 && newItem.curStepIdx >= 0 && newItem.curStepFinished) continue; // No deed to add this operation since it's already finished
+
+		    Operation& curOper = ordman.operByID(newItem.operIDs[curOperIdx]);
+		    Operation newOper = curOper;
+
+		    newOper.ID = curOper.ID;
+		    newOper.type = curOper.type;
+		    newOper.BID = curBOM.ID;
+		    newOper.RID = newRoute.ID;
+		    newOper.IID = newItem.ID;
+		    newOper.IT = newItem.type;
+		    newOper.OT = curBOM.ID;
+
+		    out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete operation (SCHED): " << endl << newOper << endl;
+
+		    if (curOperIdx == 0 && newItem.curStepIdx >= 0 && !newItem.curStepFinished) { // This step is not finished and can not be scheduled on other machines
+
+			// New type for this operation
+			newOper.type = newOper.ID;
+
+			// Dedicate only one machine to this operation
+			Machine& curMach = rc(newOper.toolID, newOper.machID);
+			//newMach.type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
+
+			// Create a dedicated machine
+			Machine* newMach = new Machine(curMach);
+			newMach->ID = newOper.ID;
+			newMach->type2speed.clear();
+			newMach->operations.clear();
+			newMach->type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
+			rc(newOper.toolID) << newMach;
+			newMach = nullptr;
+
+			rc(newOper.toolID).types.insert(newOper.type);
+			rc.type2idcs[newOper.type].append(rc.type2idcs[curOper.type]);
+
+			origStartedOperationID2origStartedOperation[curOper.ID] = curOper;
+			
+			out << "PlanSchedServer::createIncompleteBOMs : Updated resources for the new operation for rescheduling only: " << endl << rc << endl;
+
+		    }
+
+		    newRoute.otypeIDs.append(newOper.type);
+
+		    //ordman << newOper;
+		    origOperationID2origOperation[curOper.ID] = curOper;
+		    ordman.operations[ordman.operations.indexOf(curOper)] = newOper;
+		    //ordman.incompleteOperations.append(newOper);
+		    //ordman.incompleteOperID2Idx[newOper.ID] = ordman.incompleteOperations.size() - 1;
+
+		}
+
+
+		out << "PlanSchedServer::createIncompleteBOMs : New incomplete route for the incomplete item (rescheduling only): " << endl << newRoute << endl;
+
+		itype2Routes[newItem.type].append(new Route(newRoute));
+
+		// The actual node replacement
+		curBOM.itemID[curNode] = newItem.ID;
+		curBOM.itypeID[curNode] = newItem.type;
+
+	    }
 
 	}
 
@@ -1576,12 +1764,12 @@ void PlanSchedServer::incomingConnection() {
 		schedPM.ops[nit]->itemType(origOperationID2origOperation[schedPM.ops[nit]->ID].itemType());
 		schedPM.ops[nit]->itemID(origOperationID2origOperation[schedPM.ops[nit]->ID].itemID());
 		schedPM.ops[nit]->routeID(origOperationID2origOperation[schedPM.ops[nit]->ID].routeID());
-		
+
 		// Restore the original machine for the started operation
-		if (origStartedOperationID2origStartedOperation.contains(schedPM.ops[nit]->ID)){
+		if (origStartedOperationID2origStartedOperation.contains(schedPM.ops[nit]->ID)) {
 		    schedPM.ops[nit]->machID = origStartedOperationID2origStartedOperation[schedPM.ops[nit]->ID].machID;
 		}
-		
+
 	    }
 	}
 
