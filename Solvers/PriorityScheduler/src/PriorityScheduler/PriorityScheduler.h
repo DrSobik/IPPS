@@ -43,6 +43,12 @@ using namespace Common::SmartPointers;
 
 //typedef Solver<Schedule, const SchedulingProblem&, const SchedulerOptions&> SchedSolver;
 
+#if defined DLL_EXPORT
+#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#else
+#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#endif
+
 class TrivialScheduler : public Scheduler {
 public:
     TrivialScheduler();
@@ -67,7 +73,7 @@ private:
 
 };
 
-class PriorityScheduler : public Scheduler {//LSScheduler {
+class DLL_EXPORT_INTEFACE PriorityScheduler : public Scheduler {//LSScheduler {
 //    Q_OBJECT
 protected:
     QList<ListDigraph::Node> topolOrdering; // Topological ordering of the graph
@@ -119,7 +125,7 @@ public:
 
 };
 
-class RNDScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE RNDScheduler : public PriorityScheduler {
 public:
 
     RNDScheduler();
@@ -134,7 +140,7 @@ public:
 
 };
 
-class WFIFOScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE WFIFOScheduler : public PriorityScheduler {
 protected:
     bool _weightedFIFO;
 public:
@@ -156,7 +162,7 @@ public:
 
 };
 
-class WScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE WScheduler : public PriorityScheduler {
 public:
 
     WScheduler();
@@ -174,7 +180,7 @@ public:
 };
 
 /** The operation with potentially highest weighted tardiness is the most critical. */
-class WTScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE WTScheduler : public PriorityScheduler {
 protected:
 
     bool _weightedT;
@@ -200,7 +206,7 @@ public:
 
 };
 
-class WSPTScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE WSPTScheduler : public PriorityScheduler {
 protected:
     bool _weightedSPT;
 
@@ -226,7 +232,7 @@ public:
 };
 
 /** Earliest operation due date scheduler. */
-class EODScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE EODScheduler : public PriorityScheduler {
 public:
 
     EODScheduler();
@@ -246,7 +252,7 @@ public:
 };
 
 /** Weighted earliest operation due date scheduler. */
-class WEODScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE WEODScheduler : public PriorityScheduler {
 protected:
     bool _weightedEOD;
 
@@ -270,7 +276,7 @@ public:
 };
 
 /** Weighted earliest job due date scheduler. */
-class WEDDScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE WEDDScheduler : public PriorityScheduler {
 protected:
     bool _weightedEDD;
 
@@ -296,7 +302,7 @@ public:
 };
 
 /** Weighted shortest due date scheduler with w^2. */
-class WEDD2Scheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE WEDD2Scheduler : public PriorityScheduler {
 protected:
     bool _weightedEDD;
 
@@ -322,7 +328,7 @@ public:
 };
 
 /** Weighted modified operation due date scheduler. */
-class WMODScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE WMODScheduler : public PriorityScheduler {
 protected:
     bool _weightedMOD;
 
@@ -346,7 +352,7 @@ public:
 };
 
 /** Weighted modified job due date scheduler. */
-class WMDDScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE WMDDScheduler : public PriorityScheduler {
 protected:
     bool _weightedMDD;
 
@@ -376,7 +382,7 @@ public:
 };
 
 /** Schedule the operations in view of machine utilization. */
-class MUBScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE MUBScheduler : public PriorityScheduler {
 public:
 
     MUBScheduler();
@@ -394,7 +400,7 @@ public:
 };
 
 /** Schedule the operations in view of machine time balancing, i.e. try to utilize machines which are available earlier, first. */
-class MTBScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE MTBScheduler : public PriorityScheduler {
 public:
 
     MTBScheduler();
@@ -412,7 +418,7 @@ public:
 };
 
 /** ATC scheduler that considers only the available nodes. Unavailable successors for the current node can be considered. */
-class ATCANScheduler : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE ATCANScheduler : public PriorityScheduler {
 private:
     double p_avg;
 
@@ -480,7 +486,7 @@ public:
 };
 
 /** ATC scheduler that considers only the available nodes. Unavailable successors for the current node can be considered. */
-class ATCSchedulerTest : public PriorityScheduler {
+class DLL_EXPORT_INTEFACE ATCSchedulerTest : public PriorityScheduler {
 private:
     double p_avg;
 
