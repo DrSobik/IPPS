@@ -1,0 +1,196 @@
+<problem>
+    <resources>
+        <resource id="1">
+            <toolgroups>
+                <toolgroup id="0">
+                    <machines>
+                        <machine id="0" availAt="195">
+                            <type2speed>0,1</type2speed>
+                        </machine>
+                    </machines>
+                </toolgroup>
+                <toolgroup id="1">
+                    <machines>
+                        <machine id="1" availAt="195">
+                            <type2speed>3,0.125</type2speed>
+                            <type2speed>6,0.25</type2speed>
+                        </machine>
+                        <machine id="2" availAt="195">
+                            <type2speed>3,0.125</type2speed>
+                            <type2speed>6,1</type2speed>
+                        </machine>
+                        <machine id="3" availAt="195">
+                            <type2speed>3,0.25</type2speed>
+                            <type2speed>6,0.142857142857143</type2speed>
+                        </machine>
+                    </machines>
+                </toolgroup>
+                <toolgroup id="2">
+                    <machines>
+                        <machine id="4" availAt="347">
+                            <type2speed>1,1</type2speed>
+                            <type2speed>2,0.2</type2speed>
+                            <type2speed>1001,0.05</type2speed>
+                        </machine>
+                    </machines>
+                </toolgroup>
+                <toolgroup id="3">
+                    <machines>
+                        <machine id="5" availAt="208.5">
+                            <type2speed>5,0.1</type2speed>
+                            <type2speed>7,0.2</type2speed>
+                            <type2speed>1005,0.0666666666666667</type2speed>
+                        </machine>
+                    </machines>
+                </toolgroup>
+            </toolgroups>
+        </resource>
+    </resources>
+    <itypes>
+        <itype id="1">
+            <routes>
+                <route id="1">5,1</route>
+                <route id="2">1,5</route>
+            </routes>
+        </itype>
+        <itype id="2">
+            <routes>
+                <route id="3">1,2,5</route>
+            </routes>
+        </itype>
+        <itype id="3">
+            <routes>
+                <route id="4">3,5,7</route>
+            </routes>
+        </itype>
+        <itype id="4">
+            <routes>
+                <route id="5">2,6,5</route>
+                <route id="6">6,5,2</route>
+            </routes>
+        </itype>
+        <itype id="5">
+            <routes>
+                <route id="7">6,3,6,3</route>
+            </routes>
+        </itype>
+        <itype id="100">
+            <routes>
+                <route id="101">1005,1001</route>
+                <route id="102">1001,1005</route>
+            </routes>
+        </itype>
+    </itypes>
+    <ptypes>
+        <ptype type="1">
+            <boms>
+                <bom id="1">
+                    <nodes>
+                        <node id="0">2</node>
+                        <node id="1">3</node>
+                        <node id="2">2</node>
+                    </nodes>
+                    <arcs>
+                        <arc>2,0</arc>
+                        <arc>1,0</arc>
+                    </arcs>
+                </bom>
+                <bom id="2">
+                    <nodes>
+                        <node id="0">3</node>
+                        <node id="1">3</node>
+                        <node id="2">3</node>
+                    </nodes>
+                    <arcs>
+                        <arc>2,0</arc>
+                        <arc>1,0</arc>
+                    </arcs>
+                </bom>
+            </boms>
+        </ptype>
+        <ptype type="2">
+            <boms>
+                <bom id="3">
+                    <nodes>
+                        <node id="0">4</node>
+                        <node id="1">4</node>
+                        <node id="2">1</node>
+                    </nodes>
+                    <arcs>
+                        <arc>1,2</arc>
+                        <arc>2,0</arc>
+                    </arcs>
+                </bom>
+                <bom id="4">
+                    <nodes>
+                        <node id="0">1</node>
+                        <node id="1">5</node>
+                        <node id="2">4</node>
+                        <node id="3">4</node>
+                    </nodes>
+                    <arcs>
+                        <arc>1,3</arc>
+                        <arc>3,0</arc>
+                        <arc>2,0</arc>
+                    </arcs>
+                </bom>
+            </boms>
+        </ptype>
+        <ptype type="100">
+            <boms>
+                <bom id="100">
+                    <nodes>
+                        <node id="0">100</node>
+                        <node id="1">100</node>
+                    </nodes>
+                    <arcs>
+                        <arc>1,0</arc>
+                    </arcs>
+                </bom>
+            </boms>
+        </ptype>
+    </ptypes>
+    <operations>
+        <operation id="65541">
+            <type>1005</type>
+            <partID>65537</partID>
+            <partType>100</partType>
+            <unitID>1</unitID>
+            <unitType>100</unitType>
+            <bomID>100</bomID>
+            <routeID>102</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>3</toolGroup>
+            <machID>5</machID>
+            <weight>4</weight>
+            <releaseTime>208.5</releaseTime>
+            <startTime>208.5</startTime>
+            <procTime>0</procTime>
+            <dueTime>208.5</dueTime>
+            <completionTime>208.5</completionTime>
+        </operation>
+    </operations>
+    <precedences/>
+    <parts>
+        <part id="65537" action="SCHED">
+            <type>100</type>
+            <unitID>1</unitID>
+            <routeID>102</routeID>
+            <curStepIdx>1</curStepIdx>
+            <curStepFinished>0</curStepFinished>
+            <releaseTime>0</releaseTime>
+            <operIDs>-1,65541</operIDs>
+        </part>
+    </parts>
+    <units>
+        <unit id="1" action="PLAN_PARTS_SCHED">
+            <w>4</w>
+            <r>0</r>
+            <d>47</d>
+            <ptype>100</ptype>
+            <bomID>100</bomID>
+            <partIDs>65537</partIDs>
+            <partPrec/>
+        </unit>
+    </units>
+</problem>

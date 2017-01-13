@@ -944,6 +944,17 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 			// Create a dedicated machine
 			Machine* newMach = new Machine(curMach);
 			newMach->ID = newOper.ID;
+			
+			// 13.01.2017: Add checks on the already existing machines
+			QSet<int> allMachIDs;
+			QList<Machine*> allMachs = rc.machines();
+			for (int i = 0 ; i < allMachs.size() ; ++i){
+			    allMachIDs << allMachs[i]->ID;
+			}
+			while(allMachIDs.contains(newMach->ID)){
+			    ++newMach->ID;
+			}
+			
 			newMach->type2speed.clear();
 			newMach->operations.clear();
 			newMach->type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
@@ -1049,6 +1060,17 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 			// Create a dedicated machine
 			Machine* newMach = new Machine(curMach);
 			newMach->ID = newOper.ID;
+			
+			// 13.01.2017: Add checks on the already existing machines
+			QSet<int> allMachIDs;
+			QList<Machine*> allMachs = rc.machines();
+			for (int i = 0 ; i < allMachs.size() ; ++i){
+			    allMachIDs << allMachs[i]->ID;
+			}
+			while(allMachIDs.contains(newMach->ID)){
+			    ++newMach->ID;
+			}
+			
 			newMach->type2speed.clear();
 			newMach->operations.clear();
 			newMach->type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
@@ -1059,7 +1081,7 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 			rc.type2idcs[newOper.type].append(rc.type2idcs[curOper.type]);
 
 			origStartedOperationID2origStartedOperation[curOper.ID] = curOper;
-			
+
 			out << "PlanSchedServer::createIncompleteBOMs : Updated resources for the new operation for rescheduling only: " << endl << rc << endl;
 
 		    }
@@ -2059,7 +2081,10 @@ void PlanSchedServer::constructPartsAndOrders(ProcessModel& pm) {
 		    }
 
 		    // Set the last started operation as -1, regardless whether it has been finished or not
-		    curItem.operIDs[curItem.curStepIdx] = -1;
+		    // Fix: do it only for finished operations
+		    if (curItem.curStepFinished) {
+			curItem.operIDs[curItem.curStepIdx] = -1;
+		    }
 		}
 
 		//out << "Replacing " << ordman.itemByID(curPartID) << " with " << curItem << endl;

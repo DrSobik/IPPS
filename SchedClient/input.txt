@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<problem>
+    <resources>
+        <resource id="1">
+            <toolgroups>
+                <toolgroup id="0">
+                    <machines>
+                        <machine id="0" availAt="15">
+                            <type2speed>0,1</type2speed>
+                        </machine>
+                    </machines>
+                </toolgroup>
+                <toolgroup id="1">
+                    <machines>
+                        <machine id="65537" availAt="15">
+                            <type2speed>6,1</type2speed>
+                        </machine>
+                        <machine id="65538" availAt="15">
+                            <type2speed>6,0.166666666666667</type2speed>
+                        </machine>
+                    </machines>
+                </toolgroup>
+                <toolgroup id="2">
+                    <machines>
+                        <machine id="131073" availAt="16">
+                            <type2speed>1,0.5</type2speed>
+                            <type2speed>2,0.5</type2speed>
+                            <type2speed>4,0.142857142857143</type2speed>
+                        </machine>
+                    </machines>
+                </toolgroup>
+                <toolgroup id="3">
+                    <machines>
+                        <machine id="196609" availAt="17">
+                            <type2speed>3,0.2</type2speed>
+                            <type2speed>7,0.166666666666667</type2speed>
+                        </machine>
+                        <machine id="196610" availAt="18">
+                            <type2speed>3,0.25</type2speed>
+                            <type2speed>7,0.5</type2speed>
+                        </machine>
+                        <machine id="196611" availAt="15">
+                            <type2speed>3,0.111111111111111</type2speed>
+                            <type2speed>7,1</type2speed>
+                        </machine>
+                    </machines>
+                </toolgroup>
+            </toolgroups>
+        </resource>
+    </resources>
+    <itypes>
+        <itype id="4">
+            <routes>
+                <route id="262145">1,4</route>
+            </routes>
+        </itype>
+        <itype id="1">
+            <routes>
+                <route id="65537">4,6</route>
+            </routes>
+        </itype>
+        <itype id="3">
+            <routes>
+                <route id="196609">3,7,2,6</route>
+                <route id="196610">3,2,6,7</route>
+            </routes>
+        </itype>
+        <itype id="2">
+            <routes>
+                <route id="131073">3,6</route>
+                <route id="131074">6,3</route>
+            </routes>
+        </itype>
+        <itype id="5">
+            <routes>
+                <route id="327681">2,2,3,1</route>
+                <route id="327682">1,2,2,3</route>
+            </routes>
+        </itype>
+    </itypes>
+    <ptypes>
+        <ptype type="1">
+            <boms>
+                <bom id="65537">
+                    <nodes>
+                        <node id="0">4</node>
+                        <node id="1">3</node>
+                        <node id="2">3</node>
+                    </nodes>
+                    <arcs>
+                        <arc>2,1</arc>
+                        <arc>1,0</arc>
+                    </arcs>
+                </bom>
+                <bom id="65538">
+                    <nodes>
+                        <node id="0">3</node>
+                        <node id="1">4</node>
+                    </nodes>
+                    <arcs>
+                        <arc>1,0</arc>
+                    </arcs>
+                </bom>
+            </boms>
+        </ptype>
+        <ptype type="2">
+            <boms>
+                <bom id="131073">
+                    <nodes>
+                        <node id="0">3</node>
+                        <node id="1">1</node>
+                        <node id="2">1</node>
+                    </nodes>
+                    <arcs>
+                        <arc>2,1</arc>
+                        <arc>1,0</arc>
+                    </arcs>
+                </bom>
+                <bom id="131074">
+                    <nodes>
+                        <node id="0">3</node>
+                        <node id="1">3</node>
+                    </nodes>
+                    <arcs>
+                        <arc>1,0</arc>
+                    </arcs>
+                </bom>
+            </boms>
+        </ptype>
+    </ptypes>
+    <operations>
+        <operation id="65544">
+            <type>4</type>
+            <partID>65538</partID>
+            <partType>4</partType>
+            <unitID>1</unitID>
+            <unitType>1</unitType>
+            <bomID>65538</bomID>
+            <routeID>262145</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>2</toolGroup>
+            <machID>131073</machID>
+            <weight>4</weight>
+            <releaseTime>2</releaseTime>
+            <startTime>2</startTime>
+            <procTime>7</procTime>
+            <dueTime>10.8608</dueTime>
+            <completionTime>9</completionTime>
+        </operation>
+        <operation id="196618">
+            <type>6</type>
+            <partID>196610</partID>
+            <partType>3</partType>
+            <unitID>3</unitID>
+            <unitType>2</unitType>
+            <bomID>131074</bomID>
+            <routeID>196609</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>1</toolGroup>
+            <machID>65537</machID>
+            <weight>4</weight>
+            <releaseTime>11</releaseTime>
+            <startTime>11</startTime>
+            <procTime>1</procTime>
+            <dueTime>10.8608</dueTime>
+            <completionTime>12</completionTime>
+        </operation>
+        <operation id="131082">
+            <type>6</type>
+            <partID>131074</partID>
+            <partType>3</partType>
+            <unitID>2</unitID>
+            <unitType>2</unitType>
+            <bomID>131074</bomID>
+            <routeID>196609</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>1</toolGroup>
+            <machID>65537</machID>
+            <weight>2</weight>
+            <releaseTime>13</releaseTime>
+            <startTime>13</startTime>
+            <procTime>1</procTime>
+            <dueTime>10.8608</dueTime>
+            <completionTime>14</completionTime>
+        </operation>
+        <operation id="196609">
+            <type>3</type>
+            <partID>196609</partID>
+            <partType>3</partType>
+            <unitID>3</unitID>
+            <unitType>2</unitType>
+            <bomID>131074</bomID>
+            <routeID>196610</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>3</toolGroup>
+            <machID>196609</machID>
+            <weight>4</weight>
+            <releaseTime>12</releaseTime>
+            <startTime>12</startTime>
+            <procTime>5</procTime>
+            <dueTime>16.2074</dueTime>
+            <completionTime>17</completionTime>
+        </operation>
+        <operation id="131073">
+            <type>3</type>
+            <partID>131073</partID>
+            <partType>3</partType>
+            <unitID>2</unitID>
+            <unitType>2</unitType>
+            <bomID>131074</bomID>
+            <routeID>196610</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>3</toolGroup>
+            <machID>196610</machID>
+            <weight>2</weight>
+            <releaseTime>14</releaseTime>
+            <startTime>14</startTime>
+            <procTime>4</procTime>
+            <dueTime>16.2074</dueTime>
+            <completionTime>18</completionTime>
+        </operation>
+        <operation id="65542">
+            <type>2</type>
+            <partID>65537</partID>
+            <partType>3</partType>
+            <unitID>1</unitID>
+            <unitType>1</unitType>
+            <bomID>65538</bomID>
+            <routeID>196609</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>2</toolGroup>
+            <machID>131073</machID>
+            <weight>4</weight>
+            <releaseTime>14</releaseTime>
+            <startTime>14</startTime>
+            <procTime>2</procTime>
+            <dueTime>20.0074</dueTime>
+            <completionTime>16</completionTime>
+        </operation>
+        <operation id="196613">
+            <type>2</type>
+            <partID>196609</partID>
+            <partType>3</partType>
+            <unitID>3</unitID>
+            <unitType>2</unitType>
+            <bomID>131074</bomID>
+            <routeID>196610</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>2</toolGroup>
+            <machID>131073</machID>
+            <weight>4</weight>
+            <releaseTime>17</releaseTime>
+            <startTime>17</startTime>
+            <procTime>2</procTime>
+            <dueTime>18.2074</dueTime>
+            <completionTime>19</completionTime>
+        </operation>
+        <operation id="131077">
+            <type>2</type>
+            <partID>131073</partID>
+            <partType>3</partType>
+            <unitID>2</unitID>
+            <unitType>2</unitType>
+            <bomID>131074</bomID>
+            <routeID>196610</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>2</toolGroup>
+            <machID>131073</machID>
+            <weight>2</weight>
+            <releaseTime>18</releaseTime>
+            <startTime>19</startTime>
+            <procTime>2</procTime>
+            <dueTime>18.2074</dueTime>
+            <completionTime>21</completionTime>
+        </operation>
+        <operation id="65543">
+            <type>6</type>
+            <partID>65537</partID>
+            <partType>3</partType>
+            <unitID>1</unitID>
+            <unitType>1</unitType>
+            <bomID>65538</bomID>
+            <routeID>196609</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>1</toolGroup>
+            <machID>65537</machID>
+            <weight>4</weight>
+            <releaseTime>16</releaseTime>
+            <startTime>16</startTime>
+            <procTime>1</procTime>
+            <dueTime>21.7216</dueTime>
+            <completionTime>17</completionTime>
+        </operation>
+        <operation id="196614">
+            <type>6</type>
+            <partID>196609</partID>
+            <partType>3</partType>
+            <unitID>3</unitID>
+            <unitType>2</unitType>
+            <bomID>131074</bomID>
+            <routeID>196610</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>1</toolGroup>
+            <machID>65537</machID>
+            <weight>4</weight>
+            <releaseTime>17</releaseTime>
+            <startTime>19</startTime>
+            <procTime>1</procTime>
+            <dueTime>19.9216</dueTime>
+            <completionTime>20</completionTime>
+        </operation>
+        <operation id="131078">
+            <type>6</type>
+            <partID>131073</partID>
+            <partType>3</partType>
+            <unitID>2</unitID>
+            <unitType>2</unitType>
+            <bomID>131074</bomID>
+            <routeID>196610</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>1</toolGroup>
+            <machID>65537</machID>
+            <weight>2</weight>
+            <releaseTime>18</releaseTime>
+            <startTime>21</startTime>
+            <procTime>1</procTime>
+            <dueTime>19.9216</dueTime>
+            <completionTime>22</completionTime>
+        </operation>
+        <operation id="196615">
+            <type>7</type>
+            <partID>196609</partID>
+            <partType>3</partType>
+            <unitID>3</unitID>
+            <unitType>2</unitType>
+            <bomID>131074</bomID>
+            <routeID>196610</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>3</toolGroup>
+            <machID>196611</machID>
+            <weight>4</weight>
+            <releaseTime>17</releaseTime>
+            <startTime>20</startTime>
+            <procTime>1</procTime>
+            <dueTime>21.7216</dueTime>
+            <completionTime>21</completionTime>
+        </operation>
+        <operation id="131079">
+            <type>7</type>
+            <partID>131073</partID>
+            <partType>3</partType>
+            <unitID>2</unitID>
+            <unitType>2</unitType>
+            <bomID>131074</bomID>
+            <routeID>196610</routeID>
+            <curStepIdx>-1</curStepIdx>
+            <toolGroup>3</toolGroup>
+            <machID>196611</machID>
+            <weight>2</weight>
+            <releaseTime>18</releaseTime>
+            <startTime>22</startTime>
+            <procTime>1</procTime>
+            <dueTime>21.7216</dueTime>
+            <completionTime>23</completionTime>
+        </operation>
+    </operations>
+    <precedences>
+        <arc>196613,131077,0</arc>
+        <arc>196613,196614,1</arc>
+        <arc>65543,196614,0</arc>
+        <arc>131077,131078,1</arc>
+        <arc>196614,131078,0</arc>
+        <arc>196614,196615,1</arc>
+        <arc>131078,131079,1</arc>
+        <arc>196615,131079,0</arc>
+    </precedences>
+    <parts>
+        <part id="65537" action="SCHED">
+            <type>3</type>
+            <unitID>1</unitID>
+            <routeID>196609</routeID>
+            <curStepIdx>2</curStepIdx>
+            <curStepFinished>0</curStepFinished>
+            <releaseTime>16</releaseTime>
+            <operIDs>-1,-1,65542,65543</operIDs>
+        </part>
+        <part id="131073" action="SCHED">
+            <type>3</type>
+            <unitID>2</unitID>
+            <routeID>196610</routeID>
+            <curStepIdx>0</curStepIdx>
+            <curStepFinished>0</curStepFinished>
+            <releaseTime>18</releaseTime>
+            <operIDs>131073,131077,131078,131079</operIDs>
+        </part>
+        <part id="196609" action="SCHED">
+            <type>3</type>
+            <unitID>3</unitID>
+            <routeID>196610</routeID>
+            <curStepIdx>0</curStepIdx>
+            <curStepFinished>0</curStepFinished>
+            <releaseTime>17</releaseTime>
+            <operIDs>196609,196613,196614,196615</operIDs>
+        </part>
+    </parts>
+    <units>
+        <unit id="1" action="PLAN_PARTS_SCHED">
+            <w>4</w>
+            <r>0</r>
+            <d>13</d>
+            <ptype>1</ptype>
+            <bomID>65538</bomID>
+            <partIDs>65537</partIDs>
+            <partPrec/>
+        </unit>
+        <unit id="2" action="PLAN_PARTS_SCHED">
+            <w>2</w>
+            <r>0</r>
+            <d>13</d>
+            <ptype>2</ptype>
+            <bomID>131074</bomID>
+            <partIDs>131073</partIDs>
+            <partPrec/>
+        </unit>
+        <unit id="3" action="PLAN_PARTS_SCHED">
+            <w>4</w>
+            <r>0</r>
+            <d>13</d>
+            <ptype>2</ptype>
+            <bomID>131074</bomID>
+            <partIDs>196609</partIDs>
+            <partPrec/>
+        </unit>
+    </units>
+</problem>

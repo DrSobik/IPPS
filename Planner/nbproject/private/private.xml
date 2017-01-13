@@ -9,8 +9,6 @@
         <group name="Common">
             <file>file:/data/Projects/IPPS/CPPALG/Planner/src/main.cpp</file>
         </group>
-        <group>
-            <file>file:/data/Projects/IPPS/CPPALG/Planner/src/main.cpp</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -545,7 +545,11 @@ Schedule LocalSearchPM::solve(const SchedulingProblem& problem/*, const Schedule
 	//		this->setObjective(problem.obj);
 	this->setPM(&curPM);
 	this->setResources(&curRC);
+	
+	
+	//out << curRC << endl;
 
+		
 	this->run();
 
 	//pm->restore();
@@ -614,6 +618,7 @@ void LocalSearchPM::init() {
     //out << "RandSeed in the PM: " << randGen->getSeeds()[0] << endl;
     //out << "RandSeed in the PM: " << randGen->getMaxGenInt() << endl;
     //out << "2^32-1: " << (unsigned int) ((((unsigned long int) (2)) << 31) - 1) << endl;
+    //out << *(this->rc->) << endl;
 
     alpha = 0.1;
 
@@ -2007,13 +2012,15 @@ QList<QPair<ListDigraph::Node, ListDigraph::Node> > LocalSearchPM::selectBreakab
     // ###################  DEBUG: can be deleted  #################################   
 
     /*
+    QTextStream out(stdout);
     out << "operations on machine " << mid << " : " << endl;
     for (int k = 0; k < trgmachnodes.size(); k++) {
 	    out << pm->ops[trgmachnodes[k]]->ID << ",";
     }
-
+     
     out << endl << endl;
-     */
+    */ 
+    
     //out << "GBM:" << endl;
     //out << *pm << endl;
 
@@ -2188,6 +2195,15 @@ bool LocalSearchPM::moveOperPossible(const ListDigraph::Node &j, const ListDigra
 	return true;
     }
 
+    // 10.08.2016 added to avoid some exotic situations like only one operation on a machine
+    if (j == INVALID && k == node) {
+	return true;
+    }
+    
+    if (j == node && k == INVALID) {
+	return true;
+    }
+    
     //if (pm->conPathExists(j, k)) return false;
 
     QList<ListDigraph::Node> fri; // IMPORTANT!!! There can be several routing predecessors or successors of the node i
@@ -3840,6 +3856,8 @@ bool LocalSearchPM::debugCheckPMCorrectness(const QString& location) {
 	    t = pm->graph.target(ait);
 
 	    if (pm->ops[s]->toolID != pm->ops[t]->toolID || pm->ops[s]->machID != pm->ops[t]->machID) {
+		out << "Machine ID: " << pm->ops[s]->machID << ":" << pm->ops[s]->toolID << " -> " << pm->ops[t]->machID << ":" << pm->ops[t]->toolID << endl;
+		out << pm;
 		Debugger::err << "LocalSearchPM::debugCheckPMCorrectness : Schedule-based arc connects incompatible operations!" << ENDL;
 	    }
 	}

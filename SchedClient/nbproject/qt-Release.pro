@@ -26,4 +26,5 @@ equals(QT_MAJOR_VERSION, 4) {
 QMAKE_CXXFLAGS += -std=c++14
 }
 OBJECTS_DIR=$$DESTDIR/obj
+CONFIG += c++14
 QMAKE_CXXFLAGS += -std=c++14

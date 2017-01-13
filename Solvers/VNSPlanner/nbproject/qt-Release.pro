@@ -26,7 +26,7 @@ equals(QT_MAJOR_VERSION, 4) {
 QMAKE_CXXFLAGS += -std=c++14
 }
 OBJECTS_DIR=$$DESTDIR/obj
-QMAKE_CXXFLAGS += -std=c++14
+CONFIG += c++14
 AFTERBUILDDIR = ../../bin/DLL/Solvers/$$TARGET
 unix:QMAKE_POST_LINK = mkdir -p $$AFTERBUILDDIR &&  cp -f -d $$DESTDIR/lib* $$AFTERBUILDDIR
 QT += concurrent

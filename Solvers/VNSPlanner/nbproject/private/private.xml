@@ -12,9 +12,6 @@
             <file>file:/data/Projects/IPPS/CPPALG/Solvers/VNSPlanner/src/VNSPlanner/VNSPlanner.cpp</file>
             <file>file:/data/Projects/IPPS/CPPALG/Solvers/VNSPlanner/src/VNSPlanner/VNSPlanner.h</file>
         </group>
-        <group>
-            <file>file:/data/Projects/IPPS/CPPALG/Solvers/VNSPlanner/src/VNSPlanner/VNSPlanner.cpp</file>
-            <file>file:/data/Projects/IPPS/CPPALG/Solvers/VNSPlanner/src/VNSPlanner/VNSPlanner.h</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
