@@ -91,7 +91,7 @@ stepN3=2;
 numNeigh=2;
 
 # scheduling strategy to be used by the solver algorithm
-schedStrategyIdx=6;
+schedStrategyIdx=6; 
 
 # objective
 objective=TWT@Common;
