@@ -1,4 +1,4 @@
-echo "Hello!";
+echo "Hello!"; 
 
 # detect platform
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
@@ -91,16 +91,29 @@ stepN3=2;
 numNeigh=2;
 
 # scheduling strategy to be used by the solver algorithm
-schedStrategyIdx=6; 
+# 26.01.2017: middle model
+schedStrategyIdx=1; #6; 
 
 # objective
 objective=TWT@Common;
 
 
 # only SDR
-schedStrategy[1]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6)}";
+# modified according to the new format
+# schedStrategy[1]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6)}";
+SS2RNDSchedulerStr="RNDScheduler(RNDScheduler_ID=1;RNDScheduler_PRIMARY_OBJECTIVE=TWT@Common)@PriorityScheduler";
+SS2FIFOSchedulerSrt="WFIFOScheduler(WFIFOScheduler_ID=2;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=false)@PriorityScheduler";
+SS2WFIFOSchedulerSrt="WFIFOScheduler(WFIFOScheduler_ID=3;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=true)@PriorityScheduler";
+SS2EODSchedulerStr="WEODScheduler(WEODScheduler_ID=4;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=false)@PriorityScheduler";
+SS2WEODSchedulerStr="WEODScheduler(WEODScheduler_ID=5;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=true)@PriorityScheduler";
+SS2MODSchedulerStr="WMODScheduler(WMODScheduler_ID=6;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=false)@PriorityScheduler";
+SS2WMODSchedulerStr="WMODScheduler(WMODScheduler_ID=7;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=true)@PriorityScheduler";
+SS2CS="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7&8;CS_SCHEDULERS=[${SS2RNDSchedulerStr};${SS2FIFOSchedulerSrt};${SS2WFIFOSchedulerSrt};${SS2EODSchedulerStr};${SS2WEODSchedulerStr};${SS2MODSchedulerStr};${SS2WMODSchedulerStr}])@CombinedScheduler";
+schedStrategy[1]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:${SS2CS}}"
+
   
 # CS = SDR + ATC
+# modified according to the new format
 #schedStrategy[2]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7)}";
 SS2RNDSchedulerStr="RNDScheduler(RNDScheduler_ID=1;RNDScheduler_PRIMARY_OBJECTIVE=TWT@Common)@PriorityScheduler";
 SS2FIFOSchedulerSrt="WFIFOScheduler(WFIFOScheduler_ID=2;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=false)@PriorityScheduler";
@@ -124,15 +137,19 @@ schedStrategy[2]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VN
 #schedStrategy[2]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:${SS2FIFOSchedulerSrt}}";
  
 # CS+LS(20)
+# NOT modified according to the new format
 schedStrategy[3]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20)}";
  
 # CS+LS(200)
+# NOT modified according to the new format
 schedStrategy[4]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=200)}";
   
 # CS+LS(2000)
+# NOT modified according to the new format
 schedStrategy[5]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=2000)}";
  
 # CS+LS(20000)
+# modified according to the new format
 #schedStrategy[6]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
 SS6RNDSchedulerStr="RNDScheduler(RNDScheduler_ID=1;RNDScheduler_PRIMARY_OBJECTIVE=TWT@Common)@PriorityScheduler";
 SS6FIFOSchedulerSrt="WFIFOScheduler(WFIFOScheduler_ID=2;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=false)@PriorityScheduler";
@@ -157,27 +174,35 @@ SS6LS="LocalSearchPM(LS_PRIMARY_OBJECTIVE=TWT@Common;LS_CRIT_NODES_UPDATE_FREQ=1
 schedStrategy[6]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:${SS6LS}}";
   
 # [0%-50%):SDR, [50%-100%]:CS
+# NOT modified according to the new format
 schedStrategy[7]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-50%):CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6),[50%-100%]:CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7)}";
 
 # [0%-50%):SDR, [50%-80%):CS, [80%-100%]:CS+LS(20000)
+# NOT modified according to the new format
 schedStrategy[8]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-50%):CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6),[50%-80%):CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7),[80%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
   
 # [0%-50%):SDR, [50%-80%):CS+LS(20), [80%-100%]:CS+LS(20000)
+# NOT modified according to the new format
 schedStrategy[9]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-50%):CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6),[50%-80%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20),[80%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
   
 # [0%-80%):CS,  [80%-95%):CS+LS(20), [95%-100%]:CS+LS(20000)
+# NOT modified according to the new format
 schedStrategy[10]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-80%):CS,[80%-95%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20),[95%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
   
 # [0%-90%):SDR, [90%-100%):CS+LS(20), [100%-100%]:CS+LS(20000)
+# NOT modified according to the new format
 schedStrategy[11]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6),[90%-100%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20),[100%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
   
 # [0%-90%):CS,  [90%-100%):CS+LS(20), [100%-100%]:CS+LS(20000)
+# NOT modified according to the new format
 schedStrategy[12]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7),[90%-100%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20),[100%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
   
 # [0%-90%):SDR+LS(20), [90%-100%):CS+LS(2000), [100%-100%]:CS+LS(20000)
+# NOT modified according to the new format
 schedStrategy[13]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6;LS_MAX_ITER=20),[90%-100%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=2000),[100%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
   
 # [0%-90%):SDR+LS(20), [90%-100%):CS+LS(2000), [100%-100%]:CS+LS(20000) // Planner options variate
+# NOT modified according to the new format
 schedStrategy[14]="PLANNER{[0%-50%):(PLANNER_BEST_PLAN=false),[50%-55%):(PLANNER_BEST_PLAN=true),[55%-80%):(PLANNER_BEST_PLAN=false),[80%-85%):(PLANNER_BEST_PLAN=true),[85%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6;LS_MAX_ITER=20),[90%-100%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=2000),[100%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
         
 # set the name of the protocol
