@@ -194,6 +194,29 @@ void CombinedScheduler::scheduleActions() {
     }
     out << endl;
 
+#ifdef DEBUG    
+    
+    // 03.02.2017: Some correctness checks
+    for (ListDigraph::NodeIt nit(_bestPM.graph); nit != INVALID; ++nit) {
+	if (_bestPM.ops[nit]->ID > 0) {
+	    if (_bestPM.ops[nit]->s() < rc(_bestPM.ops[nit]->toolID, _bestPM.ops[nit]->machID).timeAvailable()) {
+		Debugger::err << "CombinedScheduler::scheduleActions : Operation s < mA!!!" << ENDL;
+		getchar();
+	    }
+
+	    if (rc(_bestPM.ops[nit]->toolID, _bestPM.ops[nit]->machID).timeAvailable() != _bestPM.ops[nit]->machAvailTime()) {
+		out << _bestPM << endl << endl;
+		out << rc(_bestPM.ops[nit]->toolID, _bestPM.ops[nit]->machID) << endl;
+		out << *_bestPM.ops[nit] << endl;
+		Debugger::err << "CombinedScheduler::scheduleActions : timeAvail mismatch!!!" << ENDL;
+		getchar();
+	    }
+	}
+	
+    }
+    
+#endif    
+    
 }
 
 CombinedScheduler & CombinedScheduler::operator<<(Scheduler * sch) {

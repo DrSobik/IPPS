@@ -820,8 +820,8 @@ void VNSPlanner::postprocessingActions() {
     }
     out << bestPlan.prodID2BOPID[pmm->prodman->products.last()->ID] << ")" << endl;
 
-    out << "VNSPlanner::postprocessingActions : Final schedule : " << endl << bestSched << endl;
-    out << "VNSPlanner::postprocessingActions : Final PM : " << endl << bestSched.pm << endl;
+    //out << "VNSPlanner::postprocessingActions : Final schedule : " << endl << bestSched << endl;
+    //out << "VNSPlanner::postprocessingActions : Final PM : " << endl << bestSched.pm << endl;
     out << "VNSPlanner::postprocessingActions : Final TWT = " << bestSched.objective << endl;
 
     out << "VNSPlanner::postprocessingActions : Number of sequential iterations without improvements: " << iterDecl() << endl;

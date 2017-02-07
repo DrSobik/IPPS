@@ -57,12 +57,12 @@ using namespace lemon;
 using namespace Common;
 
 #if defined DLL_EXPORT
-#define DLL_EXPORT_INTEFACE Q_DECL_EXPORT
+#define DLL_EXPORT_INTERFACE Q_DECL_EXPORT
 #else
-#define DLL_EXPORT_INTEFACE Q_DECL_IMPORT
+#define DLL_EXPORT_INTERFACE Q_DECL_IMPORT
 #endif
 
-class DLL_EXPORT_INTEFACE BillOfProcesses {
+class DLL_EXPORT_INTERFACE BillOfProcesses {
 private:
 
 	ListDigraph _graph;
@@ -184,7 +184,7 @@ public:
 
 	/** Output of the BOP to the text stream. */
 	//friend QTextStream& operator<<(QTextStream &out, BillOfProcesses &bop);
-	friend QTextStream& operator<<(QTextStream &out, const BillOfProcesses &bop);
+    DLL_EXPORT_INTERFACE friend QTextStream& operator<<(QTextStream &out, const BillOfProcesses &bop);
 
 private:
 

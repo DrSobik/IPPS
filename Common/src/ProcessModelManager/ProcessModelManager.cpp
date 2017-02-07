@@ -673,7 +673,7 @@ void ProcessModelManager::insertOrdSubgraph(const Product& prod, Order& ord, Pro
 
 	int nOperAdded = 0; // Number of real operations added to the graph while inserting this order
 
-	out << "Adding order : " << ord << endl;
+	//out << "Adding order : " << ord << endl;
 
 	//out << "PM before adding order : " << endl << apm << endl;
 
@@ -938,7 +938,7 @@ void ProcessModelManager::insertOrdSubgraph(const Product& prod, Order& ord, Pro
 	    }
 	}
 
-	out << "ProcessModelManager::insertOrdSubgraph : After modifying the operation IDs:" << endl << apm << endl;
+	//out << "ProcessModelManager::insertOrdSubgraph : After modifying the operation IDs:" << endl << apm << endl;
 
 	//	getchar();
 
@@ -966,7 +966,7 @@ void ProcessModelManager::insertOrdSubgraph(const Product& prod, Order& ord, Pro
 
 	int nOperAdded = 0; // Number of real operations added to the graph while inserting this order
 
-	out << "Adding order (OA_SCHED): " << ord << endl;
+	//out << "Adding order (OA_SCHED): " << ord << endl;
 
 	//out << "PM before adding order : " << endl << apm << endl;
 
@@ -1235,7 +1235,7 @@ void ProcessModelManager::insertOrdSubgraph(const Product& prod, Order& ord, Pro
 	    }
 	}
 
-	out << "ProcessModelManager::insertOrdSubgraph : After modifying the operation IDs (OA_SCHED):" << endl << apm << endl;
+	//out << "ProcessModelManager::insertOrdSubgraph : After modifying the operation IDs (OA_SCHED):" << endl << apm << endl;
 
 	//getchar();
 

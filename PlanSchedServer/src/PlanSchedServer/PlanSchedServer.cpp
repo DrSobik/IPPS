@@ -774,6 +774,144 @@ void PlanSchedServer::createPMM() {
     out << "PlanSchedServer::createPMM : Nodes in the updated process model: " << countNodes(pmm.pm.graph) << endl;
 }
 
+int PlanSchedServer::nextBOMID(const int& proposedID) {
+
+    int res = proposedID;
+
+    QSet<int> existingDs;
+    QList<BillOfMaterials*> allBOMs;
+
+    for (auto iter = ptype2Boms.begin(); iter != ptype2Boms.end(); ++iter) {
+	allBOMs.append(iter.value());
+    }
+
+    for (int i = 0; i < allBOMs.size(); ++i) {
+	existingDs += allBOMs[i]->ID;
+    }
+
+    while (existingDs.contains(res)) {
+	++res;
+    }
+
+    return res;
+
+}
+
+int PlanSchedServer::nextRouteID(const int& proposedID) {
+
+    int res = proposedID;
+
+    QSet<int> existingDs;
+    QList<Route*> allRoutes;
+
+    for (auto iter = itype2Routes.begin(); iter != itype2Routes.end(); ++iter) {
+	allRoutes.append(iter.value());
+    }
+
+    for (int i = 0; i < allRoutes.size(); ++i) {
+	existingDs += allRoutes[i]->ID;
+    }
+
+    while (existingDs.contains(res)) {
+	++res;
+    }
+
+    return res;
+
+}
+
+int PlanSchedServer::nextOperationID(const int& proposedID) {
+
+    int res = proposedID;
+
+    QSet<int> existingDs;
+
+    for (int i = 0; i < ordman.operations.size(); ++i) {
+	existingDs += ordman.operations[i].ID;
+    }
+
+    while (existingDs.contains(res)) {
+	++res;
+    }
+
+    return res;
+
+}
+
+int PlanSchedServer::nextItemType(const int& proposedID) {
+
+    int res = proposedID;
+
+    QSet<int> existingDs;
+
+    for (int i = 0; i < ordman.items.size(); ++i) {
+	existingDs += ordman.items[i].type;
+    }
+
+    while (existingDs.contains(res)) {
+	++res;
+    }
+
+    return res;
+
+}
+
+int PlanSchedServer::nextOperationType(const int& proposedID) {
+
+    int res = proposedID;
+
+    QSet<int> existingDs;
+    QList<Machine*> allMachs = rc.machines();
+
+    for (int i = 0; i < allMachs.size(); ++i) {
+	existingDs += (allMachs[i]->type2speed.keys().toSet());
+    }
+
+    while (existingDs.contains(res)) {
+	++res;
+    }
+
+    return res;
+
+}
+
+int PlanSchedServer::nextProductID(const int& proposedID) {
+
+    int res = proposedID;
+
+    QSet<int> existingDs;
+
+    for (int i = 0; i < prodman.products.size(); ++i) {
+
+	existingDs << prodman.products[i]->ID;
+
+    }
+
+    while (existingDs.contains(res)) {
+	++res;
+    }
+
+    return res;
+
+}
+
+int PlanSchedServer::nextMachineID(const int& proposedID) {
+
+    int res = proposedID;
+
+    QSet<int> allMachIDs;
+    QList<Machine*> allMachs = rc.machines();
+    for (int i = 0; i < allMachs.size(); ++i) {
+	allMachIDs << allMachs[i]->ID;
+    }
+    while (allMachIDs.contains(res)) {
+	++res;
+    }
+
+    return res;
+
+}
+
 QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
     // Consists of the parts within the orders
@@ -796,7 +934,31 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
 	curBOM.init();
 
-	curBOM.ID = curOrder.type; // This would generate a unique ID for the BOM in view of other orders and products
+	// 01.02.2017: Potential bug with duplicate IDs!!!
+	//curBOM.ID = curOrder.type; // This would generate a unique ID for the BOM in view of other orders and products
+	curBOM.ID = nextBOMID(curOrder.type); // This would generate a unique ID for the BOM in view of other orders and products
+
+	// 31.01.2017 : Check for duplicate BOMs
+	for (auto curIter = ptype2Boms.begin(); curIter != ptype2Boms.end(); ++curIter) {
+
+	    for (Math::int32 curIdx1 = 0; curIdx1 < curIter.value().size(); ++curIdx1) {
+
+		BillOfMaterials& curBOM1 = *curIter.value()[curIdx1];
+
+		if (curBOM1.ID == curBOM.ID) {
+
+		    out << "PlanSchedServer::createIncompleteBOMs : " << "Duplicate BOM IDs " << endl;
+		    out << curBOM1 << endl;
+		    out << curBOM << endl;
+
+		    throw ErrException();
+		}
+
+	    }
+
+	}
+
+
 	//curBOM.ID = ((curOrder.ID *2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2) + curOrder.type); // This would generate a unique ID for the BOM in view of other orders and products
 	out << "PlanSchedServer::createIncompleteBOMs : Generated BOM ID: " << curBOM.ID << " for order " << curOrder.ID << ":" << curOrder.type << endl;
 	QHash<int, ListDigraph::Node> itemID2Node;
@@ -899,8 +1061,10 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
 		// Create a new incomplete item
 		newItem = curItem;
-		newItem.type = curItem.ID;
-		newItem.routeID = curItem.ID;
+		//01.02.2017: newItem.type = curItem.ID;
+		newItem.type = nextItemType(curItem.ID);
+		//01.02.2017: newItem.routeID = curItem.ID;
+		newItem.routeID = nextRouteID(curItem.ID);
 		newItem.operIDs = curItem.operIDs.mid(curItem.curStepIdx, curItem.operIDs.size() - curItem.curStepIdx);
 		newItem.curStepIdx = 0; // Since we've removed some of the operations
 
@@ -914,7 +1078,8 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
 		// Create a new incomplete route for this item
 		Route newRoute;
-		newRoute.ID = newItem.ID;
+		//01.02.2017: newRoute.ID = newItem.ID;
+		newRoute.ID = newItem.routeID;
 		for (int curOperIdx = 0; curOperIdx < newItem.operIDs.size(); ++curOperIdx) {
 
 		    if (curOperIdx == 0 && newItem.curStepFinished) continue; // No deed to add this operation since it's already finished
@@ -928,14 +1093,16 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 		    newOper.RID = newRoute.ID;
 		    newOper.IID = newItem.ID;
 		    newOper.IT = newItem.type;
-		    newOper.OT = curBOM.ID;
+		    //01.02.2017: newOper.OT = curBOM.ID;
+		    newOper.OT = -1; // 01.02.2017: Since it's an incomplete product and it's not know here
 
 		    out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete operation: " << endl << newOper << endl;
 
 		    if (curOperIdx == 0 && !newItem.curStepFinished) { // This step is not finished and can not be scheduled on other machines
 
 			// New type for this operation
-			newOper.type = newOper.ID;
+			//01.02.2017: newOper.type = newOper.ID;
+			newOper.type = nextOperationType(newOper.ID);
 
 			// Dedicate only one machine to this operation
 			Machine& curMach = rc(newOper.toolID, newOper.machID);
@@ -943,18 +1110,21 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
 			// Create a dedicated machine
 			Machine* newMach = new Machine(curMach);
-			newMach->ID = newOper.ID;
-			
+			//01.02.2017: newMach->ID = newOper.ID;
+			newMach->ID = nextMachineID(newOper.ID);
+
+			/*// 01.02.2017: logic migrated to nextMachineID()
 			// 13.01.2017: Add checks on the already existing machines
 			QSet<int> allMachIDs;
 			QList<Machine*> allMachs = rc.machines();
-			for (int i = 0 ; i < allMachs.size() ; ++i){
+			for (int i = 0; i < allMachs.size(); ++i) {
 			    allMachIDs << allMachs[i]->ID;
 			}
-			while(allMachIDs.contains(newMach->ID)){
+			while (allMachIDs.contains(newMach->ID)) {
 			    ++newMach->ID;
 			}
-			
+			 */
+
 			newMach->type2speed.clear();
 			newMach->operations.clear();
 			newMach->type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
@@ -989,7 +1159,10 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 		curBOM.itemID[curNode] = newItem.ID;
 		curBOM.itypeID[curNode] = newItem.type;
 
-	    }
+		// 31.01.2017: Check whether such route already exists
+		runCorrectnessChecks("PlanSchedServer::createIncompleteBOMs() : curOrder.action == Order::OA_PLAN_PARTS_SCHED");
+
+	    } // Started items to replace 
 
 	} else if (curOrder.action == Order::OA_SCHED) {
 
@@ -1015,8 +1188,10 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
 		// Create a new incomplete item
 		newItem = curItem;
-		newItem.type = curItem.ID;
-		newItem.routeID = curItem.ID;
+		//01.02.2017: newItem.type = curItem.ID;
+		newItem.type = nextItemType(curItem.ID);
+		//01.02.2017: newItem.routeID = curItem.ID;
+		newItem.routeID = nextRouteID(curItem.ID);
 		newItem.operIDs = curItem.operIDs.mid(Math::max(curItem.curStepIdx, 0), curItem.operIDs.size() - Math::max(curItem.curStepIdx, 0));
 		newItem.curStepIdx = (curItem.curStepIdx == -1) ? -1 : 0; // Since we've removed some of the operations
 
@@ -1030,7 +1205,8 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
 		// Create a new incomplete route for this item
 		Route newRoute;
-		newRoute.ID = newItem.ID;
+		//01.02.2017: newRoute.ID = newItem.ID;
+		newRoute.ID = newItem.routeID;
 		for (int curOperIdx = 0; curOperIdx < newItem.operIDs.size(); ++curOperIdx) {
 
 		    if (curOperIdx == 0 && newItem.curStepIdx >= 0 && newItem.curStepFinished) continue; // No deed to add this operation since it's already finished
@@ -1044,14 +1220,16 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 		    newOper.RID = newRoute.ID;
 		    newOper.IID = newItem.ID;
 		    newOper.IT = newItem.type;
-		    newOper.OT = curBOM.ID;
+		    //01.02.2017: newOper.OT = curBOM.ID;
+		    newOper.OT = -1; // Product unknown here
 
 		    out << "PlanSchedServer::createIncompleteBOMs : Created new incomplete operation (SCHED): " << endl << newOper << endl;
 
 		    if (curOperIdx == 0 && newItem.curStepIdx >= 0 && !newItem.curStepFinished) { // This step is not finished and can not be scheduled on other machines
 
 			// New type for this operation
-			newOper.type = newOper.ID;
+			//01.02.2017: newOper.type = newOper.ID;
+			newOper.type = nextOperationType(newOper.ID);
 
 			// Dedicate only one machine to this operation
 			Machine& curMach = rc(newOper.toolID, newOper.machID);
@@ -1059,18 +1237,21 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
 			// Create a dedicated machine
 			Machine* newMach = new Machine(curMach);
-			newMach->ID = newOper.ID;
-			
+			//01.02.2017: newMach->ID = newOper.ID;
+			newMach->ID = nextMachineID(newOper.ID);
+
+			/*// 01.02.2017: Logic migrated to nextMachineID()
 			// 13.01.2017: Add checks on the already existing machines
 			QSet<int> allMachIDs;
 			QList<Machine*> allMachs = rc.machines();
-			for (int i = 0 ; i < allMachs.size() ; ++i){
+			for (int i = 0; i < allMachs.size(); ++i) {
 			    allMachIDs << allMachs[i]->ID;
 			}
-			while(allMachIDs.contains(newMach->ID)){
+			while (allMachIDs.contains(newMach->ID)) {
 			    ++newMach->ID;
 			}
-			
+			 */
+
 			newMach->type2speed.clear();
 			newMach->operations.clear();
 			newMach->type2speed[newOper.type] = Math::numInfinity<double>; //curMach.type2speed[curOper.type];
@@ -1105,7 +1286,10 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 		curBOM.itemID[curNode] = newItem.ID;
 		curBOM.itypeID[curNode] = newItem.type;
 
-	    }
+		// 31.01.2017: Some correctness checks
+		runCorrectnessChecks("PlanSchedServer::createIncompleteBOMs() : curOrder.action == Order::OA_SCHED");
+
+	    } // Items to replace
 
 	}
 
@@ -1113,10 +1297,13 @@ QHash<int, BillOfMaterials > PlanSchedServer::createIncompleteBOMs() {
 
 	ordID2Bom.insert(curOrder.ID, curBOM);
 
+	// 31.01.2017 : Correctness checks
+	runCorrectnessChecks("PlanSchedServer::createIncompleteBOMs() : when created incomplete BOM");
+
 	//out << "Saved it" << endl;
 	//getchar();
 
-    }
+    } // Orders
 
     return ordID2Bom;
 }
@@ -1133,12 +1320,25 @@ void PlanSchedServer::createIncompleteProducts() {
 
 	out << "PlanSchedServer::createIncompleteProducts : Incomplete BOM : " << endl << curBOM << endl;
 
-	int curProdID = curBOM.ID;
+	// 01.02.2017: int curProdID = curBOM.ID;
+	int curProdID = nextProductID(curBOM.ID);
+
+	// 31.01.2017: Check whether this product ID already exists
+	for (Math::int32 i = 0; i < products.size(); ++i) {
+	    if (products[i].ID == curProdID) {
+		out << "PlanSchedServer::createIncompleteProducts : " << "Product already exists!!! " << endl;
+		out << products[i] << endl;
+
+		throw ErrException();
+	    }
+	}
 
 	icplProdType2IcplBom.insert(curProdID, curBOM);
 
 	// Set the order type to the new incomplete product
 	ordman.orderByID(curOrdID).type = curProdID;
+
+	// 01.02.2017: Set the OT for the operations?
 
 	//ordman.orderByID(curOrdID).BID = curBOM.ID;  The BID must stay the same as in the simulation
 
@@ -1177,7 +1377,10 @@ void PlanSchedServer::createIncompleteProducts() {
 
 	// Add the incomplete product to the prodman
 	prodman << &products.last();
-    }
+
+    } // Incomplete BOMs
+
+    runCorrectnessChecks("PlanSchedServer::createIncompleteProducts : After creating incomplete products");
 
 }
 
@@ -1752,10 +1955,40 @@ void PlanSchedServer::incomingConnection() {
 	createPMM();
 
 
+	// 31.01.2017 : Run some correctness checks
+	runCorrectnessChecks("PlanSchedServer::incomingConnection : Before solving...");
+
+
 	// Perform planning and scheduling ...
 	PlanSched ps;
 	//    solver.run();
 	ps = solver->solve(ippsProblem);
+
+#ifdef DEBUG    
+
+	// 03.02.2017: Some correctness checks
+	for (ListDigraph::NodeIt nit(ps.schedule.pm.graph); nit != INVALID; ++nit) {
+	    if (ps.schedule.pm.ops[nit]->ID > 0) {
+		if (ps.schedule.pm.ops[nit]->s() < rc(ps.schedule.pm.ops[nit]->toolID, ps.schedule.pm.ops[nit]->machID).timeAvailable()) {
+		    out << ps.schedule.pm << endl << endl;
+		    out << rc(ps.schedule.pm.ops[nit]->toolID, ps.schedule.pm.ops[nit]->machID) << endl;
+		    out << *ps.schedule.pm.ops[nit] << endl;
+		    Debugger::err << "PlanSchedServer::incomingConnection ps.schedule.pm: Operation s < mA!!!" << ENDL;
+		    getchar();
+		}
+
+		if (rc(ps.schedule.pm.ops[nit]->toolID, ps.schedule.pm.ops[nit]->machID).timeAvailable() != ps.schedule.pm.ops[nit]->machAvailTime()) {
+		    out << ps.schedule.pm << endl << endl;
+		    out << rc(ps.schedule.pm.ops[nit]->toolID, ps.schedule.pm.ops[nit]->machID) << endl;
+		    out << *ps.schedule.pm.ops[nit] << endl;
+		    Debugger::err << "PlanSchedServer::incomingConnection ps.schedule.pm: timeAvail mismatch!!!" << ENDL;
+		    getchar();
+		}
+	    }
+
+	}
+
+#endif 
 
 	/******************************************************************************************************************/
 
@@ -1766,8 +1999,70 @@ void PlanSchedServer::incomingConnection() {
 	Plan plan = ps.plan;
 	Schedule sched = ps.schedule;
 
+#ifdef DEBUG    
+
+	// 03.02.2017: Some correctness checks
+	for (ListDigraph::NodeIt nit(sched.pm.graph); nit != INVALID; ++nit) {
+	    if (sched.pm.ops[nit]->ID > 0) {
+		if (sched.pm.ops[nit]->s() < rc(sched.pm.ops[nit]->toolID, sched.pm.ops[nit]->machID).timeAvailable()) {
+		    out << sched.pm << endl << endl;
+		    out << rc(sched.pm.ops[nit]->toolID, sched.pm.ops[nit]->machID) << endl;
+		    out << *sched.pm.ops[nit] << endl;
+		    Debugger::err << "PlanSchedServer::incomingConnection sched.pm: Operation s < mA!!!" << ENDL;
+		    getchar();
+		}
+
+		if (rc(sched.pm.ops[nit]->toolID, sched.pm.ops[nit]->machID).timeAvailable() != sched.pm.ops[nit]->machAvailTime()) {
+		    out << sched.pm << endl << endl;
+		    out << rc(sched.pm.ops[nit]->toolID, sched.pm.ops[nit]->machID) << endl;
+		    out << *sched.pm.ops[nit] << endl;
+		    Debugger::err << "PlanSchedServer::incomingConnection sched.pm: timeAvail mismatch!!!" << ENDL;
+		    getchar();
+		}
+	    }
+
+	}
+
+#endif 
+
+
 	// Set the proper product types and BOM IDs for operations of the incomplete products
 	ProcessModel schedPM = sched.pm;
+
+#ifdef DEBUG    
+
+	// 03.02.2017: Some correctness checks
+	for (ListDigraph::NodeIt nit(schedPM.graph); nit != INVALID; ++nit) {
+	    if (schedPM.ops[nit]->ID > 0) {
+		if (schedPM.ops[nit]->s() < rc(schedPM.ops[nit]->toolID, schedPM.ops[nit]->machID).timeAvailable()) {
+		    out << schedPM << endl << endl;
+		    out << rc(schedPM.ops[nit]->toolID, schedPM.ops[nit]->machID) << endl;
+		    out << *schedPM.ops[nit] << endl;
+		    Debugger::err << "PlanSchedServer::incomingConnection : Operation s < mA!!!" << ENDL;
+		    getchar();
+		}
+
+		if (rc(schedPM.ops[nit]->toolID, schedPM.ops[nit]->machID).timeAvailable() != schedPM.ops[nit]->machAvailTime()) {
+		    out << schedPM << endl << endl;
+		    out << rc(schedPM.ops[nit]->toolID, schedPM.ops[nit]->machID) << endl;
+		    out << *schedPM.ops[nit] << endl;
+		    Debugger::err << "PlanSchedServer::incomingConnection : timeAvail mismatch!!!" << ENDL;
+		    getchar();
+		}
+	    }
+
+	    if (schedPM.ops[nit]->ID == 196627 && schedPM.ops[nit]->machID == 131073 && schedPM.ops[nit]->s() == 17.0) {
+
+		out << *schedPM.ops[nit] << endl;
+		out << rc(schedPM.ops[nit]->toolID, schedPM.ops[nit]->machID) << endl;
+
+		getchar();
+	    }
+
+	}
+
+#endif    
+
 	for (ListDigraph::NodeIt nit(schedPM.graph); nit != INVALID; ++nit) {
 	    if (nit != schedPM.head && nit != schedPM.tail && origOrdID2OrigOrdType.contains(schedPM.ops[nit]->orderID())) { // This operation belongs to a fake incomplete product -> set the correct one
 		schedPM.ops[nit]->orderType(origOrdID2OrigOrdType[schedPM.ops[nit]->orderID()]);
@@ -2347,5 +2642,100 @@ void PlanSchedServer::parse(const Settings& settings) {
     this->settings.setChanged(false);
 
     out << "PlanSchedServer::parse : Done parsing settings." << endl;
+
+}
+
+void PlanSchedServer::runCorrectnessChecks(const QString& place) {
+
+    QTextStream out(stdout);
+
+    out << "PlanSchedServer::runCorrectnessChecks : " << "Checking correctness in <" << place << ">" << endl;
+
+    // Check for duplicate routes
+    QList<Route*> allRoutes;
+    for (auto curIter = itype2Routes.begin(); curIter != itype2Routes.end(); ++curIter) {
+
+	allRoutes.append(curIter.value());
+
+    }
+
+    for (Math::int32 routeIdx1 = 0; routeIdx1 < allRoutes.size(); ++routeIdx1) {
+
+	for (Math::int32 routeIdx2 = routeIdx1 + 1; routeIdx2 < allRoutes.size(); ++routeIdx2) {
+
+	    Route& curRoute1 = *allRoutes[routeIdx1];
+	    Route& curRoute2 = *allRoutes[routeIdx2];
+
+	    if (curRoute1.ID == curRoute2.ID) {
+
+		out << "PlanSchedServer::runCorrectnessChecks : " << "Duplicate routes " << endl;
+		out << curRoute1 << endl;
+		out << curRoute2 << endl;
+
+		throw ErrException();
+	    }
+
+	}
+
+    }
+
+
+    // Check for duplicate BOMs
+    QList<BillOfMaterials*> allBOMs;
+    for (auto curIter = ptype2Boms.begin(); curIter != ptype2Boms.end(); ++curIter) {
+
+	allBOMs.append(curIter.value());
+
+    }
+
+    for (Math::int32 curIdx1 = 0; curIdx1 < allBOMs.size(); ++curIdx1) {
+
+	for (Math::int32 curIdx2 = curIdx1 + 1; curIdx2 < allBOMs.size(); ++curIdx2) {
+
+	    BillOfMaterials& curBOM1 = *allBOMs[curIdx1];
+	    BillOfMaterials& curBOM2 = *allBOMs[curIdx2];
+
+	    if (curBOM1.ID == curBOM2.ID) {
+
+		out << "PlanSchedServer::runCorrectnessChecks : " << "Duplicate BOMs " << endl;
+		out << curBOM1 << endl;
+		out << curBOM2 << endl;
+
+		throw ErrException();
+	    }
+
+	}
+
+    }
+
+    // Check for duplicate BOPs
+    QList<BillOfProcesses*> allBOPs;
+    for (auto curIter = ptype2Bops.begin(); curIter != ptype2Bops.end(); ++curIter) {
+
+	allBOPs.append(curIter.value());
+
+    }
+
+    for (Math::int32 curIdx1 = 0; curIdx1 < allBOPs.size(); ++curIdx1) {
+
+	for (Math::int32 curIdx2 = curIdx1 + 1; curIdx2 < allBOPs.size(); ++curIdx2) {
+
+	    BillOfProcesses& curBOP1 = *allBOPs[curIdx1];
+	    BillOfProcesses& curBOP2 = *allBOPs[curIdx2];
+
+	    if (curBOP1.ID == curBOP2.ID) {
+
+		out << "PlanSchedServer::runCorrectnessChecks : " << "Duplicate BOPs " << endl;
+		out << curBOP1 << endl;
+		out << curBOP2 << endl;
+
+		throw ErrException();
+	    }
+
+	}
+
+    }
+
+    out << "PlanSchedServer::runCorrectnessChecks : " << "Done checking correctness in <" << place << ">" << endl;
 
 }

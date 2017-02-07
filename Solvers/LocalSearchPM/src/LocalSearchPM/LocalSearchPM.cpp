@@ -545,11 +545,11 @@ Schedule LocalSearchPM::solve(const SchedulingProblem& problem/*, const Schedule
 	//		this->setObjective(problem.obj);
 	this->setPM(&curPM);
 	this->setResources(&curRC);
-	
-	
+
+
 	//out << curRC << endl;
 
-		
+
 	this->run();
 
 	//pm->restore();
@@ -560,6 +560,32 @@ Schedule LocalSearchPM::solve(const SchedulingProblem& problem/*, const Schedule
     sched.fromPM(curPM, *obj);
 
     out << "LocalSearchPM::solve : Finished!" << endl;
+
+#ifdef DEBUG    
+
+    // 03.02.2017: Some correctness checks
+    for (ListDigraph::NodeIt nit(curPM.graph); nit != INVALID; ++nit) {
+	if (curPM.ops[nit]->ID > 0) {
+	    if (curPM.ops[nit]->s() < (*rc)(curPM.ops[nit]->toolID, curPM.ops[nit]->machID).timeAvailable()) {
+		out << curPM << endl << endl;
+		out << (*rc)(curPM.ops[nit]->toolID, curPM.ops[nit]->machID) << endl;
+		out << *curPM.ops[nit] << endl;
+		Debugger::err << "LocalSearchPM::solve : Operation s < mA!!!" << ENDL;
+		getchar();
+	    }
+
+	    if ((*rc)(curPM.ops[nit]->toolID, curPM.ops[nit]->machID).timeAvailable() != curPM.ops[nit]->machAvailTime()) {
+		out << curPM << endl << endl;
+		out << (*rc)(curPM.ops[nit]->toolID, curPM.ops[nit]->machID) << endl;
+		out << *curPM.ops[nit] << endl;
+		Debugger::err << "LocalSearchPM::solve: timeAvail mismatch!!!" << ENDL;
+		getchar();
+	    }
+	}
+
+    }
+
+#endif 
 
     return sched;
 
@@ -2019,8 +2045,8 @@ QList<QPair<ListDigraph::Node, ListDigraph::Node> > LocalSearchPM::selectBreakab
     }
      
     out << endl << endl;
-    */ 
-    
+     */
+
     //out << "GBM:" << endl;
     //out << *pm << endl;
 
@@ -2199,11 +2225,11 @@ bool LocalSearchPM::moveOperPossible(const ListDigraph::Node &j, const ListDigra
     if (j == INVALID && k == node) {
 	return true;
     }
-    
+
     if (j == node && k == INVALID) {
 	return true;
     }
-    
+
     //if (pm->conPathExists(j, k)) return false;
 
     QList<ListDigraph::Node> fri; // IMPORTANT!!! There can be several routing predecessors or successors of the node i
@@ -2606,7 +2632,7 @@ void LocalSearchPM::moveOper(const int& mid, const ListDigraph::Node &jNode, con
     // IMPORTANT!!!
     //topolSorted.clear();
     prevRS.clear();
-
+    
     if ((node == jNode) || (node == kNode)) { // The operation is not moved
 	remMachID = pm->ops[node]->machID;
 
@@ -2871,6 +2897,10 @@ void LocalSearchPM::moveOper(const int& mid, const ListDigraph::Node &jNode, con
     // Update the machine id of the moved operation and preserve the previous assignment ID
     remMachID = pm->ops[node]->machID;
     pm->ops[node]->machID = mid;
+    
+    // 03.02.2017
+    pm->ops[node]->machAvailTime((*rc)(pm->ops[node]->toolID, pm->ops[node]->machID).timeAvailable(), false);
+    
     /*
     if (j != INVALID) {
 	    pm->ops[node]->machID = pm->ops[j]->machID;
@@ -2953,6 +2983,9 @@ void LocalSearchPM::moveBackOper(const ListDigraph::Node & node) {
     // Restore the machine assignment of the operation
     pm->ops[node]->machID = remMachID;
 
+    // 03.02.2017
+    pm->ops[node]->machAvailTime((*rc)(pm->ops[node]->toolID, pm->ops[node]->machID).timeAvailable(), false);
+    
     // Restore the processing time of the moved operation
     pm->ops[node]->p(((*rc)(pm->ops[node]->toolID, pm->ops[node]->machID)).procTime(pm->ops[node]));
 

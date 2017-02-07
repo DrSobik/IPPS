@@ -207,7 +207,7 @@ public:
 	// 13.01.2017: Add checks on existing Machines
 	if (mid2idx.contains(machine->ID)) {
 	    QTextStream out(stdout);
-	    
+
 	    out << "virtual ToolGroup& ToolGroup::operator<<(Machine *machine) : Machine with ID = " << machine->ID << " already exists!" << endl;
 	    throw Common::Exceptions::ErrMsgException<>("virtual ToolGroup& operator<<(Machine *machine) : Machine already exists!");
 	}
@@ -364,6 +364,25 @@ public:
     inline Machine& operator()(const int tID, const int mID) {
 	// IMPORTANT!!! BUG FIXED!!! id2idx in ToolGroup and in Resources classed are DIFFERENT!!! 
 	//return *(tools[id2idx[tID]]->_machines[id2idx[mID]]);
+
+#ifdef DEBUG
+	if (!tid2idx.contains(tID)) {
+	    Debugger::err << "ToolGroup& operator() (const int tID, const int mID) : Machine group " << tID << " not found!!!" << ENDL;
+	}
+	
+	if (!tools[tid2idx[tID]]->mid2idx.contains(mID)) {
+	    Debugger::err << "ToolGroup& operator() (const int tID, const int mID) : Machine group " << tID << " does not contain machine " << mID << ENDL;
+	}
+	
+	if (tID < 0) {
+	    Debugger::err << "ToolGroup& operator() (const int tID, const int mID) : tID < 0 " << ENDL;
+	}
+	
+	if (mID < 0) {
+	    Debugger::err << "ToolGroup& operator() (const int tID, const int mID) : mID < 0 " << ENDL;
+	}
+	
+#endif
 
 	return *(tools[tid2idx[tID]]->_machines[tools[tid2idx[tID]]->mid2idx[mID]]);
     }

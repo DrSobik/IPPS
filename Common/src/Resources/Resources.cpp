@@ -215,7 +215,8 @@ Machine& Machine::operator<<(Operation *o) {
 	o->machAvailTime(this->timeAvail);
 
 	// Set the operation's start and processing times
-	o->sp(Math::max(t, o->r()), pt);
+	// 01.02.2017: o->sp(Math::max(t, o->r()), pt);
+	o->sp(Math::max(Math::max(t, o->r()),this->timeAvailable()), pt);
 
 	// Update the next time the machine will become available
 	t = o->c();

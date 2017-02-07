@@ -23,6 +23,7 @@
 #include "SmartPointer"
 #include "Loader"
 #include "Parser"
+#include "Exceptions"
 
 #include "DebugExt.h"
 
@@ -44,6 +45,7 @@
 
 using namespace Common;
 using namespace Common::SmartPointers;
+using namespace Common::Exceptions;
 
 class PlanSchedServer : public QTcpServer, public Parser<void, const Settings&> {
     Q_OBJECT
@@ -125,7 +127,25 @@ public:
     /** Parse settings */
     void parse(const Settings&) override;
 
+    /** Procedure to run data correctness checks to avoid duplicates etc. */
+    void runCorrectnessChecks(const QString& place);
 
+    /** Utilities */
+    int nextBOMID(const int& proposedID);
+    
+    int nextRouteID(const int& proposedID);
+    
+    int nextOperationID(const int& proposedID);
+    
+    int nextItemType(const int& proposedID);
+    
+    int nextOperationType(const int& proposedID);
+    
+    int nextProductID(const int& proposedID);
+    
+    int nextMachineID(const int& proposedID);
+    
+    
 public slots:
 
     /** Synchronous incoming connection handling */
