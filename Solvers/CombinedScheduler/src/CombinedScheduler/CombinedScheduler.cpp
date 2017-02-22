@@ -287,6 +287,8 @@ void CombinedScheduler::setObjective(ScalarObjective& newObj) {
 void CombinedScheduler::parse(const SchedulerOptions& options) {
     QTextStream out(stdout);
 
+    out << "CombinedScheduler::parse : Parsing settings..." << endl;
+    
 //    if (settings["ALL_SETTINGS"].get() != options["ALL_SETTINGS"].get()) {
 //        out << "!=" << endl;
 //        out << settings["ALL_SETTINGS"].get().compare(options["ALL_SETTINGS"].get()) << endl;

@@ -2850,7 +2850,7 @@ void VNSPlanner::parse(const PlannerOptions& plannerOptions) {
 
 	    }
 
-	    // Othe settings could be parsed here
+	    // Other settings could be parsed here
 
 	    considerSingleStrategySettings = true;
 

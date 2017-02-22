@@ -472,7 +472,13 @@ void LocalSearchPM::parse(const SchedulerOptions& options) {
 		try {
 
 		    //initScheduler = initSchedulerLoader.load(initSchedureLib, QString("new_" + initSchedulerName).toStdString().data());
-		    initScheduler.setPointer(initSchedulerLoader.load(initSchedulerLib, QString("new_" + initSchedulerName).toStdString().data()), true);
+		    out << "LocalSearchPM::parse : initSchedulerPointer before recreation: " << initScheduler.getPointer() << endl;
+		    		    
+		    SchedSolver* newInitScheduler = initSchedulerLoader.load(initSchedulerLib, QString("new_" + initSchedulerName).toStdString().data());
+		    initScheduler.setPointer(newInitScheduler, true);
+		    out << "LocalSearchPM::parse : newSchedSolver: " << newInitScheduler << endl;
+		    
+		    out << "LocalSearchPM::parse : initSchedulerPointer after recreation: " << initScheduler.getPointer() << endl;
 
 		} catch (Common::Util::DLLLoadException<Common::Util::DLLResolveLoader<SchedSolver*, QLibrary&, const char*>>&) {
 
@@ -492,8 +498,15 @@ void LocalSearchPM::parse(const SchedulerOptions& options) {
 		    SchedulerOptions lsInitSchedSettings;
 		    lsInitSchedSettings["ALL_SETTINGS"] = initSchedulerParams;
 
+		    out << "LocalSearchPM::parse : parsing lsInitSchedSettings..." << endl;
 		    initScheduler->parse(lsInitSchedSettings);
+		    out << "LocalSearchPM::parse : done parsing lsInitSchedSettings." << endl;
 
+		} else {
+		    
+		    out << "LocalSearchPM::parse : initScheduler invalid!" << endl;
+		    getchar();
+		    
 		}
 
 	    }
