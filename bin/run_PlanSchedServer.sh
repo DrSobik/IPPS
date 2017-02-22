@@ -92,7 +92,7 @@ numNeigh=2;
 
 # scheduling strategy to be used by the solver algorithm
 # 26.01.2017: middle model
-schedStrategyIdx=1; #6; 
+schedStrategyIdx=12; 
 
 # objective
 objective=TWT@Common;
@@ -194,8 +194,29 @@ schedStrategy[10]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLAN
 schedStrategy[11]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6),[90%-100%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20),[100%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
   
 # [0%-90%):CS,  [90%-100%):CS+LS(20), [100%-100%]:CS+LS(20000)
-# NOT modified according to the new format
-schedStrategy[12]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7),[90%-100%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20),[100%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
+SS12RNDSchedulerStr="RNDScheduler(RNDScheduler_ID=1;RNDScheduler_PRIMARY_OBJECTIVE=TWT@Common)@PriorityScheduler";
+SS12FIFOSchedulerSrt="WFIFOScheduler(WFIFOScheduler_ID=2;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=false)@PriorityScheduler";
+SS12WFIFOSchedulerSrt="WFIFOScheduler(WFIFOScheduler_ID=3;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=true)@PriorityScheduler";
+SS12EODSchedulerStr="WEODScheduler(WEODScheduler_ID=4;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=false)@PriorityScheduler";
+SS12WEODSchedulerStr="WEODScheduler(WEODScheduler_ID=5;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=true)@PriorityScheduler";
+SS12MODSchedulerStr="WMODScheduler(WMODScheduler_ID=6;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=false)@PriorityScheduler";
+SS12WMODSchedulerStr="WMODScheduler(WMODScheduler_ID=7;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=true)@PriorityScheduler";
+SS12ATCFFFIFOSrt="WFIFOScheduler(WFIFOScheduler_ID=1;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=false)@PriorityScheduler";
+SS12ATCFFWFIFOSrt="WFIFOScheduler(WFIFOScheduler_ID=2;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=true)@PriorityScheduler";
+SS12ATCFFEODStr="WEODScheduler(WEODScheduler_ID=3;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=false)@PriorityScheduler";
+SS12ATCFFWEODStr="WEODScheduler(WEODScheduler_ID=4;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=true)@PriorityScheduler";
+SS12ATCFFMODStr="WMODScheduler(WMODScheduler_ID=5;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=false)@PriorityScheduler";
+SS12ATCFFWMODStr="WMODScheduler(WMODScheduler_ID=6;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=true)@PriorityScheduler";
+SS12ATCFFMDDStr="WMDDScheduler(WMDDScheduler_ID=7;WMDDScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMDDScheduler_WEIGHTED=false)@PriorityScheduler";
+SS12ATCFFWMDDStr="WMDDScheduler(WMDDScheduler_ID=8;WMDDScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMDDScheduler_WEIGHTED=true)@PriorityScheduler";
+SS12ATCFFEstimatorStr="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7&8;CS_SCHEDULERS=[${SS12ATCFFFIFOSrt};${SS12ATCFFWFIFOSrt};${SS12ATCFFEODStr};${SS12ATCFFWEODStr};${SS12ATCFFMODStr};${SS12ATCFFWMODStr};${SS12ATCFFMDDStr};${SS12ATCFFWMDDStr}])@CombinedScheduler";
+SS12ATCSchedulerStr="ATCANScheduler(ATCANScheduler_ID=8;ATCANScheduler_PRIMARY_OBJECTIVE=TWT@Common;ATCANScheduler_KAPPA=2.0;ATCANScheduler_KAPPA_OPT=true;ATCANScheduler_CONSIDER_SUCC=false;ATCANScheduler_FF_ESTIMATOR=${SS12ATCFFEstimatorStr})@PriorityScheduler";
+SS12CS="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7&8;CS_SCHEDULERS=[${SS12RNDSchedulerStr};${SS12FIFOSchedulerSrt};${SS12WFIFOSchedulerSrt};${SS12EODSchedulerStr};${SS12WEODSchedulerStr};${SS12MODSchedulerStr};${SS12WMODSchedulerStr};${SS12ATCSchedulerStr}])@CombinedScheduler";
+SS12LSInitScheduler="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7&8;CS_SCHEDULERS=[${SS12RNDSchedulerStr};${SS12FIFOSchedulerSrt};${SS12WFIFOSchedulerSrt};${SS12EODSchedulerStr};${SS12WEODSchedulerStr};${SS12MODSchedulerStr};${SS12WMODSchedulerStr};${SS12ATCSchedulerStr}])@CombinedScheduler";
+SS12LS20="LocalSearchPM(LS_PRIMARY_OBJECTIVE=TWT@Common;LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;LS_MAX_ITER=20;LS_BEST_POS_TO_MOVE=false;LS_INIT_SCHEDULER=${SS12LSInitScheduler})@LocalSearchPM";
+SS12LS20000="LocalSearchPM(LS_PRIMARY_OBJECTIVE=TWT@Common;LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;LS_MAX_ITER=20000;LS_BEST_POS_TO_MOVE=false;LS_INIT_SCHEDULER=${SS12LSInitScheduler})@LocalSearchPM";
+#schedStrategy[12]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7),[90%-100%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20),[100%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
+schedStrategy[12]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):${SS12CS},[90%-100%):${SS12LS20},[100%-100%]:${SS12LS20000}}";
   
 # [0%-90%):SDR+LS(20), [90%-100%):CS+LS(2000), [100%-100%]:CS+LS(20000)
 # NOT modified according to the new format
@@ -222,7 +243,7 @@ protoFile="${protoFileDir}${protoFileName}.xml";
 echo $protoFile;
 
 # run the prograFm
-echo "Current scheduling strategy: ${schedStrategy[${schedStrategyIdx}]}";
+echo "###################################  Current scheduling strategy: ${schedStrategy[${schedStrategyIdx}]}  ######################################################";
    
 # Initial scheduler
 RNDSchedulerStr="RNDScheduler(RNDScheduler_ID=1;RNDScheduler_PRIMARY_OBJECTIVE=TWT@Common)@PriorityScheduler";
