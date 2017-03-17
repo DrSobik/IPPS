@@ -100,6 +100,8 @@ public:
     /** Clears all data in the server. */
     virtual void clear();
 
+    void readSolverSettings(const QByteArray& message);
+    
     void readResources(const QByteArray& message);
 
     void readRoutes(const QByteArray& message);

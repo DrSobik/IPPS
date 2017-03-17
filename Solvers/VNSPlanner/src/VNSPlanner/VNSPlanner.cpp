@@ -2498,7 +2498,7 @@ void VNSPlanner::parse(const PlannerOptions& plannerOptions) {
 	    }
 
 	} else {
-	    throw ErrMsgException<>(std::string("VNSPlanner::parse : VNSPLANNER_PROTOCOLFILE not specified!"));
+	    if (!settings.container().contains("PARTICULAR_SETTINGS") || settings["PARTICULAR_SETTINGS"].get() != "true") throw ErrMsgException<>(std::string("VNSPlanner::parse : VNSPLANNER_PROTOCOLFILE not specified!"));
 	}
 
 	//  ####################################################################
@@ -2544,7 +2544,7 @@ void VNSPlanner::parse(const PlannerOptions& plannerOptions) {
 	    }
 
 	} else {
-	    throw ErrMsgException<>(std::string("VNSPlanner::parse : VNSPLANNER_PRIMARY_OBJECTIVE not specified!"));
+	    if (!settings.container().contains("PARTICULAR_SETTINGS") || settings["PARTICULAR_SETTINGS"].get() != "true") throw ErrMsgException<>(std::string("VNSPlanner::parse : VNSPLANNER_PRIMARY_OBJECTIVE not specified!"));
 	}
 
 	//  ####################################################################
@@ -2573,7 +2573,7 @@ void VNSPlanner::parse(const PlannerOptions& plannerOptions) {
 	    }
 
 	} else {
-	    throw ErrMsgException<>("VNSPlanner::parse : VNSPLANNER_SOLINITRULE not specified");
+	    if (!settings.container().contains("PARTICULAR_SETTINGS") || settings["PARTICULAR_SETTINGS"].get() != "true") throw ErrMsgException<>("VNSPlanner::parse : VNSPLANNER_SOLINITRULE not specified");
 	}
 	//  ####################################################################
 
@@ -2646,7 +2646,7 @@ void VNSPlanner::parse(const PlannerOptions& plannerOptions) {
 	    }
 
 	} else {
-	    throw ErrMsgException<>("VNSPlanner::parse : VNSPLANNER_NS not specified");
+	    if (!settings.container().contains("PARTICULAR_SETTINGS") || settings["PARTICULAR_SETTINGS"].get() != "true") throw ErrMsgException<>("VNSPlanner::parse : VNSPLANNER_NS not specified");
 	}
 
 	//  ####################################################################
@@ -2703,7 +2703,7 @@ void VNSPlanner::parse(const PlannerOptions& plannerOptions) {
 
 	} else {
 
-	    throw ErrMsgException<>(std::string("VNSPLANNER_NUMNEIGH not defined!"));
+	    if (!settings.container().contains("PARTICULAR_SETTINGS") || settings["PARTICULAR_SETTINGS"].get() != "true") throw ErrMsgException<>(std::string("VNSPLANNER_NUMNEIGH not defined!"));
 
 	}
 
@@ -2724,7 +2724,7 @@ void VNSPlanner::parse(const PlannerOptions& plannerOptions) {
 
 	} else {
 
-	    throw ErrMsgException<>(std::string("VNSPLANNER_GLOBMAXITER not defined!"));
+	    if (!settings.container().contains("PARTICULAR_SETTINGS") || settings["PARTICULAR_SETTINGS"].get() != "true") throw ErrMsgException<>(std::string("VNSPLANNER_GLOBMAXITER not defined!"));
 
 	}
 	//  ####################################################################
@@ -2743,7 +2743,7 @@ void VNSPlanner::parse(const PlannerOptions& plannerOptions) {
 
 	} else {
 
-	    throw ErrMsgException<>(std::string("VNSPLANNER_GLOBMAXTIMEMINUTES not defined!"));
+	    if (!settings.container().contains("PARTICULAR_SETTINGS") || settings["PARTICULAR_SETTINGS"].get() != "true") throw ErrMsgException<>(std::string("VNSPLANNER_GLOBMAXTIMEMINUTES not defined!"));
 
 	}
 	//  ####################################################################
@@ -2761,7 +2761,7 @@ void VNSPlanner::parse(const PlannerOptions& plannerOptions) {
 
 	} else {
 
-	    throw ErrMsgException<>(std::string("VNSPLANNER_SCHEDSTRATEGY not defined!"));
+	    if (!settings.container().contains("PARTICULAR_SETTINGS") || settings["PARTICULAR_SETTINGS"].get() != "true") throw ErrMsgException<>(std::string("VNSPLANNER_SCHEDSTRATEGY not defined!"));
 
 	}
 	//  ####################################################################
@@ -2818,7 +2818,7 @@ void VNSPlanner::parse(const PlannerOptions& plannerOptions) {
 
 	} else {
 
-	    throw ErrMsgException<>(std::string("VNSPLANNER_INITSCHEDULER not defined!"));
+	    if (!settings.container().contains("PARTICULAR_SETTINGS") || settings["PARTICULAR_SETTINGS"].get() != "true") throw ErrMsgException<>(std::string("VNSPLANNER_INITSCHEDULER not defined!"));
 
 	}
 

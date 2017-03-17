@@ -129,6 +129,63 @@ void PlanSchedServer::clear() {
 
 }
 
+void PlanSchedServer::readSolverSettings(const QByteArray& message) {
+
+    QTextStream out(stdout);
+    QXmlStreamReader reader(message);
+
+    out << "PlanSchedServer::readSolverSettings : Parsing solver settings ..." << endl;
+
+    while (!reader.atEnd()) {
+
+	reader.readNext();
+
+	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.name() == "solver") {
+
+	    while (!(reader.readNext() == QXmlStreamReader::EndElement && reader.name() == "solver")) {
+
+		if (reader.tokenType() == QXmlStreamReader::StartElement && reader.name() == "setting") {
+
+		    while (!(reader.readNext() == QXmlStreamReader::EndElement && reader.name() == "setting")) { // Parse the product till the end
+
+			out << "PlanSchedServer::readSolverSettings : " << reader.text().toString() << endl;
+
+			QString curSettingText = reader.text().toString();
+			QString curSettingName = curSettingText.split("=").first();
+			QString curSettingValue = curSettingText.split("=").last();
+
+			Settings solverSettings;
+			solverSettings[curSettingName] = curSettingValue;
+			solverSettings["PARTICULAR_SETTINGS"] = "true"; // To inform the solver that it should not check other settings except the ones specified
+
+			//try{
+			solver->parse(solverSettings);
+			//}catch (ErrMsgException<>& e){
+			//   out << e.getMsg().getMsgData().data() << endl;
+			//}
+
+		    } // </setting>
+
+		} // <setting>
+
+	    } //</solver>
+
+	} // <solver>
+
+    }
+
+    if (reader.hasError()) {
+
+	out << reader.errorString() << endl;
+	Debugger::err << "PlanSchedServer::readResources : XML reader encountered an error!" << ENDL;
+    }
+
+
+    out << "PlanSchedServer::readSolverSettings : Done parsing solver settings." << endl;
+    //getchar();
+
+}
+
 void PlanSchedServer::readResources(const QByteArray& message) {
     QTextStream out(stdout);
     QXmlStreamReader reader(message);
@@ -1895,6 +1952,9 @@ void PlanSchedServer::incomingConnection() {
 
 	/**************************  Perform planning and scheduling   ****************************************************/
 
+	// 17.03.2017: Read the solver settings which could possibly be sent with the problem
+	readSolverSettings(inMessage);
+
 	// Read the resources
 	readResources(inMessage);
 
@@ -2578,7 +2638,21 @@ void PlanSchedServer::parse(const Settings& settings) {
 	}
 
     } else {
-	throw ErrMsgException<>(std::string("PlanSchedServer::parse : PLANSCHEDSERVER_SOLVER not specified!"));
+
+	//	if (this->settings.container().contains("PLANSCHEDSERVER_SOLVER_SETTING")) {
+	//	    
+	//	    QString curSettingName = this->settings["PLANSCHEDSERVER_SOLVER_SETTING"].get().split("=").first();
+	//	    QString curSettingValue = this->settings["PLANSCHEDSERVER_SOLVER_SETTING"].get().split("=").last();
+	//	    
+	//	    Settings solverSettings;
+	//	    solverSettings[curSettingName] = curSettingValue;
+	//	    solver->parse(solverSettings);
+	//	    
+	//	}else{
+
+	throw ErrMsgException<>(std::string("PlanSchedServer::parse : PLANSCHEDSERVER_SOLVER or PLANSCHEDSERVER_SOLVER_SETTING not specified!"));
+
+	//	}
     }
 
     // Parse the RNG seed
