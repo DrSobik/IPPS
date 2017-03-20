@@ -42,6 +42,7 @@
 #include "Plan"
 #include "Planner"
 #include "Protocol"
+#include "FlowFactor"
 
 using namespace Common;
 using namespace Common::SmartPointers;

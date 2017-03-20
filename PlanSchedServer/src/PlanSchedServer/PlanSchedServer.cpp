@@ -2212,6 +2212,9 @@ void PlanSchedServer::incomingConnection() {
 	// Write the schedule
 	composer << sched;
 
+	// Write the flow factor
+	composer.writeTextElement("FF", QString::number(FlowFactor()(sched.pm)));
+	
 	composer.writeEndElement(); // solution
 
 	composer.writeEndDocument();
