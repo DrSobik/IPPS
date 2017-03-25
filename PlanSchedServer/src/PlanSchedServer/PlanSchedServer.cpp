@@ -14,11 +14,15 @@ QHash<int, Operation> origStartedOperationID2origStartedOperation; // Used for p
 PlanSchedServer::PlanSchedServer() : socket(NULL)/*, scheduler(NULL)*/ {
     connect(this, SIGNAL(newConnection()), this, SLOT(incomingConnection()));
 
+    currentTime = 0.0;
+    
     // Notify the Server when the Algorithm finishes
     //    connect(&solver, SIGNAL(sigFinished()), this, SLOT(computationFinished()));
 }
 
-PlanSchedServer::PlanSchedServer(const PlanSchedServer&) : QTcpServer(0), Parser<void, const Settings&>() {
+PlanSchedServer::PlanSchedServer(const PlanSchedServer& orig) : QTcpServer(0), Parser<void, const Settings&>() {
+    
+    currentTime = orig.currentTime;
 }
 
 PlanSchedServer::~PlanSchedServer() {
@@ -125,7 +129,56 @@ void PlanSchedServer::clear() {
     origOperationID2origOperation.clear();
     origStartedOperationID2origStartedOperation.clear();
 
+    currentTime = 0.0;
+    
     out << "Everything is clear." << endl;
+
+}
+
+void PlanSchedServer::readModelSettings(const QByteArray& message) {
+
+    QTextStream out(stdout);
+    QXmlStreamReader reader(message);
+
+    out << "PlanSchedServer::readModelSettings : Parsing model settings ..." << endl;
+
+    while (!reader.atEnd()) {
+
+	reader.readNext();
+
+	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.name() == "model") {
+
+	    while (!(reader.readNext() == QXmlStreamReader::EndElement && reader.name() == "model")) {
+
+		if (reader.tokenType() == QXmlStreamReader::StartElement && reader.name() == "time") {
+
+		    while (!(reader.readNext() == QXmlStreamReader::EndElement && reader.name() == "time")) { // Parse the product till the end
+
+			out << "PlanSchedServer::readModelSettings : " << reader.text().toString() << endl;
+
+			QString curSettingText = reader.text().toString();
+			
+			currentTime = curSettingText.toDouble();
+
+		    } // </time>
+
+		} // <time>
+
+	    } //</model>
+
+	} // <model>
+
+    }
+
+    if (reader.hasError()) {
+
+	out << reader.errorString() << endl;
+	Debugger::err << "PlanSchedServer::readModelSettings : XML reader encountered an error!" << ENDL;
+    }
+
+
+    out << "PlanSchedServer::readModelSettings : Done parsing settings." << endl;
+    //getchar();
 
 }
 
@@ -555,6 +608,13 @@ void PlanSchedServer::readOperationsAndPartsAndOrders(const QByteArray& message)
 
 		    reader >> curOrder;
 
+		    // Avoid situations that there is a non-planned order with release time in the past
+		    if (curOrder.action == Order::OA_PLAN_SCHED) {
+			// 25.03.2017: If the release time is less that the current time -> set the current time as its release time
+			curOrder.r = Math::max(curOrder.r, currentTime);
+		    }
+		    
+		    
 		    // Check whether this order will get a new product
 		    if (curOrder.action == Order::OA_PLAN_PARTS_SCHED) { // This order will get a new incomplete product type
 			// Preserve some original data
@@ -562,6 +622,9 @@ void PlanSchedServer::readOperationsAndPartsAndOrders(const QByteArray& message)
 			origOrdID2OrigOrdBOM[curOrder.ID] = curOrder.BID;
 
 			curOrder.type = (curOrder.ID << 16);
+			
+			// 23.03.2017: This order has started -> set the current time as its release time
+			curOrder.r = currentTime;
 		    }
 
 		    // For all items of this order which have started and performing their last operation, set the initial release time of the succeeding items
@@ -641,6 +704,9 @@ void PlanSchedServer::readOperationsAndPartsAndOrders(const QByteArray& message)
 			origOrdID2OrigOrdBOM[curOrder.ID] = curOrder.BID;
 
 			curOrder.type = (curOrder.ID << 16);
+			
+			// 23.03.2017: This order has started -> set the current time as its release time
+			curOrder.r = currentTime;
 		    }
 
 		    // For all items of this order which have started and performing their last operation, set the initial release time of the succeeding items
@@ -1952,6 +2018,9 @@ void PlanSchedServer::incomingConnection() {
 
 	/**************************  Perform planning and scheduling   ****************************************************/
 
+	// 23.03.2017: Read the model settings like the current time
+	readModelSettings(inMessage);
+	
 	// 17.03.2017: Read the solver settings which could possibly be sent with the problem
 	readSolverSettings(inMessage);
 

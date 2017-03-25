@@ -40,6 +40,8 @@ double FlowFactor::operator()(const ProcessModel& somePM) {
         // In case there are release times of the orders
         //out << "Scheduler::flowFactor : release time : " << pm.ops[terminals[i]]->ir() << endl;
         averageCycleTime -= pm.ops[terminals[i]]->ir();
+	
+	// What about incomplete orders?
     }
 
     //out << pm << endl;

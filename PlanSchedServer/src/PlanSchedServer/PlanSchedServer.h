@@ -90,6 +90,9 @@ private:
     
     IPPSProblem ippsProblem;
     
+    // 23.03.2017: The current scheduling time point at which the schedule is created. Also used to set the correct release times for the imcomplete orders.
+    double currentTime;
+    
 public:
 
     PlanSchedServer();
@@ -101,6 +104,9 @@ public:
     /** Clears all data in the server. */
     virtual void clear();
 
+    // Model settings like the current time point
+    void readModelSettings(const QByteArray& message);
+    
     void readSolverSettings(const QByteArray& message);
     
     void readResources(const QByteArray& message);
