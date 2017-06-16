@@ -80,7 +80,9 @@ randseed=1325467;
 planningInitRule=SOL_INIT_RANK; #TPTRANK; #TPT_RANK;
 
 # neighborhood structure
-ns=NS_N2N3; #N2N1
+#ns=NS_N2N3; #N2N1
+#testing 15.06.2017
+ns=NS_N2N1;
 
 # speps withing the neighborhood structures
 stepN1=2;
@@ -88,11 +90,13 @@ stepN2=2;
 stepN3=2;
 
 # number of neighbors to be generated at a time
-numNeigh=2;
+#numNeigh=2;
+numNeigh=4; # 13.05.2017: use 4 cores since the processor is using it
 
 # scheduling strategy to be used by the solver algorithm
 # 26.01.2017: middle model
 schedStrategyIdx=12; 
+#schedStrategyIdx=1; # to test only FIFO/SDR scheduling 
 
 # objective
 objective=TWT@Common;
@@ -101,16 +105,21 @@ objective=TWT@Common;
 # only SDR
 # modified according to the new format
 # schedStrategy[1]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6)}";
-SS2RNDSchedulerStr="RNDScheduler(RNDScheduler_ID=1;RNDScheduler_PRIMARY_OBJECTIVE=TWT@Common)@PriorityScheduler";
-SS2FIFOSchedulerSrt="WFIFOScheduler(WFIFOScheduler_ID=2;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=false)@PriorityScheduler";
-SS2WFIFOSchedulerSrt="WFIFOScheduler(WFIFOScheduler_ID=3;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=true)@PriorityScheduler";
-SS2EODSchedulerStr="WEODScheduler(WEODScheduler_ID=4;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=false)@PriorityScheduler";
-SS2WEODSchedulerStr="WEODScheduler(WEODScheduler_ID=5;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=true)@PriorityScheduler";
-SS2MODSchedulerStr="WMODScheduler(WMODScheduler_ID=6;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=false)@PriorityScheduler";
-SS2WMODSchedulerStr="WMODScheduler(WMODScheduler_ID=7;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=true)@PriorityScheduler";
-SS2CS="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7&8;CS_SCHEDULERS=[${SS2RNDSchedulerStr};${SS2FIFOSchedulerSrt};${SS2WFIFOSchedulerSrt};${SS2EODSchedulerStr};${SS2WEODSchedulerStr};${SS2MODSchedulerStr};${SS2WMODSchedulerStr}])@CombinedScheduler";
-schedStrategy[1]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:${SS2CS}}"
-
+SS1RNDSchedulerStr="RNDScheduler(RNDScheduler_ID=1;RNDScheduler_PRIMARY_OBJECTIVE=TWT@Common)@PriorityScheduler";
+SS1FIFOSchedulerSrt="WFIFOScheduler(WFIFOScheduler_ID=2;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=false)@PriorityScheduler";
+SS1WFIFOSchedulerSrt="WFIFOScheduler(WFIFOScheduler_ID=3;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=true)@PriorityScheduler";
+SS1EODSchedulerStr="WEODScheduler(WEODScheduler_ID=4;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=false)@PriorityScheduler";
+SS1WEODSchedulerStr="WEODScheduler(WEODScheduler_ID=5;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=true)@PriorityScheduler";
+SS1MODSchedulerStr="WMODScheduler(WMODScheduler_ID=6;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=false)@PriorityScheduler";
+SS1WMODSchedulerStr="WMODScheduler(WMODScheduler_ID=7;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=true)@PriorityScheduler";
+SS1CS="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;CS_SCHEDULERS=[${SS1RNDSchedulerStr};${SS1FIFOSchedulerSrt};${SS1WFIFOSchedulerSrt};${SS1EODSchedulerStr};${SS1WEODSchedulerStr};${SS1MODSchedulerStr};${SS1WMODSchedulerStr}])@CombinedScheduler";
+# to test only SDR scheduling
+#schedStrategy[1]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:${SS1CS}}"
+# to test only FIFO scheduling
+schedStrategy[1]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-100%]:${SS1FIFOSchedulerSrt}}"
+# initScheduler for the current scheduling strategy
+#initSchedulerSetting[1]="${SS1CS}";
+initSchedulerSetting[1]="${SS1FIFOSchedulerSrt}";
   
 # CS = SDR + ATC
 # modified according to the new format
@@ -215,8 +224,17 @@ SS12CS="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=
 SS12LSInitScheduler="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7&8;CS_SCHEDULERS=[${SS12RNDSchedulerStr};${SS12FIFOSchedulerSrt};${SS12WFIFOSchedulerSrt};${SS12EODSchedulerStr};${SS12WEODSchedulerStr};${SS12MODSchedulerStr};${SS12WMODSchedulerStr};${SS12ATCSchedulerStr}])@CombinedScheduler";
 SS12LS20="LocalSearchPM(LS_PRIMARY_OBJECTIVE=TWT@Common;LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;LS_MAX_ITER=20;LS_BEST_POS_TO_MOVE=false;LS_INIT_SCHEDULER=${SS12LSInitScheduler})@LocalSearchPM";
 SS12LS20000="LocalSearchPM(LS_PRIMARY_OBJECTIVE=TWT@Common;LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;LS_MAX_ITER=20000;LS_BEST_POS_TO_MOVE=false;LS_INIT_SCHEDULER=${SS12LSInitScheduler})@LocalSearchPM";
+SS12LS50000="LocalSearchPM(LS_PRIMARY_OBJECTIVE=TWT@Common;LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;LS_MAX_ITER=50000;LS_BEST_POS_TO_MOVE=false;LS_INIT_SCHEDULER=${SS12LSInitScheduler})@LocalSearchPM";
 #schedStrategy[12]="PLANNER{[0%-100%):(PLANNER_BEST_PLAN=false),[100%-100%]:(PLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):CS(CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7),[90%-100%):CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20),[100%-100%]:CSLS(LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=false;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7;LS_MAX_ITER=20000)}";
-schedStrategy[12]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):${SS12CS},[90%-100%):${SS12LS20},[100%-100%]:${SS12LS20000}}";
+#schedStrategy[12]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):${SS12CS},[90%-100%):${SS12LS20},[100%-100%]:${SS12LS20000}}";
+#schedStrategy[12]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):${SS12CS},[90%-100%):${SS12LS20},[100%-100%]:${SS12LS50000}}";
+# test 13.06.2017
+schedStrategy[12]="PLANNER{[0%-100%):(VNSPLANNER_BEST_PLAN=false),[100%-100%]:(VNSPLANNER_BEST_PLAN=true)},SCHEDULER{[0%-90%):${SS12LS20},[90%-100%):${SS12LS20},[100%-100%]:${SS12LS50000}}";
+# initScheduler for the current scheduling strategy
+initSchedulerSetting[12]="${SS12CS}";
+#initSchedulerSetting[12]="${SS12FIFOSchedulerSrt}";
+
+
   
 # [0%-90%):SDR+LS(20), [90%-100%):CS+LS(2000), [100%-100%]:CS+LS(20000)
 # NOT modified according to the new format
@@ -246,37 +264,38 @@ echo $protoFile;
 echo "###################################  Current scheduling strategy: ${schedStrategy[${schedStrategyIdx}]}  ######################################################";
    
 # Initial scheduler
-RNDSchedulerStr="RNDScheduler(RNDScheduler_ID=1;RNDScheduler_PRIMARY_OBJECTIVE=TWT@Common)@PriorityScheduler";
-FIFOSchedulerStr="WFIFOScheduler(WFIFOScheduler_ID=2;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=false)@PriorityScheduler";
-WFIFOSchedulerStr="WFIFOScheduler(WFIFOScheduler_ID=3;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=true)@PriorityScheduler";
-EODSchedulerStr="WEODScheduler(WEODScheduler_ID=4;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=false)@PriorityScheduler";
-WEODSchedulerStr="WEODScheduler(WEODScheduler_ID=5;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=true)@PriorityScheduler";
-MODSchedulerStr="WMODScheduler(WMODScheduler_ID=6;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=false)@PriorityScheduler";
-WMODSchedulerStr="WMODScheduler(WMODScheduler_ID=7;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=true)@PriorityScheduler";
+#RNDSchedulerStr="RNDScheduler(RNDScheduler_ID=1;RNDScheduler_PRIMARY_OBJECTIVE=TWT@Common)@PriorityScheduler";
+#FIFOSchedulerStr="WFIFOScheduler(WFIFOScheduler_ID=2;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=false)@PriorityScheduler";
+#WFIFOSchedulerStr="WFIFOScheduler(WFIFOScheduler_ID=3;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=true)@PriorityScheduler";
+#EODSchedulerStr="WEODScheduler(WEODScheduler_ID=4;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=false)@PriorityScheduler";
+#WEODSchedulerStr="WEODScheduler(WEODScheduler_ID=5;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=true)@PriorityScheduler";
+#MODSchedulerStr="WMODScheduler(WMODScheduler_ID=6;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=false)@PriorityScheduler";
+#WMODSchedulerStr="WMODScheduler(WMODScheduler_ID=7;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=true)@PriorityScheduler";
     
 ## FF estimators for ATC
-ATCFFFIFOSrt="WFIFOScheduler(WFIFOScheduler_ID=1;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=false)@PriorityScheduler";
-ATCFFWFIFOSrt="WFIFOScheduler(WFIFOScheduler_ID=2;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=true)@PriorityScheduler";
-ATCFFEODStr="WEODScheduler(WEODScheduler_ID=3;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=false)@PriorityScheduler";
-ATCFFWEODStr="WEODScheduler(WEODScheduler_ID=4;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=true)@PriorityScheduler";
-ATCFFMODStr="WMODScheduler(WMODScheduler_ID=5;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=false)@PriorityScheduler";
-ATCFFWMODStr="WMODScheduler(WMODScheduler_ID=6;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=true)@PriorityScheduler";
-ATCFFMDDStr="WMDDScheduler(WMDDScheduler_ID=7;WMDDScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMDDScheduler_WEIGHTED=false)@PriorityScheduler";
-ATCFFWMDDStr="WMDDScheduler(WMDDScheduler_ID=8;WMDDScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMDDScheduler_WEIGHTED=true)@PriorityScheduler";
-ATCFFEstimatorStr="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7&8;CS_SCHEDULERS=[${ATCFFFIFOSrt};${ATCFFWFIFOSrt};${ATCFFEODStr};${ATCFFWEODStr};${ATCFFMODStr};${ATCFFWMODStr};${ATCFFMDDStr};${ATCFFWMDDStr}])@CombinedScheduler";
+#ATCFFFIFOSrt="WFIFOScheduler(WFIFOScheduler_ID=1;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=false)@PriorityScheduler";
+#ATCFFWFIFOSrt="WFIFOScheduler(WFIFOScheduler_ID=2;WFIFOScheduler_PRIMARY_OBJECTIVE=TWT@Common;WFIFOScheduler_WEIGHTED=true)@PriorityScheduler";
+#ATCFFEODStr="WEODScheduler(WEODScheduler_ID=3;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=false)@PriorityScheduler";
+#ATCFFWEODStr="WEODScheduler(WEODScheduler_ID=4;WEODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WEODScheduler_WEIGHTED=true)@PriorityScheduler";
+#ATCFFMODStr="WMODScheduler(WMODScheduler_ID=5;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=false)@PriorityScheduler";
+#ATCFFWMODStr="WMODScheduler(WMODScheduler_ID=6;WMODScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMODScheduler_WEIGHTED=true)@PriorityScheduler";
+#ATCFFMDDStr="WMDDScheduler(WMDDScheduler_ID=7;WMDDScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMDDScheduler_WEIGHTED=false)@PriorityScheduler";
+#ATCFFWMDDStr="WMDDScheduler(WMDDScheduler_ID=8;WMDDScheduler_PRIMARY_OBJECTIVE=TWT@Common;WMDDScheduler_WEIGHTED=true)@PriorityScheduler";
+#ATCFFEstimatorStr="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7&8;CS_SCHEDULERS=[${ATCFFFIFOSrt};${ATCFFWFIFOSrt};${ATCFFEODStr};${ATCFFWEODStr};${ATCFFMODStr};${ATCFFWMODStr};${ATCFFMDDStr};${ATCFFWMDDStr}])@CombinedScheduler";
 ##ATC
-ATCSchedulerStr="ATCANScheduler(ATCANScheduler_ID=8;ATCANScheduler_PRIMARY_OBJECTIVE=TWT@Common;ATCANScheduler_KAPPA=2.0;ATCANScheduler_KAPPA_OPT=true;ATCANScheduler_CONSIDER_SUCC=false;ATCANScheduler_FF_ESTIMATOR=${ATCFFEstimatorStr})@PriorityScheduler";
+#ATCSchedulerStr="ATCANScheduler(ATCANScheduler_ID=8;ATCANScheduler_PRIMARY_OBJECTIVE=TWT@Common;ATCANScheduler_KAPPA=2.0;ATCANScheduler_KAPPA_OPT=true;ATCANScheduler_CONSIDER_SUCC=false;ATCANScheduler_FF_ESTIMATOR=${ATCFFEstimatorStr})@PriorityScheduler";
   
 #CS
 #initSchedulerSetting="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7&8;CS_SCHEDULERS=[${RNDSchedulerStr};${FIFOSchedulerStr};${WFIFOSchedulerStr};${EODSchedulerStr};${WEODSchedulerStr};${MODSchedulerStr};${WMODSchedulerStr};${ATCSchedulerStr}])@CombinedScheduler";
  
-#CSLS
-LSInitSchedulerStr="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7&8;CS_SCHEDULERS=[${RNDSchedulerStr};${FIFOSchedulerStr};${WFIFOSchedulerStr};${EODSchedulerStr};${WEODSchedulerStr};${MODSchedulerStr};${WMODSchedulerStr};${ATCSchedulerStr}])@CombinedScheduler";
+##CSLS
+#LSInitSchedulerStr="CombinedScheduler(CS_PRIMARY_OBJECTIVE=TWT@Common;CS_ALLOWED_SCHEDULERS=1&2&3&4&5&6&7&8;CS_SCHEDULERS=[${RNDSchedulerStr};${FIFOSchedulerStr};${WFIFOSchedulerStr};${EODSchedulerStr};${WEODSchedulerStr};${MODSchedulerStr};${WMODSchedulerStr};${ATCSchedulerStr}])@CombinedScheduler";
 #LSInitSchedulerStr="${RNDSchedulerStr}";
-initSchedulerSetting="LocalSearchPM(LS_PRIMARY_OBJECTIVE=TWT@Common;LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=true;LS_MAX_ITER=20000;LS_BEST_POS_TO_MOVE=false;LS_INIT_SCHEDULER=${LSInitSchedulerStr})@LocalSearchPM";
+#initSchedulerSetting="LocalSearchPM(LS_PRIMARY_OBJECTIVE=TWT@Common;LS_CRIT_NODES_UPDATE_FREQ=100;LS_CHK_COR=true;LS_MAX_ITER=20000;LS_BEST_POS_TO_MOVE=false;LS_INIT_SCHEDULER=${LSInitSchedulerStr})@LocalSearchPM";
 
 # algorithm for IPPS
-planSchedSolver="VNSPlanner(VNSPLANNER_PROTOCOLFILE=${protoFile};VNSPLANNER_SOLINITRULE=${planningInitRule};VNSPLANNER_NS=${ns};VNSPLANNER_STEPN1=${stepN1};VNSPLANNER_STEPN2=${stepN2};VNSPLANNER_STEPN3=${stepN3};VNSPLANNER_NUMNEIGH=${numNeigh};VNSPLANNER_GLOBMAXITER=${globIter};VNSPLANNER_GLOBMAXTIMEMINUTES=${globMaxTimeM};VNSPLANNER_SCHEDSTRATEGY=${schedStrategy[${schedStrategyIdx}]};VNSPLANNER_INITSCHEDULER=${initSchedulerSetting};VNSPLANNER_PRIMARY_OBJECTIVE=${objective})@VNSPlanner";
+#planSchedSolver="VNSPlanner(VNSPLANNER_PROTOCOLFILE=${protoFile};VNSPLANNER_SOLINITRULE=${planningInitRule};VNSPLANNER_NS=${ns};VNSPLANNER_STEPN1=${stepN1};VNSPLANNER_STEPN2=${stepN2};VNSPLANNER_STEPN3=${stepN3};VNSPLANNER_NUMNEIGH=${numNeigh};VNSPLANNER_GLOBMAXITER=${globIter};VNSPLANNER_GLOBMAXTIMEMINUTES=${globMaxTimeM};VNSPLANNER_SCHEDSTRATEGY=${schedStrategy[${schedStrategyIdx}]};VNSPLANNER_INITSCHEDULER=${initSchedulerSetting};VNSPLANNER_PRIMARY_OBJECTIVE=${objective})@VNSPlanner";
+planSchedSolver="VNSPlanner(VNSPLANNER_PROTOCOLFILE=${protoFile};VNSPLANNER_SOLINITRULE=${planningInitRule};VNSPLANNER_NS=${ns};VNSPLANNER_STEPN1=${stepN1};VNSPLANNER_STEPN2=${stepN2};VNSPLANNER_STEPN3=${stepN3};VNSPLANNER_NUMNEIGH=${numNeigh};VNSPLANNER_GLOBMAXITER=${globIter};VNSPLANNER_GLOBMAXTIMEMINUTES=${globMaxTimeM};VNSPLANNER_SCHEDSTRATEGY=${schedStrategy[${schedStrategyIdx}]};VNSPLANNER_INITSCHEDULER=${initSchedulerSetting[${schedStrategyIdx}]};VNSPLANNER_PRIMARY_OBJECTIVE=${objective})@VNSPlanner";
 
 $executable "PlanSchedSolver:${planSchedSolver}" "RandSeed:${randseed}" "Host:localhost" "Port:5555" ;
 #$executable "PlanSchedSolver:${planSchedSolver}" "RandSeed:${randseed}" "Host:192.168.1.100" "Port:5555" ;
